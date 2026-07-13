@@ -20,7 +20,7 @@ const KLASSEN = [1,2,3,4,5,6,7,8,9,10]
 export default function OnboardingPage() {
   const [step, setStep] = useState(1)
   const [childName, setChildName] = useState('')
-  const [klasse, setKlasse] = useState(4)
+  const [klasse, setKlasse] = useState(3)
   const [avatarType, setAvatarType] = useState<'preset' | 'photo' | null>(null)
   const [selectedPreset, setSelectedPreset] = useState<string | null>(null)
   const [photoPreview, setPhotoPreview] = useState<string | null>(null)
@@ -45,16 +45,13 @@ export default function OnboardingPage() {
     if (!selectedPreset && !photoPreview) { setError('Bitte wähle einen Avatar'); return }
     setLoading(true)
 
-    // API-Key speichern
     if (apiKey) localStorage.setItem('np_api_key', apiKey)
 
-    // Kind-Profil speichern
     const avatarValue = photoPreview || selectedPreset || 'nica-solo'
     localStorage.setItem('np_child_name', childName)
     localStorage.setItem('np_child_avatar', avatarValue)
     localStorage.setItem('np_child_klasse', String(klasse))
 
-    // In Supabase speichern
     const { data: { user } } = await supabase.auth.getUser()
     if (user) {
       await supabase.from('children').insert({
@@ -69,21 +66,17 @@ export default function OnboardingPage() {
     router.push('/dashboard')
   }
 
-  const avatarDisplay = photoPreview || (selectedPreset?.startsWith('/') ? selectedPreset : null)
-  const avatarEmoji = !photoPreview && selectedPreset && !selectedPreset.startsWith('/') ? selectedPreset : null
-
   return (
     <div style={{ minHeight: '100vh', background: 'linear-gradient(135deg, #EAF0FF, #F2EBFF)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: 'system-ui, sans-serif', padding: '24px' }}>
       <div style={{ background: 'white', borderRadius: '28px', padding: '40px', width: '100%', maxWidth: '480px', boxShadow: '0 16px 48px rgba(79,124,255,0.15)' }}>
 
-        {/* Progress */}
         <div style={{ display: 'flex', gap: '8px', marginBottom: '32px' }}>
           {[1,2,3].map(s => (
             <div key={s} style={{ flex: 1, height: '4px', borderRadius: '100px', background: s <= step ? 'linear-gradient(90deg,#4F7CFF,#8A5CFF)' : '#E8ECF4', transition: 'all 0.3s' }} />
           ))}
         </div>
 
-        {/* SCHRITT 1: Name + Klasse */}
+        {/* SCHRITT 1: Name + Klasse (korrigiert für Sommerferien) */}
         {step === 1 && (
           <div>
             <div style={{ textAlign: 'center', marginBottom: '28px' }}>
@@ -104,8 +97,9 @@ export default function OnboardingPage() {
                 onBlur={e => e.target.style.borderColor = '#E8ECF4'}
               />
             </div>
-            <div style={{ marginBottom: '28px' }}>
-              <label style={{ display: 'block', fontSize: '13px', fontWeight: '700', color: '#374151', marginBottom: '8px' }}>In welcher Klasse bist du?</label>
+            <div style={{ marginBottom: '8px' }}>
+              <label style={{ display: 'block', fontSize: '13px', fontWeight: '700', color: '#374151', marginBottom: '4px' }}>In welche Klasse kommst du nach den Ferien?</label>
+              <p style={{ fontSize: '11px', color: '#9CA3AF', margin: '0 0 10px' }}>☀️ Ferien-Modus: wir bereiten dich schon auf die neue Klasse vor!</p>
               <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
                 {KLASSEN.map(k => (
                   <button key={k} onClick={() => setKlasse(k)}
@@ -115,9 +109,9 @@ export default function OnboardingPage() {
                 ))}
               </div>
             </div>
-            {error && <div style={{ color: '#DC2626', fontSize: '13px', marginBottom: '12px' }}>{error}</div>}
+            {error && <div style={{ color: '#DC2626', fontSize: '13px', margin: '16px 0 0' }}>{error}</div>}
             <button onClick={() => { if (!childName.trim()) { setError('Bitte gib deinen Namen ein'); return }; setError(''); setStep(2) }}
-              style={{ width: '100%', padding: '14px', background: 'linear-gradient(135deg,#4F7CFF,#8A5CFF)', color: 'white', border: 'none', borderRadius: '14px', fontSize: '16px', fontWeight: '800', cursor: 'pointer' }}>
+              style={{ width: '100%', padding: '14px', background: 'linear-gradient(135deg,#4F7CFF,#8A5CFF)', color: 'white', border: 'none', borderRadius: '14px', fontSize: '16px', fontWeight: '800', cursor: 'pointer', marginTop: '24px' }}>
               Weiter →
             </button>
           </div>
@@ -132,7 +126,6 @@ export default function OnboardingPage() {
               <p style={{ color: '#6B7280', fontSize: '14px', margin: 0 }}>Wie soll Nica & Phil dich sehen?</p>
             </div>
 
-            {/* Foto hochladen */}
             <div onClick={() => fileRef.current?.click()}
               style={{ border: '2px dashed', borderColor: avatarType === 'photo' ? '#4F7CFF' : '#E8ECF4', borderRadius: '16px', padding: '20px', textAlign: 'center', cursor: 'pointer', marginBottom: '20px', background: avatarType === 'photo' ? '#EAF0FF' : '#FAFAFA', transition: 'all 0.2s' }}>
               {photoPreview ? (
@@ -152,7 +145,6 @@ export default function OnboardingPage() {
 
             <div style={{ fontSize: '12px', fontWeight: '700', color: '#9CA3AF', textAlign: 'center', marginBottom: '16px', textTransform: 'uppercase', letterSpacing: '0.08em' }}>oder Avatar wählen</div>
 
-            {/* Preset Avatare */}
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: '10px', marginBottom: '24px' }}>
               {PRESET_AVATARS.map(av => (
                 <button key={av.id}
@@ -179,7 +171,7 @@ export default function OnboardingPage() {
           </div>
         )}
 
-        {/* SCHRITT 3: Bestätigung + API-Key (für Eltern) */}
+        {/* SCHRITT 3: Bestätigung + API-Key */}
         {step === 3 && (
           <div>
             <div style={{ textAlign: 'center', marginBottom: '28px' }}>
@@ -191,7 +183,7 @@ export default function OnboardingPage() {
                 <div style={{ fontSize: '64px', marginBottom: '12px' }}>{selectedPreset}</div>
               )}
               <h2 style={{ fontSize: '22px', fontWeight: '800', color: '#1A1F36', margin: '0 0 4px' }}>Hallo {childName}! 👋</h2>
-              <p style={{ color: '#6B7280', fontSize: '14px', margin: '0 0 4px' }}>Klasse {klasse}</p>
+              <p style={{ color: '#6B7280', fontSize: '14px', margin: '0 0 4px' }}>Startet in Klasse {klasse}</p>
               <p style={{ color: '#6B7280', fontSize: '13px', margin: 0 }}>Nica und Phil freuen sich auf dich!</p>
             </div>
 
@@ -205,7 +197,7 @@ export default function OnboardingPage() {
                 style={{ width: '100%', padding: '10px 14px', border: '1px solid #FFB648', borderRadius: '10px', fontSize: '13px', fontFamily: 'monospace', outline: 'none', boxSizing: 'border-box', background: 'white' }}
               />
               <p style={{ fontSize: '11px', color: '#9A5700', margin: '8px 0 0', lineHeight: '1.5' }}>
-                Einmalig eingeben — Kinder sehen diesen Key nicht. Auf platform.openai.com erhältlich.
+                Einmalig eingeben — Kinder sehen diesen Key nicht.
               </p>
             </div>
 
