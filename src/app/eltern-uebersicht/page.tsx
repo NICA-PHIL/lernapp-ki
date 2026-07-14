@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
 import { theme } from '@/lib/theme'
+import { BaukastenAvatar } from '@/components/BaukastenAvatar'
 
 interface Kind { id: string; name: string; klasse: number; avatar_prefs: any; selbst_registriert: boolean }
 
@@ -79,9 +80,7 @@ export default function ElternUebersicht() {
               {kinder.map(kind => (
                 <button key={kind.id} onClick={() => kindAnzeigen(kind)}
                   style={{ background: theme.bg, border: `1.5px solid ${theme.line}`, borderRadius: theme.radius.lg, padding: '14px 16px', display: 'flex', alignItems: 'center', gap: '14px', cursor: 'pointer', textAlign: 'left' }}>
-                  <div style={{ width: '42px', height: '42px', borderRadius: '50%', background: theme.soft.blue, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '20px' }}>
-                    {kind.avatar_prefs?.gesicht || '🧒'}
-                  </div>
+                  <BaukastenAvatar gesicht={kind.avatar_prefs?.gesicht} hautton={kind.avatar_prefs?.hautton || theme.soft.blue} haarfarbe={kind.avatar_prefs?.haarfarbe || theme.brand.blue} accessoire={kind.avatar_prefs?.accessoire} size={42} />
                   <div style={{ flex: 1 }}>
                     <div style={{ fontWeight: '800', fontSize: '14px', color: theme.ink }}>{kind.name}</div>
                     <div style={{ fontSize: '11.5px', color: theme.muted }}>Klasse {kind.klasse}{kind.selbst_registriert ? ' · hat eigenes Konto' : ''}</div>

@@ -3,6 +3,7 @@ import { useState, useRef } from 'react'
 import { useRouter } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
 import { klassenFrage, PROVIDERS, Provider } from '@/lib/theme'
+import { BaukastenAvatar } from '@/components/BaukastenAvatar'
 
 const GESICHTER = ['😀','😊','🤓','😎','🥳','🤩','😇','🙂','😄','🧑','👧','👦','🧒','👩','👨']
 const HAUTTOENE = ['#FFDBB4','#F1C27D','#E0AC69','#C68642','#8D5524','#5C3317']
@@ -42,13 +43,7 @@ export default function OnboardingPage() {
   }
 
   function avatarSVG() {
-    // Einfacher Baukasten-Avatar als Kreis mit Gesicht + Farbring
-    return (
-      <div style={{ width: '100px', height: '100px', borderRadius: '50%', background: hautton, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '48px', margin: '0 auto', border: `6px solid ${haarfarbe}`, position: 'relative' }}>
-        {gesicht}
-        {accessoire !== 'Keins' && <span style={{ position: 'absolute', top: '-6px', right: '-6px', fontSize: '24px' }}>{accessoire}</span>}
-      </div>
-    )
+    return <BaukastenAvatar gesicht={gesicht} hautton={hautton} haarfarbe={haarfarbe} accessoire={accessoire} size={100} />
   }
 
   async function handleFinish() {
@@ -60,7 +55,6 @@ export default function OnboardingPage() {
       localStorage.setItem('np_provider', provider)
     }
 
-    const avatarValue = photoPreview || JSON.stringify({ typ: 'baukasten', gesicht, hautton, haarfarbe, accessoire })
     localStorage.setItem('np_child_name', childName)
     localStorage.setItem('np_child_avatar_typ', photoPreview ? 'foto' : 'baukasten')
     localStorage.setItem('np_child_avatar', photoPreview || '')

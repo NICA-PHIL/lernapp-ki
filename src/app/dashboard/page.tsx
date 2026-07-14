@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { theme } from '@/lib/theme'
 import { LivingAvatar } from '@/components/LivingAvatar'
+import { BaukastenAvatar } from '@/components/BaukastenAvatar'
 
 const MOODS = [
   { emoji: '😄', label: 'Super', color: theme.brand.green },
@@ -49,9 +50,7 @@ export default function Dashboard() {
   function AvatarBubble({ size = 56 }: { size?: number }) {
     if (childAvatar) return <img src={childAvatar} style={{ width: size, height: size, borderRadius: '50%', objectFit: 'cover', border: '3px solid white', boxShadow: '0 4px 16px rgba(79,124,255,0.25)' }} />
     if (avatarBaukasten) return (
-      <div style={{ width: size, height: size, borderRadius: '50%', background: avatarBaukasten.hautton || '#FFDBB4', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: size * 0.5, border: `3px solid ${avatarBaukasten.haarfarbe || theme.brand.blue}`, boxShadow: '0 4px 16px rgba(79,124,255,0.25)' }}>
-        {avatarBaukasten.gesicht || '🧒'}
-      </div>
+      <BaukastenAvatar gesicht={avatarBaukasten.gesicht} hautton={avatarBaukasten.hautton} haarfarbe={avatarBaukasten.haarfarbe || theme.brand.blue} accessoire={avatarBaukasten.accessoire} size={size} boxShadow="0 4px 16px rgba(79,124,255,0.25)" />
     )
     return <div style={{ width: size, height: size, borderRadius: '50%', background: theme.soft.blue, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: size * 0.5 }}>🧒</div>
   }

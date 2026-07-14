@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
 import { theme } from '@/lib/theme'
+import { BaukastenAvatar } from '@/components/BaukastenAvatar'
 
 interface Kind { id: string; name: string; klasse: number; avatar_prefs: any }
 
@@ -50,9 +51,7 @@ export default function KindWaehlen() {
             {kinder.map(kind => (
               <button key={kind.id} onClick={() => kindAktivieren(kind)}
                 style={{ background: 'white', border: `1.5px solid ${theme.line}`, borderRadius: theme.radius.lg, padding: '18px 20px', display: 'flex', alignItems: 'center', gap: '16px', cursor: 'pointer', textAlign: 'left', boxShadow: theme.shadow.sm }}>
-                <div style={{ width: '48px', height: '48px', borderRadius: '50%', background: theme.soft.blue, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '22px' }}>
-                  {kind.avatar_prefs?.gesicht || '🧒'}
-                </div>
+                <BaukastenAvatar gesicht={kind.avatar_prefs?.gesicht} hautton={kind.avatar_prefs?.hautton || theme.soft.blue} haarfarbe={kind.avatar_prefs?.haarfarbe || theme.brand.blue} accessoire={kind.avatar_prefs?.accessoire} size={48} />
                 <div style={{ flex: 1 }}>
                   <div style={{ fontWeight: '800', fontSize: '16px', color: theme.ink }}>{kind.name}</div>
                   <div style={{ fontSize: '12px', color: theme.mid }}>Klasse {kind.klasse}</div>
