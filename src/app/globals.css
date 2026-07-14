@@ -128,3 +128,44 @@
     @apply font-sans;
   }
 }
+/* ═══ Responsive Verbesserungen für Nica & Phil ═══ */
+
+/* Große Monitore (1440px+): Inhalt etwas breiter, mehr Spalten möglich */
+@media (min-width: 1440px) {
+  .np-dashboard-content {
+    max-width: 920px !important;
+  }
+}
+
+/* Tablets (iPad, 768px-1024px): Schulfächer bleiben 2-spaltig, aber größer */
+@media (min-width: 768px) and (max-width: 1023px) {
+  .np-dashboard-content {
+    max-width: 680px !important;
+    padding-left: 32px !important;
+    padding-right: 32px !important;
+  }
+}
+
+/* Kleine Smartphones (unter 380px, z.B. iPhone SE): Schriftgrößen leicht reduzieren */
+@media (max-width: 380px) {
+  .np-dashboard-content h1 {
+    font-size: 24px !important;
+  }
+  .np-quicklinks-grid {
+    gap: 8px !important;
+  }
+}
+
+/* Sehr breite Bildschirme: Floating Nav nicht zu breit werden lassen */
+@media (min-width: 1200px) {
+  .np-floating-nav {
+    bottom: 24px !important;
+  }
+}
+
+/* Touch-Geräte: etwas größere Tap-Ziele */
+@media (hover: none) and (pointer: coarse) {
+  button {
+    min-height: 40px;
+  }
+}

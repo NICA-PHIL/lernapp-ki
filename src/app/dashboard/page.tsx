@@ -73,7 +73,7 @@ export default function Dashboard() {
         </div>
       </div>
 
-      <div style={{ maxWidth: '780px', margin: '0 auto', padding: '32px 20px 0' }}>
+      <div className="np-dashboard-content" style={{ maxWidth: '780px', margin: '0 auto', padding: '32px 20px 0' }}>
 
         {/* ── GREETING HERO ── */}
         <div style={{ display: 'flex', alignItems: 'center', gap: '16px', marginBottom: '28px' }}>
@@ -189,7 +189,7 @@ export default function Dashboard() {
 
         {/* ── QUICK LINKS ── */}
         <h2 style={{ fontSize: '17px', fontWeight: '800', color: '#1A1F36', marginBottom: '16px', letterSpacing: '-0.01em' }}>⚡ Schnellzugriff</h2>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '10px', marginBottom: '28px' }}>
+        <div className="np-quicklinks-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '10px', marginBottom: '28px' }}>
           {QUICKLINKS.map(q => (
             <button key={q.id} onClick={() => router.push(q.path)}
               style={{ background: 'white', border: '1px solid #EEF1F6', borderRadius: '18px', padding: '16px 12px', cursor: 'pointer', textAlign: 'center', boxShadow: '0 3px 14px rgba(79,124,255,0.06)', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '8px' }}>
@@ -212,7 +212,7 @@ export default function Dashboard() {
       </div>
 
       {/* ── BOTTOM NAVIGATION (floating pill style) ── */}
-      <div style={{ position: 'fixed', bottom: '18px', left: '50%', transform: 'translateX(-50%)', background: 'rgba(255,255,255,0.9)', backdropFilter: 'blur(20px)', borderRadius: '100px', padding: '10px 8px', display: 'flex', gap: '4px', boxShadow: '0 12px 40px rgba(26,31,54,0.15)', border: '1px solid rgba(255,255,255,0.6)', zIndex: 20 }}>
+      <div className="np-floating-nav" style={{ position: 'fixed', bottom: '18px', left: '50%', transform: 'translateX(-50%)', background: 'rgba(255,255,255,0.9)', backdropFilter: 'blur(20px)', borderRadius: '100px', padding: '10px 8px', display: 'flex', gap: '4px', boxShadow: '0 12px 40px rgba(26,31,54,0.15)', border: '1px solid rgba(255,255,255,0.6)', zIndex: 20 }}>
         {[
           { icon: '🏠', label: 'Start', active: true, path: '/dashboard' },
           { icon: '🗺️', label: 'Reise', path: '/lernreise' },
