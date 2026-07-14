@@ -37,7 +37,7 @@ export default function PianoGesang() {
   const [completed, setCompleted] = useState<string[]>([])
 
   useEffect(() => {
-    setChildName(localStorage.getItem('np_child_name') || 'Nicole')
+    setChildName(localStorage.getItem('np_child_name') || 'Entdecker')
     const saved = localStorage.getItem('np_musik_progress')
     if (saved) setCompleted(JSON.parse(saved))
   }, [])

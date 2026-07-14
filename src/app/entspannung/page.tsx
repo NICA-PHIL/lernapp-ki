@@ -1,6 +1,7 @@
 'use client'
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
+import { theme } from '@/lib/theme'
 
 interface Klang {
   id: string
@@ -60,7 +61,7 @@ export default function Entspannung() {
       {/* Ruhiger Header — kein knalliger Farbverlauf, kein Punkte-System sichtbar */}
       <div style={{ padding: '32px 24px 40px', textAlign: 'center' }}>
         <button onClick={() => router.push('/dashboard')}
-          style={{ position: 'absolute', left: '20px', top: '24px', background: 'rgba(255,255,255,0.6)', border: 'none', borderRadius: '10px', padding: '8px 14px', color: '#5B6577', fontSize: '13px', cursor: 'pointer' }}>
+          style={{ position: 'absolute', left: '20px', top: '24px', background: 'rgba(255,255,255,0.6)', border: 'none', borderRadius: theme.radius.sm, padding: '8px 14px', color: '#5B6577', fontSize: '13px', cursor: 'pointer' }}>
           ← Zurück
         </button>
         <div style={{ fontSize: '40px', marginBottom: '10px', animation: 'sanftSchweben 4s ease-in-out infinite' }}>🌙</div>
@@ -73,7 +74,7 @@ export default function Entspannung() {
       <div style={{ maxWidth: '520px', margin: '0 auto', padding: '0 20px' }}>
 
         {/* Atemübung */}
-        <div style={{ background: 'white', borderRadius: '24px', padding: '28px 20px', marginBottom: '20px', textAlign: 'center', boxShadow: '0 4px 20px rgba(91,143,209,0.08)' }}>
+        <div style={{ background: 'white', borderRadius: theme.radius.xl, padding: '28px 20px', marginBottom: '20px', textAlign: 'center', boxShadow: '0 4px 20px rgba(91,143,209,0.08)' }}>
           <div style={{ fontSize: '13px', fontWeight: '700', color: '#5B6577', marginBottom: '20px' }}>Atemübung</div>
 
           <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '20px' }}>
@@ -99,8 +100,8 @@ export default function Entspannung() {
 
           <button onClick={() => { setAtemModus(!atemModus); setAtemSchritt(0) }}
             style={{
-              padding: '12px 28px', borderRadius: '100px', border: 'none',
-              background: atemModus ? '#E8ECF4' : 'linear-gradient(135deg, #A8C5E8, #C4B8E8)',
+              padding: '12px 28px', borderRadius: theme.radius.full, border: 'none',
+              background: atemModus ? theme.line : 'linear-gradient(135deg, #A8C5E8, #C4B8E8)',
               color: atemModus ? '#5B6577' : 'white', fontSize: '13px', fontWeight: '700', cursor: 'pointer',
               transition: 'all 0.3s ease'
             }}>
@@ -120,7 +121,7 @@ export default function Entspannung() {
                 style={{
                   background: aktiv ? k.bg : 'white',
                   border: `2px solid ${aktiv ? k.farbe : '#EEF1F6'}`,
-                  borderRadius: '18px', padding: '18px 14px', cursor: 'pointer', textAlign: 'center',
+                  borderRadius: theme.radius.lg, padding: '18px 14px', cursor: 'pointer', textAlign: 'center',
                   transition: 'all 0.3s ease',
                   transform: aktiv ? 'scale(1.02)' : 'scale(1)'
                 }}>
@@ -131,7 +132,7 @@ export default function Entspannung() {
                   <div style={{ marginTop: '10px', display: 'flex', justifyContent: 'center', gap: '3px' }}>
                     {[0, 1, 2].map(i => (
                       <div key={i} style={{
-                        width: '3px', height: '12px', borderRadius: '100px', background: k.farbe,
+                        width: '3px', height: '12px', borderRadius: theme.radius.full, background: k.farbe,
                         animation: `wellenBalken 1.2s ease-in-out infinite`,
                         animationDelay: `${i * 0.15}s`
                       }} />
@@ -144,7 +145,7 @@ export default function Entspannung() {
         </div>
 
         {/* Sanfter Hinweistext */}
-        <div style={{ background: 'rgba(255,255,255,0.7)', borderRadius: '18px', padding: '16px 20px', textAlign: 'center' }}>
+        <div style={{ background: 'rgba(255,255,255,0.7)', borderRadius: theme.radius.lg, padding: '16px 20px', textAlign: 'center' }}>
           <p style={{ fontSize: '11.5px', color: '#8B92A0', margin: 0, lineHeight: '1.7' }}>
             Manchmal braucht der Kopf einfach eine Pause — vor dem Lernen, danach, oder wenn es zu viel wird. Das ist völlig in Ordnung. 🤍
           </p>
