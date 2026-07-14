@@ -48,9 +48,18 @@ export default function SommermissionPage() {
   const [completedTage, setCompletedTage] = useState<number[]>([])
 
   useEffect(() => {
-    const saved = localStorage.getItem('np_sommer_progress')
-    if (saved) setCompletedTage(JSON.parse(saved))
+    const childName = localStorage.getItem('np_child_name')?.toLowerCase() || ''
+    const erkanntesKind: 'philipp' | 'nicole' = childName.includes('nicole') ? 'nicole' : childName.includes('philipp') ? 'philipp' : 'philipp'
+    setActiveChild(erkanntesKind)
+    const saved = localStorage.getItem(`np_sommer_progress_${erkanntesKind}`)
+    setCompletedTage(saved ? JSON.parse(saved) : [])
   }, [])
+
+  function kindWechseln(kind: 'philipp' | 'nicole') {
+    setActiveChild(kind)
+    const saved = localStorage.getItem(`np_sommer_progress_${kind}`)
+    setCompletedTage(saved ? JSON.parse(saved) : [])
+  }
 
   const plan = activeChild === 'philipp' ? PHILIPP_PLAN : NICOLE_PLAN
   const childInfo = activeChild === 'philipp'
@@ -65,7 +74,7 @@ export default function SommermissionPage() {
       ? completedTage.filter(t => t !== tag)
       : [...completedTage, tag]
     setCompletedTage(newCompleted)
-    localStorage.setItem('np_sommer_progress', JSON.stringify(newCompleted))
+    localStorage.setItem(`np_sommer_progress_${activeChild}`, JSON.stringify(newCompleted))
   }
 
   return (
@@ -79,7 +88,7 @@ export default function SommermissionPage() {
 
       <div style={{ maxWidth: '640px', margin: '-36px auto 0', padding: '0 20px' }}>
         <div style={{ background: 'white', borderRadius: '20px', padding: '8px', display: 'flex', gap: '6px', boxShadow: '0 8px 24px rgba(0,0,0,0.1)', marginBottom: '20px' }}>
-          <button onClick={() => setActiveChild('philipp')}
+          <button onClick={() => kindWechseln('philipp')}
             style={{ flex: 1, padding: '14px', borderRadius: '14px', border: 'none', cursor: 'pointer', background: activeChild === 'philipp' ? '#EAF0FF' : 'transparent', display: 'flex', alignItems: 'center', gap: '10px', justifyContent: 'center' }}>
             <img src="/avatars/phil-solo.png" style={{ width: '32px', height: '32px', borderRadius: '50%', objectFit: 'cover' }} />
             <div style={{ textAlign: 'left' }}>
@@ -87,7 +96,7 @@ export default function SommermissionPage() {
               <div style={{ fontSize: '10px', color: '#9CA3AF' }}>→ Klasse 3</div>
             </div>
           </button>
-          <button onClick={() => setActiveChild('nicole')}
+          <button onClick={() => kindWechseln('nicole')}
             style={{ flex: 1, padding: '14px', borderRadius: '14px', border: 'none', cursor: 'pointer', background: activeChild === 'nicole' ? '#FFE8F1' : 'transparent', display: 'flex', alignItems: 'center', gap: '10px', justifyContent: 'center' }}>
             <img src="/avatars/nica-solo.png" style={{ width: '32px', height: '32px', borderRadius: '50%', objectFit: 'cover' }} />
             <div style={{ textAlign: 'left' }}>
