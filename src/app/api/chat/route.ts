@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import OpenAI from 'openai'
+import { createClient } from '@/lib/supabase/server'
 
 const SUBJECT_PROMPTS: Record<string, string> = {
   mathe: `Mathematik nach Berliner Rahmenlehrplan: Zahlenraum, Grundrechenarten, Brüche, Geometrie, Terme, Gleichungen.`,
@@ -64,8 +65,15 @@ async function callGemini(apiKey: string, system: string, messages: any[]) {
 }
 
 export async function POST(req: NextRequest) {
+  const supabase = await createClient()
+  const { data: { user } } = await supabase.auth.getUser()
+  if (!user) return NextResponse.json({ error: 'Nicht angemeldet' }, { status: 401 })
+
   const { messages, avatar, subject, klasse, apiKey, provider } = await req.json()
   if (!apiKey) return NextResponse.json({ error: 'Kein API-Key angegeben' }, { status: 400 })
+  if (!Array.isArray(messages) || messages.length > 50) {
+    return NextResponse.json({ error: 'Ungültige Anfrage' }, { status: 400 })
+  }
 
   const system = buildSystemPrompt(avatar, subject, parseInt(klasse) || 4)
 
