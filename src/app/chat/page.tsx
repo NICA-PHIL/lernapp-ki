@@ -104,7 +104,7 @@ function ChatContent() {
         </button>
         <LivingAvatar src={avatarImg} alt={avatar} character={isNica ? 'nica' : 'phil'} size={40} />
         <div>
-          <div style={{ fontWeight: '700', fontSize: '15px', color: theme.ink }}>
+          <div style={{ fontFamily: theme.font.display, fontWeight: '600', fontSize: '15px', color: theme.ink }}>
             {isNica ? 'Nica' : 'Phil'}
           </div>
           <div style={{ fontSize: '12px', color: accentColor, fontWeight: '600' }}>

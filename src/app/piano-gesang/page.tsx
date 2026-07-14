@@ -2,6 +2,7 @@
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { theme } from '@/lib/theme'
+import { LivingAvatar } from '@/components/LivingAvatar'
 
 const PIANO_LEKTIONEN = [
   { id: 'p1', titel: 'Handhaltung & Fingersätze', beschreibung: 'Die Grundlage für alles Weitere', dauer: '15 Min' },
@@ -58,7 +59,7 @@ export default function PianoGesang() {
         <div style={{ position: 'absolute', top: '16px', right: '24px', fontSize: '54px', opacity: 0.2 }}>🎹</div>
         <button onClick={() => router.push('/dashboard')} style={{ background: 'rgba(255,255,255,0.25)', border: 'none', borderRadius: '10px', padding: '8px 12px', color: 'white', fontSize: '14px', cursor: 'pointer', marginBottom: '20px' }}>← Zurück</button>
         <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
-          <img src="/avatars/nica-solo.png" style={{ width: '52px', height: '52px', borderRadius: '50%', objectFit: 'cover', border: '3px solid rgba(255,255,255,0.5)' }} />
+          <LivingAvatar src="/avatars/nica-solo.png" alt="Nica" character="nica" size={52} />
           <div>
             <h1 style={{ fontSize: '22px', fontWeight: '800', color: 'white', margin: 0 }}>{childName}s Piano & Gesang 🎹🎤</h1>
             <p style={{ color: 'rgba(255,255,255,0.9)', fontSize: '13px', margin: '2px 0 0' }}>Songs auf Deutsch, Englisch & Russisch</p>

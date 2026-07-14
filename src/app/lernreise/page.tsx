@@ -64,7 +64,7 @@ export default function LernreisePage() {
       <div style={{ background: 'rgba(255,255,255,0.9)', backdropFilter: 'blur(20px)', padding: '16px 24px', display: 'flex', alignItems: 'center', gap: '14px', borderBottom: `1px solid ${theme.line}`, position: 'sticky', top: 0, zIndex: 10 }}>
         <button onClick={() => router.push('/dashboard')} style={{ background: theme.bg, border: 'none', borderRadius: theme.radius.sm, padding: '8px 12px', fontSize: '14px', cursor: 'pointer' }}>← Zurück</button>
         <div>
-          <div style={{ fontWeight: '800', fontSize: '15px', color: theme.ink }}>{childName}s Lernreise 🗺️</div>
+          <div style={{ fontFamily: theme.font.display, fontWeight: '600', fontSize: '15px', color: theme.ink }}>{childName}s Lernreise 🗺️</div>
           <div style={{ fontSize: '11.5px', color: theme.muted }}>Klasse {klasse} · Berliner Lehrplan</div>
         </div>
       </div>

@@ -2,6 +2,7 @@
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { theme } from '@/lib/theme'
+import { LivingAvatar } from '@/components/LivingAvatar'
 
 const MOODS = [
   { emoji: '😄', label: 'Super', color: theme.brand.green },
@@ -139,7 +140,7 @@ export default function Dashboard() {
         {/* ── NICA & PHIL SPEECH CARDS ── */}
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px', marginBottom: '28px' }}>
           <div style={{ background: 'linear-gradient(160deg,#FFF5F9,white)', borderRadius: theme.radius.xl, padding: '18px', border: '1px solid #FFE0EE', display: 'flex', gap: '12px', alignItems: 'center', boxShadow: '0 4px 16px rgba(255,124,176,0.08)' }}>
-            <img src="/avatars/nica-solo.png" alt="Nica" style={{ width: '46px', height: '46px', borderRadius: '50%', objectFit: 'cover', flexShrink: 0, boxShadow: '0 3px 10px rgba(255,124,176,0.3)' }} />
+            <LivingAvatar src="/avatars/nica-solo.png" alt="Nica" character="nica" size={46} />
             <div>
               <div style={{ fontSize: '10.5px', fontWeight: '800', color: theme.brand.pink, marginBottom: '3px', letterSpacing: '0.03em' }}>NICA</div>
               <p style={{ fontSize: '12px', color: theme.mid, margin: 0, lineHeight: '1.4', fontWeight: '500' }}>
@@ -148,7 +149,7 @@ export default function Dashboard() {
             </div>
           </div>
           <div style={{ background: 'linear-gradient(160deg,#F5F8FF,white)', borderRadius: theme.radius.xl, padding: '18px', border: '1px solid #DEE8FF', display: 'flex', gap: '12px', alignItems: 'center', boxShadow: '0 4px 16px rgba(79,124,255,0.08)' }}>
-            <img src="/avatars/phil-solo.png" alt="Phil" style={{ width: '46px', height: '46px', borderRadius: '50%', objectFit: 'cover', flexShrink: 0, boxShadow: '0 3px 10px rgba(79,124,255,0.3)' }} />
+            <LivingAvatar src="/avatars/phil-solo.png" alt="Phil" character="phil" size={46} />
             <div>
               <div style={{ fontSize: '10.5px', fontWeight: '800', color: theme.brand.blue, marginBottom: '3px', letterSpacing: '0.03em' }}>PHIL</div>
               <p style={{ fontSize: '12px', color: theme.mid, margin: 0, lineHeight: '1.4', fontWeight: '500' }}>

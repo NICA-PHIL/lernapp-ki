@@ -2,6 +2,7 @@
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { theme } from '@/lib/theme'
+import { LivingAvatar } from '@/components/LivingAvatar'
 
 interface Tag {
   tag: number
@@ -91,7 +92,7 @@ export default function SommermissionPage() {
         <div style={{ background: 'white', borderRadius: theme.radius.xl, padding: '8px', display: 'flex', gap: '6px', boxShadow: theme.shadow.md, marginBottom: '20px' }}>
           <button onClick={() => kindWechseln('philipp')}
             style={{ flex: 1, padding: '14px', borderRadius: theme.radius.md, border: 'none', cursor: 'pointer', background: activeChild === 'philipp' ? theme.soft.blue : 'transparent', display: 'flex', alignItems: 'center', gap: '10px', justifyContent: 'center' }}>
-            <img src="/avatars/phil-solo.png" style={{ width: '32px', height: '32px', borderRadius: '50%', objectFit: 'cover' }} />
+            <LivingAvatar src="/avatars/phil-solo.png" alt="Philipp" character="phil" size={32} />
             <div style={{ textAlign: 'left' }}>
               <div style={{ fontSize: '13px', fontWeight: '800', color: activeChild === 'philipp' ? theme.brand.blue : theme.ink }}>Philipp</div>
               <div style={{ fontSize: '10px', color: theme.muted }}>→ Klasse 3</div>
@@ -99,7 +100,7 @@ export default function SommermissionPage() {
           </button>
           <button onClick={() => kindWechseln('nicole')}
             style={{ flex: 1, padding: '14px', borderRadius: theme.radius.md, border: 'none', cursor: 'pointer', background: activeChild === 'nicole' ? theme.soft.pink : 'transparent', display: 'flex', alignItems: 'center', gap: '10px', justifyContent: 'center' }}>
-            <img src="/avatars/nica-solo.png" style={{ width: '32px', height: '32px', borderRadius: '50%', objectFit: 'cover' }} />
+            <LivingAvatar src="/avatars/nica-solo.png" alt="Nicole" character="nica" size={32} />
             <div style={{ textAlign: 'left' }}>
               <div style={{ fontSize: '13px', fontWeight: '800', color: activeChild === 'nicole' ? theme.brand.pink : theme.ink }}>Nicole</div>
               <div style={{ fontSize: '10px', color: theme.muted }}>→ Klasse 7 Gymn.</div>
@@ -108,7 +109,7 @@ export default function SommermissionPage() {
         </div>
 
         <div style={{ background: childInfo.bg, borderRadius: theme.radius.xl, padding: '20px', marginBottom: '20px', display: 'flex', alignItems: 'center', gap: '16px' }}>
-          <img src={childInfo.avatar} style={{ width: '56px', height: '56px', borderRadius: '50%', objectFit: 'cover', border: '3px solid white' }} />
+          <LivingAvatar src={childInfo.avatar} alt={childInfo.name} character={activeChild === 'philipp' ? 'phil' : 'nica'} size={56} />
           <div style={{ flex: 1 }}>
             <div style={{ fontWeight: '800', fontSize: '16px', color: theme.ink }}>{childInfo.name}s Sommerplan</div>
             <div style={{ fontSize: '12px', color: theme.mid, marginBottom: '8px' }}>{doneTage} von {totalTage} Tagen geschafft</div>

@@ -67,7 +67,7 @@ export default function ElternEinblicke() {
       <div style={{ background: 'rgba(255,255,255,0.85)', backdropFilter: 'blur(20px)', padding: '16px clamp(20px,4vw,40px)', display: 'flex', alignItems: 'center', gap: '16px', borderBottom: `1px solid ${theme.line}`, position: 'sticky', top: 0, zIndex: 20 }}>
         <button onClick={() => router.push('/dashboard')} style={{ background: theme.bg, border: 'none', borderRadius: theme.radius.md, padding: '10px 16px', fontSize: 'clamp(13px,1.1vw,15px)', fontWeight: '700', cursor: 'pointer', color: '#374151' }}>← Zurück</button>
         <div>
-          <div style={{ fontWeight: '800', fontSize: 'clamp(16px,1.6vw,19px)', color: theme.ink, letterSpacing: '-0.01em' }}>👁️ Einblicke in {childName}s Welt</div>
+          <div style={{ fontFamily: theme.font.display, fontWeight: '600', fontSize: 'clamp(16px,1.6vw,19px)', color: theme.ink, letterSpacing: '-0.01em' }}>👁️ Einblicke in {childName}s Welt</div>
           <div style={{ fontSize: 'clamp(11.5px,1vw,13px)', color: theme.muted }}>Was Ihr Kind uns über sich selbst erzählt hat</div>
         </div>
       </div>
@@ -82,7 +82,7 @@ export default function ElternEinblicke() {
             <div style={{ width: 'clamp(56px,5vw,72px)', height: 'clamp(56px,5vw,72px)', borderRadius: '50%', background: theme.soft.blue, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 'clamp(24px,2.5vw,32px)' }}>🧒</div>
           )}
           <div>
-            <div style={{ fontWeight: '800', fontSize: 'clamp(19px,2vw,24px)', color: theme.ink, letterSpacing: '-0.01em' }}>{childName}</div>
+            <div style={{ fontFamily: theme.font.display, fontWeight: '600', fontSize: 'clamp(19px,2vw,24px)', color: theme.ink, letterSpacing: '-0.01em' }}>{childName}</div>
             <div style={{ fontSize: 'clamp(12.5px,1.1vw,14px)', color: theme.muted, marginTop: '2px' }}>
               Bevorzugtes Feedback: <strong style={{ color: theme.brand.blue }}>{belohnungsstil ? STIL_LABELS[belohnungsstil] : 'noch nicht gewählt'}</strong>
             </div>

@@ -2,6 +2,7 @@
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { theme } from '@/lib/theme'
+import { LivingAvatar } from '@/components/LivingAvatar'
 
 interface Lektion {
   id: string
@@ -55,7 +56,7 @@ export default function GitarrePage() {
         <div style={{ position: 'absolute', top: '16px', right: '24px', fontSize: '54px', opacity: 0.2 }}>🎸</div>
         <button onClick={() => router.push('/dashboard')} style={{ background: 'rgba(255,255,255,0.25)', border: 'none', borderRadius: '10px', padding: '8px 12px', color: 'white', fontSize: '14px', cursor: 'pointer', marginBottom: '20px' }}>← Zurück</button>
         <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
-          <img src={avatar} style={{ width: '52px', height: '52px', borderRadius: '50%', objectFit: 'cover', border: '3px solid rgba(255,255,255,0.5)' }} />
+          <LivingAvatar src={avatar} alt="Phil" character="phil" size={52} />
           <div>
             <h1 style={{ fontSize: '22px', fontWeight: '800', color: 'white', margin: 0 }}>{childName}s Gitarre 🎸</h1>
             <p style={{ color: 'rgba(255,255,255,0.9)', fontSize: '13px', margin: '2px 0 0' }}>Von den ersten Akkorden zum ersten Song</p>
