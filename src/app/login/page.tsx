@@ -20,7 +20,8 @@ export default function LoginPage() {
 
     if (mode === 'signup') {
       const { error } = await supabase.auth.signUp({ email, password })
-      if (error) { setError(error.message); setLoading(false); return }
+      setLoading(false)
+      if (error) { setError(error.message); return }
       router.push('/rolle-waehlen')
       return
     }
