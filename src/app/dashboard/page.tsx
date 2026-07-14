@@ -212,6 +212,7 @@ export default function Dashboard() {
       </div>
 
       {/* ── BOTTOM NAVIGATION (floating pill style) ── */}
+      <button onClick={() => router.push('/feedback')} style={{ position: 'fixed', bottom: '100px', right: '20px', width: '56px', height: '56px', borderRadius: '50%', background: 'linear-gradient(135deg,#FF7CB0,#8A5CFF)', border: 'none', boxShadow: '0 8px 24px rgba(255,124,176,0.4)', fontSize: '24px', cursor: 'pointer', zIndex: 20 }}>💬</button>
       <div className="np-floating-nav" style={{ position: 'fixed', bottom: '18px', left: '50%', transform: 'translateX(-50%)', background: 'rgba(255,255,255,0.9)', backdropFilter: 'blur(20px)', borderRadius: '100px', padding: '10px 8px', display: 'flex', gap: '4px', boxShadow: '0 12px 40px rgba(26,31,54,0.15)', border: '1px solid rgba(255,255,255,0.6)', zIndex: 20 }}>
         {[
           { icon: '🏠', label: 'Start', active: true, path: '/dashboard' },
