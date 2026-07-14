@@ -63,7 +63,7 @@ function ChatContent() {
           messages: newMessages,
           avatar,
           subject,
-          klasse: 4,
+          klasse: parseInt(localStorage.getItem('np_child_klasse') || '4'),
           apiKey,
         }),
       })

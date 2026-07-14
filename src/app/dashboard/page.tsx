@@ -24,6 +24,7 @@ interface TalentKarte {
 const TALENTE: TalentKarte[] = [
   { id: 'gitarre', label: 'Gitarre', icon: '🎸', desc: 'Akkorde, Songs, erste Melodien', path: '/gitarre', farbe: theme.brand.orange, bg: theme.soft.orange },
   { id: 'piano-gesang', label: 'Piano & Gesang', icon: '🎹', desc: 'Songs auf DE, EN & RU', path: '/piano-gesang', farbe: theme.brand.purple, bg: theme.soft.purple, nurFuer: 'nicole' },
+  { id: 'entspannung', label: 'Entspannung', icon: '🌙', desc: 'Ruhige Klänge & Atemübungen', path: '/entspannung', farbe: '#5B8FD1', bg: '#EAF2FB' },
   { id: 'schach', label: 'Schach', icon: '♟️', desc: 'Taktiken und Strategien vertiefen', path: '/schach', farbe: theme.ink, bg: theme.soft.blue },
   { id: 'sport', label: 'Sport', icon: '⚽', desc: 'Fußball, Taekwondo, Karate', path: '/chat?subject=sport&avatar=phil', farbe: theme.brand.teal, bg: theme.soft.teal },
 ]
@@ -50,8 +51,6 @@ export default function Dashboard() {
     : nameKey.includes('philipp') ? '/philipp-vorbereitung' : null
 
   const sichtbareTalente = TALENTE.filter(t => !t.nurFuer || nameKey.includes(t.nurFuer))
-
-  // Bei "reif" (Klasse 8+) reduzierter Hintergrund, weniger verspielt
   const bgStyle = reife === 'reif' ? '#F7F8FA' : theme.bg
 
   return (
@@ -75,7 +74,7 @@ export default function Dashboard() {
 
       <div style={{ maxWidth: '720px', margin: '0 auto', padding: '24px 20px' }}>
 
-        {/* Begrüßung — passt sich der Reifestufe an */}
+        {/* Begrüßung */}
         <div style={{ marginBottom: '20px', display: 'flex', alignItems: 'center', gap: '14px' }}>
           {childAvatar && (
             <img src={childAvatar} alt={childName} style={{ width: reife === 'jung' ? '52px' : '46px', height: reife === 'jung' ? '52px' : '46px', borderRadius: '50%', objectFit: 'cover', border: `3px solid ${theme.soft.blue}` }} />
@@ -103,16 +102,46 @@ export default function Dashboard() {
           </button>
         )}
 
+        {/* Fit für die neue Klasse — volle Breite */}
+        <button onClick={() => router.push('/fit-fuer-die-schule')}
+          style={{ width: '100%', background: theme.gradients.philipp, border: 'none', borderRadius: theme.radius.lg, padding: '14px 16px', marginBottom: '12px', cursor: 'pointer', textAlign: 'left', display: 'flex', alignItems: 'center', gap: '10px' }}>
+          <span style={{ fontSize: '20px' }}>🎯</span>
+          <div>
+            <div style={{ fontSize: '13px', fontWeight: '800', color: 'white' }}>Fit für die neue Klasse</div>
+            <div style={{ fontSize: '10px', color: 'rgba(255,255,255,0.85)' }}>Wiederholen · Vorarbeiten · Skills</div>
+          </div>
+        </button>
+
+        {/* Kalender — volle Breite */}
+        <button onClick={() => router.push('/kalender')}
+          style={{ width: '100%', background: 'linear-gradient(135deg, #1A1F36, #4F7CFF)', border: 'none', borderRadius: theme.radius.lg, padding: '14px 16px', marginBottom: '12px', cursor: 'pointer', textAlign: 'left', display: 'flex', alignItems: 'center', gap: '10px' }}>
+          <span style={{ fontSize: '20px' }}>📅</span>
+          <div>
+            <div style={{ fontSize: '13px', fontWeight: '800', color: 'white' }}>Kalender</div>
+            <div style={{ fontSize: '10px', color: 'rgba(255,255,255,0.85)' }}>Klassenarbeiten, Prüfungen & Termine</div>
+          </div>
+        </button>
+
+        {/* Eltern-Einblicke — volle Breite */}
+        <button onClick={() => router.push('/eltern-einblicke')}
+          style={{ width: '100%', background: theme.gradients.eltern, border: 'none', borderRadius: theme.radius.md, padding: '14px 16px', marginBottom: '16px', cursor: 'pointer', textAlign: 'left', display: 'flex', alignItems: 'center', gap: '10px' }}>
+          <span style={{ fontSize: '18px' }}>👁️</span>
+          <div>
+            <div style={{ fontSize: '13px', fontWeight: '800', color: 'white' }}>Für Eltern: Einblicke</div>
+            <div style={{ fontSize: '10px', color: 'rgba(255,255,255,0.7)' }}>Was {childName} über sich erzählt hat</div>
+          </div>
+        </button>
+
         {/* Quick-Access Kacheln */}
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px', marginBottom: '20px' }}>
           <button onClick={() => router.push('/meine-wuensche')}
             style={{ background: theme.gradients.wuensche, border: 'none', borderRadius: theme.radius.md, padding: '14px 16px', cursor: 'pointer', textAlign: 'left', display: 'flex', alignItems: 'center', gap: '10px' }}>
-            <span style={{ fontSize: '18px' }}>{reife === 'jung' ? '💭' : '📝'}</span>
+            <span style={{ fontSize: '18px' }}>💭</span>
             <span style={{ fontSize: '12px', fontWeight: '800', color: 'white' }}>Meine Wünsche</span>
           </button>
           <button onClick={() => router.push('/meine-skills')}
             style={{ background: 'linear-gradient(135deg, #37C978, #00C9A7)', border: 'none', borderRadius: theme.radius.md, padding: '14px 16px', cursor: 'pointer', textAlign: 'left', display: 'flex', alignItems: 'center', gap: '10px' }}>
-            <span style={{ fontSize: '18px' }}>{reife === 'jung' ? '🚀' : '📊'}</span>
+            <span style={{ fontSize: '18px' }}>🚀</span>
             <span style={{ fontSize: '12px', fontWeight: '800', color: 'white' }}>Meine Skills</span>
           </button>
           <button onClick={() => router.push('/mein-stil')}
@@ -122,15 +151,20 @@ export default function Dashboard() {
           </button>
           <button onClick={() => router.push('/freizeit')}
             style={{ background: 'linear-gradient(135deg, #FF8C42, #8A5CFF)', border: 'none', borderRadius: theme.radius.md, padding: '14px 16px', cursor: 'pointer', textAlign: 'left', display: 'flex', alignItems: 'center', gap: '10px' }}>
-            <span style={{ fontSize: '18px' }}>{reife === 'jung' ? '🎡' : '🗺️'}</span>
+            <span style={{ fontSize: '18px' }}>🎡</span>
             <span style={{ fontSize: '12px', fontWeight: '800', color: 'white' }}>Freizeit-Ideen</span>
+          </button>
+          <button onClick={() => router.push('/eltern-wuensche')}
+            style={{ background: theme.gradients.eltern, border: 'none', borderRadius: theme.radius.md, padding: '14px 16px', cursor: 'pointer', textAlign: 'left', display: 'flex', alignItems: 'center', gap: '10px', gridColumn: 'span 2' }}>
+            <span style={{ fontSize: '18px' }}>👪</span>
+            <span style={{ fontSize: '12px', fontWeight: '800', color: 'white' }}>Eltern: Wünsche für {childName} eintragen</span>
           </button>
         </div>
 
         {/* Stimmung */}
         <div style={{ background: theme.card, borderRadius: theme.radius.xl, padding: '18px 20px', marginBottom: '16px', border: `1px solid ${theme.line}` }}>
           <p style={{ fontSize: '13px', fontWeight: '700', color: '#374151', marginBottom: '12px' }}>
-            {reife === 'jung' ? 'Wie fühlst du dich heute?' : reife === 'mittel' ? 'Wie geht\'s dir heute?' : 'Stimmung heute'}
+            {reife === 'jung' ? 'Wie fühlst du dich heute?' : reife === 'mittel' ? 'Wie geht\u2019s dir heute?' : 'Stimmung heute'}
           </p>
           <div style={{ display: 'flex', gap: '8px' }}>
             {MOODS.map(m => (
@@ -143,7 +177,7 @@ export default function Dashboard() {
           </div>
         </div>
 
-        {/* Nica & Phil Nachrichten — Ton passt sich an */}
+        {/* Nica & Phil Nachrichten */}
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px', marginBottom: '24px' }}>
           <div style={{ background: `linear-gradient(135deg, ${theme.soft.pink}, #fff)`, borderRadius: theme.radius.md, padding: '16px', border: '1px solid #FFD0E8', display: 'flex', gap: '12px', alignItems: 'center' }}>
             <img src="/avatars/nica-solo.png" alt="Nica" style={{ width: '48px', height: '48px', borderRadius: '50%', objectFit: 'cover', flexShrink: 0 }} />
@@ -152,7 +186,7 @@ export default function Dashboard() {
               <p style={{ fontSize: '12px', color: theme.ink, margin: 0, lineHeight: '1.45' }}>
                 {reife === 'jung'
                   ? (mood ? '✨ Ich bin bereit!' : 'Wie geht es dir heute? 💗')
-                  : (mood ? 'Bereit, wenn du es bist.' : 'Sag mir, wie's dir geht.')}
+                  : (mood ? 'Bereit, wenn du es bist.' : 'Sag mir, wie es dir geht.')}
               </p>
             </div>
           </div>
@@ -162,8 +196,8 @@ export default function Dashboard() {
               <div style={{ fontSize: '11px', fontWeight: '700', color: theme.brand.blue, marginBottom: '3px' }}>PHIL</div>
               <p style={{ fontSize: '12px', color: theme.ink, margin: 0, lineHeight: '1.45' }}>
                 {reife === 'jung'
-                  ? (mood ? '🚀 Los geht\'s!' : 'Ich hab was für dich! 🚀')
-                  : (mood ? 'Los geht\'s.' : 'Ich hab heute was Interessantes für dich.')}
+                  ? (mood ? '🚀 Los geht\u2019s!' : 'Ich hab was für dich! 🚀')
+                  : (mood ? 'Los geht\u2019s.' : 'Ich hab heute was Interessantes für dich.')}
               </p>
             </div>
           </div>
@@ -181,7 +215,6 @@ export default function Dashboard() {
           </button>
         </div>
 
-        {/* Schulfächer */}
         {activeTab === 'schule' && (
           <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
             {SCHULFAECHER.map(s => {
@@ -206,7 +239,6 @@ export default function Dashboard() {
           </div>
         )}
 
-        {/* Talente */}
         {activeTab === 'talente' && (
           <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
             {sichtbareTalente.map(t => (
@@ -234,6 +266,7 @@ export default function Dashboard() {
         {[
           { icon: '🏠', label: 'Start', active: true, path: '/dashboard' },
           { icon: '🗺️', label: 'Lernreise', path: '/lernreise' },
+          { icon: '📅', label: 'Kalender', path: '/kalender' },
           { icon: '☀️', label: 'Sommer', path: '/sommermission' },
           { icon: '👤', label: 'Profil', path: '/onboarding' },
         ].map(item => (
