@@ -17,14 +17,35 @@ export default function LoginPage() {
     e.preventDefault()
     setLoading(true)
     setError('')
-    const { error } = mode === 'login'
-      ? await supabase.auth.signInWithPassword({ email, password })
-      : await supabase.auth.signUp({ email, password })
-    if (error) {
-      setError(error.message)
-    } else {
-      router.push('/dashboard')
+
+    if (mode === 'signup') {
+      const { error } = await supabase.auth.signUp({ email, password })
+      if (error) { setError(error.message); setLoading(false); return }
+      router.push('/rolle-waehlen')
+      return
     }
+
+    const { error } = await supabase.auth.signInWithPassword({ email, password })
+    if (error) { setError(error.message); setLoading(false); return }
+
+    const { data: { user } } = await supabase.auth.getUser()
+    if (user) {
+      const { data: alsKind } = await supabase.from('children').select('id, name, klasse, avatar_prefs').eq('auth_user_id', user.id).maybeSingle()
+      if (alsKind) {
+        localStorage.setItem('np_child_name', alsKind.name)
+        localStorage.setItem('np_child_klasse', String(alsKind.klasse))
+        router.push('/dashboard')
+        setLoading(false)
+        return
+      }
+      const { data: alsEltern } = await supabase.from('children').select('id').eq('parent_id', user.id).limit(1).maybeSingle()
+      if (alsEltern) {
+        router.push('/eltern-uebersicht')
+        setLoading(false)
+        return
+      }
+    }
+    router.push('/rolle-waehlen')
     setLoading(false)
   }
 

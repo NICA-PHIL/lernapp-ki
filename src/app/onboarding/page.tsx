@@ -69,10 +69,20 @@ export default function OnboardingPage() {
 
     const { data: { user } } = await supabase.auth.getUser()
     if (user) {
-      await supabase.from('children').insert({
-        parent_id: user.id, name: childName, klasse,
+      const { data: kind } = await supabase.from('children').insert({
+        auth_user_id: user.id, selbst_registriert: true, name: childName, klasse,
         avatar_prefs: photoPreview ? { type: 'photo' } : { type: 'baukasten', gesicht, hautton, haarfarbe, accessoire }
-      })
+      }).select().single()
+
+      if (kind) {
+        const einladungsCode = Math.floor(100000 + Math.random() * 900000).toString()
+        await supabase.from('family_codes').insert({
+          code: einladungsCode, child_id: kind.id, typ: 'kind_laedt_eltern_ein',
+        })
+        setLoading(false)
+        router.push(`/eltern-einladen?code=${einladungsCode}`)
+        return
+      }
     }
 
     setLoading(false)
