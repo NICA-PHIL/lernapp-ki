@@ -1,272 +1,229 @@
 'use client'
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
-import { theme, fachFarben, getReifestufe, reifeStyles } from '@/lib/theme'
 
 const MOODS = [
-  { emoji: '😄', label: 'Super' },
-  { emoji: '🙂', label: 'Gut' },
-  { emoji: '😐', label: 'Geht so' },
-  { emoji: '😔', label: 'Müde' },
+  { emoji: '😄', label: 'Super', color: '#37C978' },
+  { emoji: '🙂', label: 'Gut', color: '#4F7CFF' },
+  { emoji: '😐', label: 'Geht so', color: '#FFB648' },
+  { emoji: '😔', label: 'Müde', color: '#9B8AC4' },
 ]
 
 const SCHULFAECHER = [
-  { id: 'mathe', label: 'Mathe', icon: '📐', desc: 'Rechnen, Geometrie, Logik' },
-  { id: 'deutsch', label: 'Deutsch', icon: '📖', desc: 'Lesen, Schreiben, Grammatik' },
-  { id: 'englisch', label: 'Englisch', icon: '🌍', desc: 'Vokabeln, Sprechen, Grammatik' },
-  { id: 'sachunterricht', label: 'Sachunterricht', icon: '🔬', desc: 'Natur, Technik, Gesellschaft' },
+  { id: 'mathe', label: 'Mathe', icon: '📐', desc: 'Rechnen, Geometrie, Logik', farbe: '#4F7CFF', bg: 'linear-gradient(135deg,#EAF0FF,#F5F8FF)', avatar: 'phil', fortschritt: 68 },
+  { id: 'deutsch', label: 'Deutsch', icon: '📖', desc: 'Lesen, Schreiben, Grammatik', farbe: '#FF7CB0', bg: 'linear-gradient(135deg,#FFE8F1,#FFF5F9)', avatar: 'nica', fortschritt: 45 },
+  { id: 'englisch', label: 'Englisch', icon: '🌍', desc: 'Vokabeln, Sprechen, Grammatik', farbe: '#37C978', bg: 'linear-gradient(135deg,#E3FAEE,#F3FDF7)', avatar: 'nica', fortschritt: 80 },
+  { id: 'sachunterricht', label: 'Sachunterricht', icon: '🔬', desc: 'Natur, Technik, Gesellschaft', farbe: '#8A5CFF', bg: 'linear-gradient(135deg,#F2EBFF,#F9F6FF)', avatar: 'phil', fortschritt: 30 },
 ]
 
-interface TalentKarte {
-  id: string; label: string; icon: string; desc: string; path: string; farbe: string; bg: string; nurFuer?: string
-}
-
-const TALENTE: TalentKarte[] = [
-  { id: 'gitarre', label: 'Gitarre', icon: '🎸', desc: 'Akkorde, Songs, erste Melodien', path: '/gitarre', farbe: theme.brand.orange, bg: theme.soft.orange },
-  { id: 'piano-gesang', label: 'Piano & Gesang', icon: '🎹', desc: 'Songs auf DE, EN & RU', path: '/piano-gesang', farbe: theme.brand.purple, bg: theme.soft.purple, nurFuer: 'nicole' },
-  { id: 'entspannung', label: 'Entspannung', icon: '🌙', desc: 'Ruhige Klänge & Atemübungen', path: '/entspannung', farbe: '#5B8FD1', bg: '#EAF2FB' },
-  { id: 'schach', label: 'Schach', icon: '♟️', desc: 'Taktiken und Strategien vertiefen', path: '/schach', farbe: theme.ink, bg: theme.soft.blue },
-  { id: 'sport', label: 'Sport', icon: '⚽', desc: 'Fußball, Taekwondo, Karate', path: '/chat?subject=sport&avatar=phil', farbe: theme.brand.teal, bg: theme.soft.teal },
+interface QuickLink { id: string; label: string; icon: string; path: string; farbe: string }
+const QUICKLINKS: QuickLink[] = [
+  { id: 'wuensche', label: 'Meine Wünsche', icon: '💭', path: '/meine-wuensche', farbe: '#FF7CB0' },
+  { id: 'skills', label: 'Meine Skills', icon: '🚀', path: '/meine-skills', farbe: '#37C978' },
+  { id: 'stil', label: 'Mein Stil', icon: '🎨', path: '/mein-stil', farbe: '#FFB648' },
+  { id: 'freizeit', label: 'Freizeit', icon: '🎡', path: '/freizeit', farbe: '#8A5CFF' },
+  { id: 'schule', label: 'Meine Schule', icon: '🏫', path: '/meine-schule', farbe: '#4F7CFF' },
 ]
 
 export default function Dashboard() {
   const [mood, setMood] = useState<string | null>(null)
   const [childName, setChildName] = useState('Entdecker')
   const [childAvatar, setChildAvatar] = useState<string | null>(null)
+  const [avatarBaukasten, setAvatarBaukasten] = useState<any>(null)
   const [klasse, setKlasse] = useState('3')
-  const [activeTab, setActiveTab] = useState<'schule' | 'talente'>('schule')
   const router = useRouter()
 
   useEffect(() => {
     setChildName(localStorage.getItem('np_child_name') || 'Entdecker')
     setChildAvatar(localStorage.getItem('np_child_avatar'))
     setKlasse(localStorage.getItem('np_child_klasse') || '3')
+    const bk = localStorage.getItem('np_child_avatar_baukasten')
+    if (bk) setAvatarBaukasten(JSON.parse(bk))
   }, [])
 
-  const klasseNum = parseInt(klasse)
-  const reife = getReifestufe(klasseNum)
-  const rs = reifeStyles[reife]
   const nameKey = childName.toLowerCase()
-  const vorbereitungLink = nameKey.includes('nicole') ? '/nicole-vorbereitung'
-    : nameKey.includes('philipp') ? '/philipp-vorbereitung' : null
+  const vorbereitungLink = nameKey.includes('nicole') ? '/nicole-vorbereitung' : nameKey.includes('philipp') ? '/philipp-vorbereitung' : null
 
-  const sichtbareTalente = TALENTE.filter(t => !t.nurFuer || nameKey.includes(t.nurFuer))
-  const bgStyle = reife === 'reif' ? '#F7F8FA' : theme.bg
+  function AvatarBubble({ size = 56 }: { size?: number }) {
+    if (childAvatar) return <img src={childAvatar} style={{ width: size, height: size, borderRadius: '50%', objectFit: 'cover', border: '3px solid white', boxShadow: '0 4px 16px rgba(79,124,255,0.25)' }} />
+    if (avatarBaukasten) return (
+      <div style={{ width: size, height: size, borderRadius: '50%', background: avatarBaukasten.hautton || '#FFDBB4', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: size * 0.5, border: `3px solid ${avatarBaukasten.haarfarbe || '#4F7CFF'}`, boxShadow: '0 4px 16px rgba(79,124,255,0.25)' }}>
+        {avatarBaukasten.gesicht || '🧒'}
+      </div>
+    )
+    return <div style={{ width: size, height: size, borderRadius: '50%', background: '#EAF0FF', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: size * 0.5 }}>🧒</div>
+  }
 
   return (
-    <div style={{ minHeight: '100vh', background: bgStyle, fontFamily: 'system-ui, sans-serif', paddingBottom: '100px' }}>
+    <div style={{ minHeight: '100vh', background: 'radial-gradient(ellipse 80% 50% at 50% -10%, #F0F4FF 0%, #FAFBFF 60%)', fontFamily: "'Inter', -apple-system, sans-serif", paddingBottom: '110px' }}>
 
-      <div style={{ background: theme.card, padding: '16px 24px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', boxShadow: `0 1px 0 ${theme.line}`, position: 'sticky', top: 0, zIndex: 10 }}>
+      {/* ── STICKY HEADER ── */}
+      <div style={{ background: 'rgba(255,255,255,0.85)', backdropFilter: 'blur(20px)', padding: '16px 24px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', borderBottom: '1px solid rgba(232,236,244,0.6)', position: 'sticky', top: 0, zIndex: 20 }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-          <img src="/avatars/duo-circle.png" alt="Nica & Phil" style={{ width: '38px', height: '38px', borderRadius: '50%', objectFit: 'cover' }} />
-          <span style={{ fontWeight: '800', fontSize: '16px', color: theme.ink }}>Nica & Phil</span>
+          <img src="/avatars/duo-circle.png" alt="Nica & Phil" style={{ width: '34px', height: '34px', borderRadius: '50%', objectFit: 'cover' }} />
+          <span style={{ fontWeight: '800', fontSize: '15px', color: '#1A1F36', letterSpacing: '-0.01em' }}>Nica <span style={{ color: '#4F7CFF' }}>&</span> Phil</span>
         </div>
-        <div style={{ display: 'flex', gap: '10px' }}>
-          <div style={{ background: theme.soft.warn, borderRadius: theme.radius.full, padding: '6px 14px', fontSize: '13px', fontWeight: '700', color: '#9A5700' }}>
-            {rs.emojiDichte === 'hoch' ? '🔥 3 Tage' : '3 Tage Serie'}
+        <div style={{ display: 'flex', gap: '8px' }}>
+          <div style={{ background: 'linear-gradient(135deg,#FFB648,#FF8C42)', borderRadius: '100px', padding: '7px 14px', fontSize: '12.5px', fontWeight: '800', color: 'white', display: 'flex', alignItems: 'center', gap: '5px', boxShadow: '0 4px 12px rgba(255,140,66,0.3)' }}>
+            🔥 3
           </div>
-          <div style={{ background: theme.soft.blue, borderRadius: theme.radius.full, padding: '6px 14px', fontSize: '13px', fontWeight: '700', color: theme.brand.blue }}>
-            {rs.emojiDichte === 'hoch' ? '💎 120 Punkte' : '120 Punkte'}
+          <div style={{ background: 'linear-gradient(135deg,#4F7CFF,#8A5CFF)', borderRadius: '100px', padding: '7px 14px', fontSize: '12.5px', fontWeight: '800', color: 'white', display: 'flex', alignItems: 'center', gap: '5px', boxShadow: '0 4px 12px rgba(79,124,255,0.3)' }}>
+            💎 120
           </div>
         </div>
       </div>
 
-      <div style={{ maxWidth: '720px', margin: '0 auto', padding: '24px 20px' }}>
+      <div style={{ maxWidth: '780px', margin: '0 auto', padding: '32px 20px 0' }}>
 
-        <div style={{ marginBottom: '20px', display: 'flex', alignItems: 'center', gap: '14px' }}>
-          {childAvatar && (
-            <img src={childAvatar} alt={childName} style={{ width: reife === 'jung' ? '52px' : '46px', height: reife === 'jung' ? '52px' : '46px', borderRadius: '50%', objectFit: 'cover', border: `3px solid ${theme.soft.blue}` }} />
-          )}
+        {/* ── GREETING HERO ── */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: '16px', marginBottom: '28px' }}>
+          <AvatarBubble size={60} />
           <div>
-            <h1 style={{ fontSize: rs.fontGroesse.titel, fontWeight: '800', color: theme.ink, margin: '0 0 2px' }}>{rs.begruessung(childName)}</h1>
-            <p style={{ color: theme.mid, fontSize: rs.fontGroesse.klein, margin: 0 }}>
-              {reife === 'jung' ? `Klasse ${klasse} · Was lernst du heute?` : reife === 'mittel' ? `Klasse ${klasse} · Bereit?` : `Klasse ${klasse}`}
-            </p>
+            <h1 style={{ fontSize: '28px', fontWeight: '800', color: '#1A1F36', margin: '0 0 3px', letterSpacing: '-0.02em' }}>
+              Hallo {childName} <span style={{ display: 'inline-block' }}>👋</span>
+            </h1>
+            <p style={{ color: '#8B92A5', fontSize: '13.5px', margin: 0, fontWeight: '500' }}>Klasse {klasse} · Was lernst du heute?</p>
           </div>
         </div>
 
-        {vorbereitungLink && (
-          <button onClick={() => router.push(vorbereitungLink)}
-            style={{ width: '100%', background: theme.gradients.sommer, border: 'none', borderRadius: theme.radius.lg, padding: rs.buttonPadding, marginBottom: '12px', display: 'flex', alignItems: 'center', gap: '14px', cursor: 'pointer', textAlign: 'left' }}>
-            <span style={{ fontSize: '26px' }}>{reife === 'jung' ? '🎒' : '📋'}</span>
-            <div style={{ flex: 1 }}>
-              <div style={{ fontWeight: '800', fontSize: '14px', color: 'white' }}>
-                {reife === 'jung' ? "Startklar für's neue Schuljahr!" : 'Vorbereitung neues Schuljahr'}
+        {/* ── FEATURED BANNERS (Elevated cards) ── */}
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', marginBottom: '28px' }}>
+          {vorbereitungLink && (
+            <button onClick={() => router.push(vorbereitungLink)}
+              style={{ position: 'relative', overflow: 'hidden', width: '100%', background: 'linear-gradient(120deg,#FF8C5A,#FF6FA8,#9B6EFF)', border: 'none', borderRadius: '22px', padding: '22px 24px', cursor: 'pointer', textAlign: 'left', display: 'flex', alignItems: 'center', gap: '16px', boxShadow: '0 12px 32px rgba(255,111,168,0.28)' }}>
+              <div style={{ position: 'absolute', top: '-30px', right: '-20px', fontSize: '100px', opacity: 0.15 }}>🎓</div>
+              <div style={{ width: '48px', height: '48px', borderRadius: '16px', background: 'rgba(255,255,255,0.25)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '24px', flexShrink: 0, zIndex: 1 }}>🎒</div>
+              <div style={{ flex: 1, zIndex: 1 }}>
+                <div style={{ fontWeight: '800', fontSize: '15.5px', color: 'white', marginBottom: '2px' }}>Startklar für's neue Schuljahr!</div>
+                <div style={{ fontSize: '12.5px', color: 'rgba(255,255,255,0.88)' }}>Deine persönliche Vorbereitung ansehen</div>
               </div>
-              <div style={{ fontSize: '12px', color: 'rgba(255,255,255,0.9)' }}>Deine persönliche Vorbereitung ansehen</div>
-            </div>
-            <span style={{ color: 'white', fontSize: '18px' }}>→</span>
-          </button>
-        )}
+              <span style={{ color: 'white', fontSize: '20px', zIndex: 1 }}>→</span>
+            </button>
+          )}
 
-        <button onClick={() => router.push('/fit-fuer-die-schule')}
-          style={{ width: '100%', background: theme.gradients.philipp, border: 'none', borderRadius: theme.radius.lg, padding: '14px 16px', marginBottom: '12px', cursor: 'pointer', textAlign: 'left', display: 'flex', alignItems: 'center', gap: '10px' }}>
-          <span style={{ fontSize: '20px' }}>🎯</span>
-          <div>
-            <div style={{ fontSize: '13px', fontWeight: '800', color: 'white' }}>Fit für die neue Klasse</div>
-            <div style={{ fontSize: '10px', color: 'rgba(255,255,255,0.85)' }}>Wiederholen · Vorarbeiten · Skills</div>
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
+            <button onClick={() => router.push('/fit-fuer-die-schule')}
+              style={{ background: 'white', border: '1px solid #EEF1F6', borderRadius: '20px', padding: '18px 20px', cursor: 'pointer', textAlign: 'left', boxShadow: '0 4px 20px rgba(79,124,255,0.06)', display: 'flex', flexDirection: 'column', gap: '10px' }}>
+              <div style={{ width: '40px', height: '40px', borderRadius: '13px', background: 'linear-gradient(135deg,#4F7CFF,#8A5CFF)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '19px', boxShadow: '0 6px 16px rgba(79,124,255,0.3)' }}>🎯</div>
+              <div>
+                <div style={{ fontWeight: '800', fontSize: '13.5px', color: '#1A1F36' }}>Fit für die Klasse</div>
+                <div style={{ fontSize: '11px', color: '#9BA3B4' }}>Wiederholen · Skills</div>
+              </div>
+            </button>
+            <button onClick={() => router.push('/kalender')}
+              style={{ background: 'white', border: '1px solid #EEF1F6', borderRadius: '20px', padding: '18px 20px', cursor: 'pointer', textAlign: 'left', boxShadow: '0 4px 20px rgba(79,124,255,0.06)', display: 'flex', flexDirection: 'column', gap: '10px' }}>
+              <div style={{ width: '40px', height: '40px', borderRadius: '13px', background: 'linear-gradient(135deg,#1A1F36,#3A4166)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '19px', boxShadow: '0 6px 16px rgba(26,31,54,0.3)' }}>📅</div>
+              <div>
+                <div style={{ fontWeight: '800', fontSize: '13.5px', color: '#1A1F36' }}>Kalender</div>
+                <div style={{ fontSize: '11px', color: '#9BA3B4' }}>Termine & Tests</div>
+              </div>
+            </button>
           </div>
-        </button>
-
-        <button onClick={() => router.push('/kalender')}
-          style={{ width: '100%', background: 'linear-gradient(135deg, #1A1F36, #4F7CFF)', border: 'none', borderRadius: theme.radius.lg, padding: '14px 16px', marginBottom: '12px', cursor: 'pointer', textAlign: 'left', display: 'flex', alignItems: 'center', gap: '10px' }}>
-          <span style={{ fontSize: '20px' }}>📅</span>
-          <div>
-            <div style={{ fontSize: '13px', fontWeight: '800', color: 'white' }}>Kalender</div>
-            <div style={{ fontSize: '10px', color: 'rgba(255,255,255,0.85)' }}>Klassenarbeiten, Prüfungen & Termine</div>
-          </div>
-        </button>
-
-        <button onClick={() => router.push('/eltern-einblicke')}
-          style={{ width: '100%', background: theme.gradients.eltern, border: 'none', borderRadius: theme.radius.md, padding: '14px 16px', marginBottom: '16px', cursor: 'pointer', textAlign: 'left', display: 'flex', alignItems: 'center', gap: '10px' }}>
-          <span style={{ fontSize: '18px' }}>👁️</span>
-          <div>
-            <div style={{ fontSize: '13px', fontWeight: '800', color: 'white' }}>Für Eltern: Einblicke</div>
-            <div style={{ fontSize: '10px', color: 'rgba(255,255,255,0.7)' }}>Was {childName} über sich erzählt hat</div>
-          </div>
-        </button>
-
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px', marginBottom: '20px' }}>
-          <button onClick={() => router.push('/meine-wuensche')}
-            style={{ background: theme.gradients.wuensche, border: 'none', borderRadius: theme.radius.md, padding: '14px 16px', cursor: 'pointer', textAlign: 'left', display: 'flex', alignItems: 'center', gap: '10px' }}>
-            <span style={{ fontSize: '18px' }}>💭</span>
-            <span style={{ fontSize: '12px', fontWeight: '800', color: 'white' }}>Meine Wünsche</span>
-          </button>
-          <button onClick={() => router.push('/meine-skills')}
-            style={{ background: 'linear-gradient(135deg, #37C978, #00C9A7)', border: 'none', borderRadius: theme.radius.md, padding: '14px 16px', cursor: 'pointer', textAlign: 'left', display: 'flex', alignItems: 'center', gap: '10px' }}>
-            <span style={{ fontSize: '18px' }}>🚀</span>
-            <span style={{ fontSize: '12px', fontWeight: '800', color: 'white' }}>Meine Skills</span>
-          </button>
-          <button onClick={() => router.push('/mein-stil')}
-            style={{ background: 'linear-gradient(135deg, #FFB648, #FF7CB0)', border: 'none', borderRadius: theme.radius.md, padding: '14px 16px', cursor: 'pointer', textAlign: 'left', display: 'flex', alignItems: 'center', gap: '10px' }}>
-            <span style={{ fontSize: '18px' }}>🎨</span>
-            <span style={{ fontSize: '12px', fontWeight: '800', color: 'white' }}>Mein Stil</span>
-          </button>
-          <button onClick={() => router.push('/freizeit')}
-            style={{ background: 'linear-gradient(135deg, #FF8C42, #8A5CFF)', border: 'none', borderRadius: theme.radius.md, padding: '14px 16px', cursor: 'pointer', textAlign: 'left', display: 'flex', alignItems: 'center', gap: '10px' }}>
-            <span style={{ fontSize: '18px' }}>🎡</span>
-            <span style={{ fontSize: '12px', fontWeight: '800', color: 'white' }}>Freizeit-Ideen</span>
-          </button>
-          <button onClick={() => router.push('/meine-schule')}
-            style={{ background: 'linear-gradient(135deg, #4F7CFF, #37C978)', border: 'none', borderRadius: theme.radius.md, padding: '14px 16px', cursor: 'pointer', textAlign: 'left', display: 'flex', alignItems: 'center', gap: '10px' }}>
-            <span style={{ fontSize: '18px' }}>🏫</span>
-            <span style={{ fontSize: '12px', fontWeight: '800', color: 'white' }}>Meine Schule</span>
-          </button>
-          <button onClick={() => router.push('/eltern-wuensche')}
-            style={{ background: theme.gradients.eltern, border: 'none', borderRadius: theme.radius.md, padding: '14px 16px', cursor: 'pointer', textAlign: 'left', display: 'flex', alignItems: 'center', gap: '10px' }}>
-            <span style={{ fontSize: '18px' }}>👪</span>
-            <span style={{ fontSize: '12px', fontWeight: '800', color: 'white' }}>Eltern: Wünsche</span>
-          </button>
         </div>
 
-        <div style={{ background: theme.card, borderRadius: theme.radius.xl, padding: '18px 20px', marginBottom: '16px', border: `1px solid ${theme.line}` }}>
-          <p style={{ fontSize: '13px', fontWeight: '700', color: '#374151', marginBottom: '12px' }}>
-            {reife === 'jung' ? 'Wie fühlst du dich heute?' : reife === 'mittel' ? 'Wie geht\u2019s dir heute?' : 'Stimmung heute'}
-          </p>
-          <div style={{ display: 'flex', gap: '8px' }}>
+        {/* ── MOOD CHECK ── */}
+        <div style={{ background: 'white', borderRadius: '22px', padding: '22px 24px', marginBottom: '20px', border: '1px solid #EEF1F6', boxShadow: '0 4px 20px rgba(79,124,255,0.06)' }}>
+          <p style={{ fontSize: '13.5px', fontWeight: '700', color: '#1A1F36', marginBottom: '14px' }}>Wie fühlst du dich heute?</p>
+          <div style={{ display: 'flex', gap: '10px' }}>
             {MOODS.map(m => (
               <button key={m.emoji} onClick={() => setMood(m.emoji)}
-                style={{ flex: 1, padding: '10px 6px', borderRadius: theme.radius.sm, border: '2px solid', borderColor: mood === m.emoji ? theme.brand.blue : theme.line, background: mood === m.emoji ? theme.soft.blue : 'white', cursor: 'pointer', fontSize: reife === 'jung' ? '22px' : '19px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '4px', transition: 'all 0.15s' }}>
+                style={{ flex: 1, padding: '12px 6px', borderRadius: '16px', border: 'none', background: mood === m.emoji ? `${m.color}18` : '#F8F9FB', cursor: 'pointer', fontSize: '24px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '6px', transition: 'all 0.2s', boxShadow: mood === m.emoji ? `0 0 0 2px ${m.color}` : 'none' }}>
                 {m.emoji}
-                {reife !== 'reif' && <span style={{ fontSize: '11px', color: theme.mid, fontWeight: '600' }}>{m.label}</span>}
+                <span style={{ fontSize: '10.5px', color: mood === m.emoji ? m.color : '#9BA3B4', fontWeight: '700' }}>{m.label}</span>
               </button>
             ))}
           </div>
         </div>
 
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px', marginBottom: '24px' }}>
-          <div style={{ background: `linear-gradient(135deg, ${theme.soft.pink}, #fff)`, borderRadius: theme.radius.md, padding: '16px', border: '1px solid #FFD0E8', display: 'flex', gap: '12px', alignItems: 'center' }}>
-            <img src="/avatars/nica-solo.png" alt="Nica" style={{ width: '48px', height: '48px', borderRadius: '50%', objectFit: 'cover', flexShrink: 0 }} />
+        {/* ── NICA & PHIL SPEECH CARDS ── */}
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px', marginBottom: '28px' }}>
+          <div style={{ background: 'linear-gradient(160deg,#FFF5F9,white)', borderRadius: '20px', padding: '18px', border: '1px solid #FFE0EE', display: 'flex', gap: '12px', alignItems: 'center', boxShadow: '0 4px 16px rgba(255,124,176,0.08)' }}>
+            <img src="/avatars/nica-solo.png" alt="Nica" style={{ width: '46px', height: '46px', borderRadius: '50%', objectFit: 'cover', flexShrink: 0, boxShadow: '0 3px 10px rgba(255,124,176,0.3)' }} />
             <div>
-              <div style={{ fontSize: '11px', fontWeight: '700', color: theme.brand.pink, marginBottom: '3px' }}>NICA</div>
-              <p style={{ fontSize: '12px', color: theme.ink, margin: 0, lineHeight: '1.45' }}>
-                {reife === 'jung'
-                  ? (mood ? '✨ Ich bin bereit!' : 'Wie geht es dir heute? 💗')
-                  : (mood ? 'Bereit, wenn du es bist.' : 'Sag mir, wie es dir geht.')}
+              <div style={{ fontSize: '10.5px', fontWeight: '800', color: '#FF7CB0', marginBottom: '3px', letterSpacing: '0.03em' }}>NICA</div>
+              <p style={{ fontSize: '12px', color: '#3D4759', margin: 0, lineHeight: '1.4', fontWeight: '500' }}>
+                {mood ? '✨ Ich bin bereit!' : 'Sag mir wie es dir geht 💗'}
               </p>
             </div>
           </div>
-          <div style={{ background: `linear-gradient(135deg, ${theme.soft.blue}, #fff)`, borderRadius: theme.radius.md, padding: '16px', border: '1px solid #C7D9FF', display: 'flex', gap: '12px', alignItems: 'center' }}>
-            <img src="/avatars/phil-solo.png" alt="Phil" style={{ width: '48px', height: '48px', borderRadius: '50%', objectFit: 'cover', flexShrink: 0 }} />
+          <div style={{ background: 'linear-gradient(160deg,#F5F8FF,white)', borderRadius: '20px', padding: '18px', border: '1px solid #DEE8FF', display: 'flex', gap: '12px', alignItems: 'center', boxShadow: '0 4px 16px rgba(79,124,255,0.08)' }}>
+            <img src="/avatars/phil-solo.png" alt="Phil" style={{ width: '46px', height: '46px', borderRadius: '50%', objectFit: 'cover', flexShrink: 0, boxShadow: '0 3px 10px rgba(79,124,255,0.3)' }} />
             <div>
-              <div style={{ fontSize: '11px', fontWeight: '700', color: theme.brand.blue, marginBottom: '3px' }}>PHIL</div>
-              <p style={{ fontSize: '12px', color: theme.ink, margin: 0, lineHeight: '1.45' }}>
-                {reife === 'jung'
-                  ? (mood ? '🚀 Los geht\u2019s!' : 'Ich hab was für dich! 🚀')
-                  : (mood ? 'Los geht\u2019s.' : 'Ich hab heute was Interessantes für dich.')}
+              <div style={{ fontSize: '10.5px', fontWeight: '800', color: '#4F7CFF', marginBottom: '3px', letterSpacing: '0.03em' }}>PHIL</div>
+              <p style={{ fontSize: '12px', color: '#3D4759', margin: 0, lineHeight: '1.4', fontWeight: '500' }}>
+                {mood ? '🚀 Los geht\u2019s!' : 'Ich hab was für dich! 🚀'}
               </p>
             </div>
           </div>
         </div>
 
-        <div style={{ display: 'flex', gap: '8px', marginBottom: '16px', background: theme.card, padding: '6px', borderRadius: theme.radius.md, border: `1px solid ${theme.line}` }}>
-          <button onClick={() => setActiveTab('schule')}
-            style={{ flex: 1, padding: '10px', borderRadius: theme.radius.sm, border: 'none', fontWeight: '700', fontSize: '14px', cursor: 'pointer', background: activeTab === 'schule' ? theme.ink : 'transparent', color: activeTab === 'schule' ? 'white' : theme.mid, transition: 'all 0.2s' }}>
-            {reife === 'jung' ? '📚 Schulfächer' : 'Schulfächer'}
-          </button>
-          <button onClick={() => setActiveTab('talente')}
-            style={{ flex: 1, padding: '10px', borderRadius: theme.radius.sm, border: 'none', fontWeight: '700', fontSize: '14px', cursor: 'pointer', background: activeTab === 'talente' ? theme.ink : 'transparent', color: activeTab === 'talente' ? 'white' : theme.mid, transition: 'all 0.2s' }}>
-            {reife === 'jung' ? '🌟 Talente & Hobbys' : 'Talente & Hobbys'}
-          </button>
+        {/* ── SCHULFÄCHER — Ring Progress Cards ── */}
+        <div style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'space-between', marginBottom: '16px' }}>
+          <h2 style={{ fontSize: '17px', fontWeight: '800', color: '#1A1F36', margin: 0, letterSpacing: '-0.01em' }}>📚 Schulfächer</h2>
         </div>
-
-        {activeTab === 'schule' && (
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-            {SCHULFAECHER.map(s => {
-              const fc = fachFarben[s.id] || { farbe: theme.brand.blue, bg: theme.soft.blue, avatar: 'phil' as const }
-              return (
-                <button key={s.id}
-                  onClick={() => router.push(`/chat?subject=${s.id}&avatar=${fc.avatar}`)}
-                  style={{ background: theme.card, border: `1.5px solid ${theme.line}`, borderRadius: theme.radius.lg, padding: rs.buttonPadding, display: 'flex', alignItems: 'center', gap: '16px', cursor: 'pointer', textAlign: 'left', transition: 'all 0.2s', boxShadow: theme.shadow.sm }}
-                  onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-2px)'; e.currentTarget.style.borderColor = fc.farbe }}
-                  onMouseLeave={e => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.borderColor = theme.line }}>
-                  <div style={{ width: '48px', height: '48px', borderRadius: theme.radius.md, background: fc.bg, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '22px', flexShrink: 0 }}>
-                    {s.icon}
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px', marginBottom: '32px' }}>
+          {SCHULFAECHER.map(s => {
+            const circ = 2 * Math.PI * 20
+            const offset = circ - (s.fortschritt / 100) * circ
+            return (
+              <button key={s.id} onClick={() => router.push(`/chat?subject=${s.id}&avatar=${s.avatar}`)}
+                style={{ background: s.bg, border: '1px solid rgba(255,255,255,0.6)', borderRadius: '22px', padding: '20px', cursor: 'pointer', textAlign: 'left', boxShadow: '0 6px 24px rgba(79,124,255,0.08)', transition: 'all 0.25s', position: 'relative', overflow: 'hidden' }}
+                onMouseEnter={e => e.currentTarget.style.transform = 'translateY(-3px)'}
+                onMouseLeave={e => e.currentTarget.style.transform = 'translateY(0)'}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '14px' }}>
+                  <div style={{ width: '44px', height: '44px', borderRadius: '14px', background: 'white', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '21px', boxShadow: `0 6px 14px ${s.farbe}33` }}>{s.icon}</div>
+                  <div style={{ position: 'relative', width: '46px', height: '46px' }}>
+                    <svg width="46" height="46" viewBox="0 0 46 46">
+                      <circle cx="23" cy="23" r="20" fill="none" stroke="rgba(255,255,255,0.7)" strokeWidth="4" />
+                      <circle cx="23" cy="23" r="20" fill="none" stroke={s.farbe} strokeWidth="4" strokeDasharray={circ} strokeDashoffset={offset} strokeLinecap="round" transform="rotate(-90 23 23)" />
+                    </svg>
+                    <div style={{ position: 'absolute', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '10.5px', fontWeight: '800', color: s.farbe }}>{s.fortschritt}%</div>
                   </div>
-                  <div style={{ flex: 1 }}>
-                    <div style={{ fontWeight: '800', fontSize: '15px', color: theme.ink, marginBottom: '2px' }}>{s.label}</div>
-                    <div style={{ fontSize: '12px', color: theme.mid }}>{s.desc} · mit {fc.avatar === 'nica' ? 'Nica' : 'Phil'}</div>
-                  </div>
-                  <div style={{ width: '32px', height: '32px', borderRadius: '50%', background: fc.bg, display: 'flex', alignItems: 'center', justifyContent: 'center', color: fc.farbe, fontSize: '15px', fontWeight: '700' }}>→</div>
-                </button>
-              )
-            })}
-          </div>
-        )}
-
-        {activeTab === 'talente' && (
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-            {sichtbareTalente.map(t => (
-              <button key={t.id}
-                onClick={() => router.push(t.path)}
-                style={{ background: theme.card, border: `1.5px solid ${theme.line}`, borderRadius: theme.radius.lg, padding: rs.buttonPadding, display: 'flex', alignItems: 'center', gap: '16px', cursor: 'pointer', textAlign: 'left', transition: 'all 0.2s', boxShadow: theme.shadow.sm }}
-                onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-2px)'; e.currentTarget.style.borderColor = t.farbe }}
-                onMouseLeave={e => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.borderColor = theme.line }}>
-                <div style={{ width: '48px', height: '48px', borderRadius: theme.radius.md, background: t.bg, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '22px', flexShrink: 0 }}>
-                  {t.icon}
                 </div>
-                <div style={{ flex: 1 }}>
-                  <div style={{ fontWeight: '800', fontSize: '15px', color: theme.ink, marginBottom: '2px' }}>{t.label}</div>
-                  <div style={{ fontSize: '12px', color: theme.mid }}>{t.desc}</div>
-                </div>
-                <div style={{ width: '32px', height: '32px', borderRadius: '50%', background: t.bg, display: 'flex', alignItems: 'center', justifyContent: 'center', color: t.farbe, fontSize: '15px', fontWeight: '700' }}>→</div>
+                <div style={{ fontWeight: '800', fontSize: '15px', color: '#1A1F36', marginBottom: '3px' }}>{s.label}</div>
+                <div style={{ fontSize: '11.5px', color: '#7A8299', fontWeight: '500' }}>{s.desc}</div>
               </button>
-            ))}
+            )
+          })}
+        </div>
+
+        {/* ── QUICK LINKS ── */}
+        <h2 style={{ fontSize: '17px', fontWeight: '800', color: '#1A1F36', marginBottom: '16px', letterSpacing: '-0.01em' }}>⚡ Schnellzugriff</h2>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '10px', marginBottom: '28px' }}>
+          {QUICKLINKS.map(q => (
+            <button key={q.id} onClick={() => router.push(q.path)}
+              style={{ background: 'white', border: '1px solid #EEF1F6', borderRadius: '18px', padding: '16px 12px', cursor: 'pointer', textAlign: 'center', boxShadow: '0 3px 14px rgba(79,124,255,0.06)', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '8px' }}>
+              <div style={{ width: '38px', height: '38px', borderRadius: '12px', background: `${q.farbe}18`, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '18px' }}>{q.icon}</div>
+              <span style={{ fontSize: '11px', fontWeight: '700', color: '#3D4759' }}>{q.label}</span>
+            </button>
+          ))}
+        </div>
+
+        {/* ── PARENT SECTION ── */}
+        <button onClick={() => router.push('/eltern-einblicke')}
+          style={{ width: '100%', background: 'linear-gradient(135deg,#1A1F36,#2E3560)', border: 'none', borderRadius: '22px', padding: '20px 22px', cursor: 'pointer', textAlign: 'left', display: 'flex', alignItems: 'center', gap: '14px', marginBottom: '32px', boxShadow: '0 12px 32px rgba(26,31,54,0.25)' }}>
+          <div style={{ width: '42px', height: '42px', borderRadius: '13px', background: 'rgba(255,255,255,0.12)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '20px' }}>👁️</div>
+          <div style={{ flex: 1 }}>
+            <div style={{ fontWeight: '800', fontSize: '14px', color: 'white' }}>Für Eltern: Einblicke</div>
+            <div style={{ fontSize: '11.5px', color: 'rgba(255,255,255,0.55)' }}>Was {childName} über sich erzählt hat</div>
           </div>
-        )}
+          <span style={{ color: 'rgba(255,255,255,0.6)', fontSize: '18px' }}>→</span>
+        </button>
       </div>
 
-      <div style={{ position: 'fixed', bottom: 0, left: 0, right: 0, background: theme.card, borderTop: `1px solid ${theme.line}`, display: 'flex', justifyContent: 'space-around', padding: '10px 0 20px' }}>
+      {/* ── BOTTOM NAVIGATION (floating pill style) ── */}
+      <div style={{ position: 'fixed', bottom: '18px', left: '50%', transform: 'translateX(-50%)', background: 'rgba(255,255,255,0.9)', backdropFilter: 'blur(20px)', borderRadius: '100px', padding: '10px 8px', display: 'flex', gap: '4px', boxShadow: '0 12px 40px rgba(26,31,54,0.15)', border: '1px solid rgba(255,255,255,0.6)', zIndex: 20 }}>
         {[
           { icon: '🏠', label: 'Start', active: true, path: '/dashboard' },
-          { icon: '🗺️', label: 'Lernreise', path: '/lernreise' },
+          { icon: '🗺️', label: 'Reise', path: '/lernreise' },
           { icon: '📅', label: 'Kalender', path: '/kalender' },
           { icon: '☀️', label: 'Sommer', path: '/sommermission' },
-          { icon: '👤', label: 'Profil', path: '/onboarding' },
+          { icon: '👤', label: 'Profil', path: '/kind-waehlen' },
         ].map(item => (
-          <button key={item.label} onClick={() => router.push(item.path)} style={{ background: 'none', border: 'none', cursor: 'pointer', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '3px' }}>
-            <span style={{ fontSize: '22px' }}>{item.icon}</span>
-            <span style={{ fontSize: '10px', fontWeight: '700', color: item.active ? theme.brand.blue : theme.muted }}>{item.label}</span>
+          <button key={item.label} onClick={() => router.push(item.path)}
+            style={{ background: item.active ? 'linear-gradient(135deg,#4F7CFF,#8A5CFF)' : 'transparent', border: 'none', cursor: 'pointer', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '2px', padding: '9px 14px', borderRadius: '100px', transition: 'all 0.2s' }}>
+            <span style={{ fontSize: '18px' }}>{item.icon}</span>
+            <span style={{ fontSize: '9px', fontWeight: '700', color: item.active ? 'white' : '#9BA3B4' }}>{item.label}</span>
           </button>
         ))}
       </div>
