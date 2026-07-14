@@ -69,3 +69,52 @@ export const fachFarben: Record<string, { farbe: string; bg: string; avatar: 'ni
   musik: { farbe: theme.brand.orange, bg: theme.soft.orange, avatar: 'nica' },
   sport: { farbe: theme.brand.teal, bg: theme.soft.teal, avatar: 'phil' },
 }
+
+// ═══ ALTERSREIFE-SYSTEM ═══
+// Bestimmt Design-Ton und Sprachstil je nach Klassenstufe
+
+export type Reifestufe = 'jung' | 'mittel' | 'reif'
+
+export function getReifestufe(klasse: number): Reifestufe {
+  if (klasse <= 4) return 'jung'
+  if (klasse <= 7) return 'mittel'
+  return 'reif'
+}
+
+export const reifeStyles: Record<Reifestufe, {
+  emojiDichte: 'hoch' | 'mittel' | 'niedrig'
+  begruessung: (name: string) => string
+  fontGroesse: { titel: string; text: string; klein: string }
+  radius: string
+  buttonPadding: string
+  farbSaettigung: 'kraeftig' | 'gedeckt'
+  ansprache: string
+}> = {
+  jung: {
+    emojiDichte: 'hoch',
+    begruessung: (name) => `Hallo ${name}! 👋`,
+    fontGroesse: { titel: '26px', text: '14px', klein: '11px' },
+    radius: '20px',
+    buttonPadding: '18px 20px',
+    farbSaettigung: 'kraeftig',
+    ansprache: 'Super gemacht! 🎉',
+  },
+  mittel: {
+    emojiDichte: 'mittel',
+    begruessung: (name) => `Hi ${name} 👋`,
+    fontGroesse: { titel: '24px', text: '13px', klein: '11px' },
+    radius: '16px',
+    buttonPadding: '16px 18px',
+    farbSaettigung: 'kraeftig',
+    ansprache: 'Gut gemacht.',
+  },
+  reif: {
+    emojiDichte: 'niedrig',
+    begruessung: (name) => `Hallo ${name}`,
+    fontGroesse: { titel: '22px', text: '13px', klein: '10px' },
+    radius: '14px',
+    buttonPadding: '14px 16px',
+    farbSaettigung: 'gedeckt',
+    ansprache: 'Sehr gut.',
+  },
+}

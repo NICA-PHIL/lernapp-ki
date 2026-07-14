@@ -1,7 +1,7 @@
 'use client'
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
-import { theme, fachFarben } from '@/lib/theme'
+import { theme, fachFarben, getReifestufe, reifeStyles } from '@/lib/theme'
 
 const MOODS = [
   { emoji: '😄', label: 'Super' },
@@ -17,16 +17,8 @@ const SCHULFAECHER = [
   { id: 'sachunterricht', label: 'Sachunterricht', icon: '🔬', desc: 'Natur, Technik, Gesellschaft' },
 ]
 
-// Talente jetzt als eigene Seiten statt Chat-Link
 interface TalentKarte {
-  id: string
-  label: string
-  icon: string
-  desc: string
-  path: string
-  farbe: string
-  bg: string
-  nurFuer?: string // 'nicole' | 'philipp' — wenn gesetzt, nur für dieses Kind sichtbar
+  id: string; label: string; icon: string; desc: string; path: string; farbe: string; bg: string; nurFuer?: string
 }
 
 const TALENTE: TalentKarte[] = [
@@ -50,19 +42,20 @@ export default function Dashboard() {
     setKlasse(localStorage.getItem('np_child_klasse') || '3')
   }, [])
 
-  const isTeen = parseInt(klasse) >= 5
+  const klasseNum = parseInt(klasse)
+  const reife = getReifestufe(klasseNum)
+  const rs = reifeStyles[reife]
   const nameKey = childName.toLowerCase()
   const vorbereitungLink = nameKey.includes('nicole') ? '/nicole-vorbereitung'
     : nameKey.includes('philipp') ? '/philipp-vorbereitung' : null
 
-  // Talente nach Kind filtern (Piano+Gesang nur für Nicole)
-  const sichtbareTalente = TALENTE.filter(t => {
-    if (!t.nurFuer) return true
-    return nameKey.includes(t.nurFuer)
-  })
+  const sichtbareTalente = TALENTE.filter(t => !t.nurFuer || nameKey.includes(t.nurFuer))
+
+  // Bei "reif" (Klasse 8+) reduzierter Hintergrund, weniger verspielt
+  const bgStyle = reife === 'reif' ? '#F7F8FA' : theme.bg
 
   return (
-    <div style={{ minHeight: '100vh', background: theme.bg, fontFamily: 'system-ui, sans-serif', paddingBottom: '100px' }}>
+    <div style={{ minHeight: '100vh', background: bgStyle, fontFamily: 'system-ui, sans-serif', paddingBottom: '100px' }}>
 
       {/* Header */}
       <div style={{ background: theme.card, padding: '16px 24px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', boxShadow: `0 1px 0 ${theme.line}`, position: 'sticky', top: 0, zIndex: 10 }}>
@@ -71,92 +64,106 @@ export default function Dashboard() {
           <span style={{ fontWeight: '800', fontSize: '16px', color: theme.ink }}>Nica & Phil</span>
         </div>
         <div style={{ display: 'flex', gap: '10px' }}>
-          <div style={{ background: theme.soft.warn, borderRadius: theme.radius.full, padding: '6px 14px', fontSize: '13px', fontWeight: '700', color: '#9A5700' }}>🔥 3 Tage</div>
-          <div style={{ background: theme.soft.blue, borderRadius: theme.radius.full, padding: '6px 14px', fontSize: '13px', fontWeight: '700', color: theme.brand.blue }}>💎 120 Punkte</div>
+          <div style={{ background: theme.soft.warn, borderRadius: theme.radius.full, padding: '6px 14px', fontSize: '13px', fontWeight: '700', color: '#9A5700' }}>
+            {rs.emojiDichte === 'hoch' ? '🔥 3 Tage' : '3 Tage Serie'}
+          </div>
+          <div style={{ background: theme.soft.blue, borderRadius: theme.radius.full, padding: '6px 14px', fontSize: '13px', fontWeight: '700', color: theme.brand.blue }}>
+            {rs.emojiDichte === 'hoch' ? '💎 120 Punkte' : '120 Punkte'}
+          </div>
         </div>
       </div>
 
       <div style={{ maxWidth: '720px', margin: '0 auto', padding: '24px 20px' }}>
 
-        {/* Begrüßung */}
+        {/* Begrüßung — passt sich der Reifestufe an */}
         <div style={{ marginBottom: '20px', display: 'flex', alignItems: 'center', gap: '14px' }}>
           {childAvatar && (
-            <img src={childAvatar} alt={childName} style={{ width: '52px', height: '52px', borderRadius: '50%', objectFit: 'cover', border: `3px solid ${theme.soft.blue}` }} />
+            <img src={childAvatar} alt={childName} style={{ width: reife === 'jung' ? '52px' : '46px', height: reife === 'jung' ? '52px' : '46px', borderRadius: '50%', objectFit: 'cover', border: `3px solid ${theme.soft.blue}` }} />
           )}
           <div>
-            <h1 style={{ fontSize: '24px', fontWeight: '800', color: theme.ink, margin: '0 0 2px' }}>Hallo {childName}! 👋</h1>
-            <p style={{ color: theme.mid, fontSize: '13px', margin: 0 }}>Klasse {klasse} · Was lernst du heute?</p>
+            <h1 style={{ fontSize: rs.fontGroesse.titel, fontWeight: '800', color: theme.ink, margin: '0 0 2px' }}>{rs.begruessung(childName)}</h1>
+            <p style={{ color: theme.mid, fontSize: rs.fontGroesse.klein, margin: 0 }}>
+              {reife === 'jung' ? `Klasse ${klasse} · Was lernst du heute?` : reife === 'mittel' ? `Klasse ${klasse} · Bereit?` : `Klasse ${klasse}`}
+            </p>
           </div>
         </div>
 
         {/* Vorbereitungs-Banner */}
         {vorbereitungLink && (
           <button onClick={() => router.push(vorbereitungLink)}
-            style={{ width: '100%', background: theme.gradients.sommer, border: 'none', borderRadius: theme.radius.lg, padding: '18px 20px', marginBottom: '12px', display: 'flex', alignItems: 'center', gap: '14px', cursor: 'pointer', textAlign: 'left' }}>
-            <span style={{ fontSize: '28px' }}>🎒</span>
+            style={{ width: '100%', background: theme.gradients.sommer, border: 'none', borderRadius: theme.radius.lg, padding: rs.buttonPadding, marginBottom: '12px', display: 'flex', alignItems: 'center', gap: '14px', cursor: 'pointer', textAlign: 'left' }}>
+            <span style={{ fontSize: '26px' }}>{reife === 'jung' ? '🎒' : '📋'}</span>
             <div style={{ flex: 1 }}>
-              <div style={{ fontWeight: '800', fontSize: '14px', color: 'white' }}>Startklar für's neue Schuljahr!</div>
+              <div style={{ fontWeight: '800', fontSize: '14px', color: 'white' }}>
+                {reife === 'jung' ? "Startklar für's neue Schuljahr!" : 'Vorbereitung neues Schuljahr'}
+              </div>
               <div style={{ fontSize: '12px', color: 'rgba(255,255,255,0.9)' }}>Deine persönliche Vorbereitung ansehen</div>
             </div>
             <span style={{ color: 'white', fontSize: '18px' }}>→</span>
           </button>
         )}
 
-        {/* Persönliche Bereiche — Wünsche, Skills, Stil, Freizeit */}
+        {/* Quick-Access Kacheln */}
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px', marginBottom: '20px' }}>
           <button onClick={() => router.push('/meine-wuensche')}
             style={{ background: theme.gradients.wuensche, border: 'none', borderRadius: theme.radius.md, padding: '14px 16px', cursor: 'pointer', textAlign: 'left', display: 'flex', alignItems: 'center', gap: '10px' }}>
-            <span style={{ fontSize: '20px' }}>💭</span>
-            <span style={{ fontSize: '12px', fontWeight: '800', color: 'white', lineHeight: '1.3' }}>Meine Wünsche</span>
+            <span style={{ fontSize: '18px' }}>{reife === 'jung' ? '💭' : '📝'}</span>
+            <span style={{ fontSize: '12px', fontWeight: '800', color: 'white' }}>Meine Wünsche</span>
           </button>
           <button onClick={() => router.push('/meine-skills')}
             style={{ background: 'linear-gradient(135deg, #37C978, #00C9A7)', border: 'none', borderRadius: theme.radius.md, padding: '14px 16px', cursor: 'pointer', textAlign: 'left', display: 'flex', alignItems: 'center', gap: '10px' }}>
-            <span style={{ fontSize: '20px' }}>🚀</span>
-            <span style={{ fontSize: '12px', fontWeight: '800', color: 'white', lineHeight: '1.3' }}>Meine Skills</span>
+            <span style={{ fontSize: '18px' }}>{reife === 'jung' ? '🚀' : '📊'}</span>
+            <span style={{ fontSize: '12px', fontWeight: '800', color: 'white' }}>Meine Skills</span>
           </button>
           <button onClick={() => router.push('/mein-stil')}
             style={{ background: 'linear-gradient(135deg, #FFB648, #FF7CB0)', border: 'none', borderRadius: theme.radius.md, padding: '14px 16px', cursor: 'pointer', textAlign: 'left', display: 'flex', alignItems: 'center', gap: '10px' }}>
-            <span style={{ fontSize: '20px' }}>🎨</span>
-            <span style={{ fontSize: '12px', fontWeight: '800', color: 'white', lineHeight: '1.3' }}>Mein Stil</span>
+            <span style={{ fontSize: '18px' }}>🎨</span>
+            <span style={{ fontSize: '12px', fontWeight: '800', color: 'white' }}>Mein Stil</span>
           </button>
           <button onClick={() => router.push('/freizeit')}
             style={{ background: 'linear-gradient(135deg, #FF8C42, #8A5CFF)', border: 'none', borderRadius: theme.radius.md, padding: '14px 16px', cursor: 'pointer', textAlign: 'left', display: 'flex', alignItems: 'center', gap: '10px' }}>
-            <span style={{ fontSize: '20px' }}>🎡</span>
-            <span style={{ fontSize: '12px', fontWeight: '800', color: 'white', lineHeight: '1.3' }}>Freizeit-Ideen</span>
+            <span style={{ fontSize: '18px' }}>{reife === 'jung' ? '🎡' : '🗺️'}</span>
+            <span style={{ fontSize: '12px', fontWeight: '800', color: 'white' }}>Freizeit-Ideen</span>
           </button>
         </div>
 
         {/* Stimmung */}
         <div style={{ background: theme.card, borderRadius: theme.radius.xl, padding: '18px 20px', marginBottom: '16px', border: `1px solid ${theme.line}` }}>
-          <p style={{ fontSize: '13px', fontWeight: '700', color: '#374151', marginBottom: '12px' }}>Wie fühlst du dich heute?</p>
+          <p style={{ fontSize: '13px', fontWeight: '700', color: '#374151', marginBottom: '12px' }}>
+            {reife === 'jung' ? 'Wie fühlst du dich heute?' : reife === 'mittel' ? 'Wie geht\'s dir heute?' : 'Stimmung heute'}
+          </p>
           <div style={{ display: 'flex', gap: '8px' }}>
             {MOODS.map(m => (
               <button key={m.emoji} onClick={() => setMood(m.emoji)}
-                style={{ flex: 1, padding: '10px 6px', borderRadius: theme.radius.sm, border: '2px solid', borderColor: mood === m.emoji ? theme.brand.blue : theme.line, background: mood === m.emoji ? theme.soft.blue : 'white', cursor: 'pointer', fontSize: '22px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '4px', transition: 'all 0.15s' }}>
+                style={{ flex: 1, padding: '10px 6px', borderRadius: theme.radius.sm, border: '2px solid', borderColor: mood === m.emoji ? theme.brand.blue : theme.line, background: mood === m.emoji ? theme.soft.blue : 'white', cursor: 'pointer', fontSize: reife === 'jung' ? '22px' : '19px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '4px', transition: 'all 0.15s' }}>
                 {m.emoji}
-                <span style={{ fontSize: '11px', color: theme.mid, fontWeight: '600' }}>{m.label}</span>
+                {reife !== 'reif' && <span style={{ fontSize: '11px', color: theme.mid, fontWeight: '600' }}>{m.label}</span>}
               </button>
             ))}
           </div>
         </div>
 
-        {/* Nica & Phil Nachrichten */}
+        {/* Nica & Phil Nachrichten — Ton passt sich an */}
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px', marginBottom: '24px' }}>
           <div style={{ background: `linear-gradient(135deg, ${theme.soft.pink}, #fff)`, borderRadius: theme.radius.md, padding: '16px', border: '1px solid #FFD0E8', display: 'flex', gap: '12px', alignItems: 'center' }}>
-            <img src="/avatars/nica-solo.png" alt="Nica" style={{ width: '52px', height: '52px', borderRadius: '50%', objectFit: 'cover', flexShrink: 0 }} />
+            <img src="/avatars/nica-solo.png" alt="Nica" style={{ width: '48px', height: '48px', borderRadius: '50%', objectFit: 'cover', flexShrink: 0 }} />
             <div>
               <div style={{ fontSize: '11px', fontWeight: '700', color: theme.brand.pink, marginBottom: '3px' }}>NICA</div>
               <p style={{ fontSize: '12px', color: theme.ink, margin: 0, lineHeight: '1.45' }}>
-                {mood ? '✨ Ich bin bereit!' : 'Wie geht es dir heute? 💗'}
+                {reife === 'jung'
+                  ? (mood ? '✨ Ich bin bereit!' : 'Wie geht es dir heute? 💗')
+                  : (mood ? 'Bereit, wenn du es bist.' : 'Sag mir, wie's dir geht.')}
               </p>
             </div>
           </div>
           <div style={{ background: `linear-gradient(135deg, ${theme.soft.blue}, #fff)`, borderRadius: theme.radius.md, padding: '16px', border: '1px solid #C7D9FF', display: 'flex', gap: '12px', alignItems: 'center' }}>
-            <img src="/avatars/phil-solo.png" alt="Phil" style={{ width: '52px', height: '52px', borderRadius: '50%', objectFit: 'cover', flexShrink: 0 }} />
+            <img src="/avatars/phil-solo.png" alt="Phil" style={{ width: '48px', height: '48px', borderRadius: '50%', objectFit: 'cover', flexShrink: 0 }} />
             <div>
               <div style={{ fontSize: '11px', fontWeight: '700', color: theme.brand.blue, marginBottom: '3px' }}>PHIL</div>
               <p style={{ fontSize: '12px', color: theme.ink, margin: 0, lineHeight: '1.45' }}>
-                {mood ? '🚀 Los geht\'s!' : 'Ich hab was für dich! 🚀'}
+                {reife === 'jung'
+                  ? (mood ? '🚀 Los geht\'s!' : 'Ich hab was für dich! 🚀')
+                  : (mood ? 'Los geht\'s.' : 'Ich hab heute was Interessantes für dich.')}
               </p>
             </div>
           </div>
@@ -166,15 +173,15 @@ export default function Dashboard() {
         <div style={{ display: 'flex', gap: '8px', marginBottom: '16px', background: theme.card, padding: '6px', borderRadius: theme.radius.md, border: `1px solid ${theme.line}` }}>
           <button onClick={() => setActiveTab('schule')}
             style={{ flex: 1, padding: '10px', borderRadius: theme.radius.sm, border: 'none', fontWeight: '700', fontSize: '14px', cursor: 'pointer', background: activeTab === 'schule' ? theme.ink : 'transparent', color: activeTab === 'schule' ? 'white' : theme.mid, transition: 'all 0.2s' }}>
-            📚 Schulfächer
+            {reife === 'jung' ? '📚 Schulfächer' : 'Schulfächer'}
           </button>
           <button onClick={() => setActiveTab('talente')}
             style={{ flex: 1, padding: '10px', borderRadius: theme.radius.sm, border: 'none', fontWeight: '700', fontSize: '14px', cursor: 'pointer', background: activeTab === 'talente' ? theme.ink : 'transparent', color: activeTab === 'talente' ? 'white' : theme.mid, transition: 'all 0.2s' }}>
-            🌟 Talente & Hobbys
+            {reife === 'jung' ? '🌟 Talente & Hobbys' : 'Talente & Hobbys'}
           </button>
         </div>
 
-        {/* Schulfächer Liste */}
+        {/* Schulfächer */}
         {activeTab === 'schule' && (
           <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
             {SCHULFAECHER.map(s => {
@@ -182,40 +189,40 @@ export default function Dashboard() {
               return (
                 <button key={s.id}
                   onClick={() => router.push(`/chat?subject=${s.id}&avatar=${fc.avatar}`)}
-                  style={{ background: theme.card, border: `1.5px solid ${theme.line}`, borderRadius: theme.radius.lg, padding: '18px 20px', display: 'flex', alignItems: 'center', gap: '16px', cursor: 'pointer', textAlign: 'left', transition: 'all 0.2s', boxShadow: theme.shadow.sm }}
+                  style={{ background: theme.card, border: `1.5px solid ${theme.line}`, borderRadius: theme.radius.lg, padding: rs.buttonPadding, display: 'flex', alignItems: 'center', gap: '16px', cursor: 'pointer', textAlign: 'left', transition: 'all 0.2s', boxShadow: theme.shadow.sm }}
                   onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-2px)'; e.currentTarget.style.borderColor = fc.farbe }}
                   onMouseLeave={e => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.borderColor = theme.line }}>
-                  <div style={{ width: '52px', height: '52px', borderRadius: theme.radius.md, background: fc.bg, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '26px', flexShrink: 0 }}>
+                  <div style={{ width: '48px', height: '48px', borderRadius: theme.radius.md, background: fc.bg, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '22px', flexShrink: 0 }}>
                     {s.icon}
                   </div>
                   <div style={{ flex: 1 }}>
-                    <div style={{ fontWeight: '800', fontSize: '16px', color: theme.ink, marginBottom: '2px' }}>{s.label}</div>
+                    <div style={{ fontWeight: '800', fontSize: '15px', color: theme.ink, marginBottom: '2px' }}>{s.label}</div>
                     <div style={{ fontSize: '12px', color: theme.mid }}>{s.desc} · mit {fc.avatar === 'nica' ? 'Nica' : 'Phil'}</div>
                   </div>
-                  <div style={{ width: '34px', height: '34px', borderRadius: '50%', background: fc.bg, display: 'flex', alignItems: 'center', justifyContent: 'center', color: fc.farbe, fontSize: '16px', fontWeight: '700' }}>→</div>
+                  <div style={{ width: '32px', height: '32px', borderRadius: '50%', background: fc.bg, display: 'flex', alignItems: 'center', justifyContent: 'center', color: fc.farbe, fontSize: '15px', fontWeight: '700' }}>→</div>
                 </button>
               )
             })}
           </div>
         )}
 
-        {/* Talente Liste — jetzt mit eigenen Seiten */}
+        {/* Talente */}
         {activeTab === 'talente' && (
           <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
             {sichtbareTalente.map(t => (
               <button key={t.id}
                 onClick={() => router.push(t.path)}
-                style={{ background: theme.card, border: `1.5px solid ${theme.line}`, borderRadius: theme.radius.lg, padding: '18px 20px', display: 'flex', alignItems: 'center', gap: '16px', cursor: 'pointer', textAlign: 'left', transition: 'all 0.2s', boxShadow: theme.shadow.sm }}
+                style={{ background: theme.card, border: `1.5px solid ${theme.line}`, borderRadius: theme.radius.lg, padding: rs.buttonPadding, display: 'flex', alignItems: 'center', gap: '16px', cursor: 'pointer', textAlign: 'left', transition: 'all 0.2s', boxShadow: theme.shadow.sm }}
                 onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-2px)'; e.currentTarget.style.borderColor = t.farbe }}
                 onMouseLeave={e => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.borderColor = theme.line }}>
-                <div style={{ width: '52px', height: '52px', borderRadius: theme.radius.md, background: t.bg, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '26px', flexShrink: 0 }}>
+                <div style={{ width: '48px', height: '48px', borderRadius: theme.radius.md, background: t.bg, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '22px', flexShrink: 0 }}>
                   {t.icon}
                 </div>
                 <div style={{ flex: 1 }}>
-                  <div style={{ fontWeight: '800', fontSize: '16px', color: theme.ink, marginBottom: '2px' }}>{t.label}</div>
+                  <div style={{ fontWeight: '800', fontSize: '15px', color: theme.ink, marginBottom: '2px' }}>{t.label}</div>
                   <div style={{ fontSize: '12px', color: theme.mid }}>{t.desc}</div>
                 </div>
-                <div style={{ width: '34px', height: '34px', borderRadius: '50%', background: t.bg, display: 'flex', alignItems: 'center', justifyContent: 'center', color: t.farbe, fontSize: '16px', fontWeight: '700' }}>→</div>
+                <div style={{ width: '32px', height: '32px', borderRadius: '50%', background: t.bg, display: 'flex', alignItems: 'center', justifyContent: 'center', color: t.farbe, fontSize: '15px', fontWeight: '700' }}>→</div>
               </button>
             ))}
           </div>
