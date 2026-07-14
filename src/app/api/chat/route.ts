@@ -2,80 +2,78 @@ import { NextRequest, NextResponse } from 'next/server'
 import OpenAI from 'openai'
 
 const SUBJECT_PROMPTS: Record<string, string> = {
-  mathe: `Du hilfst bei Mathematik nach dem Berliner Rahmenlehrplan.
-Themen je nach Klasse: Zahlenraum, Grundrechenarten, Brüche, Geometrie, Textaufgaben, Terme, Gleichungen.
-Erkläre mit konkreten Beispielen.`,
-  deutsch: `Du hilfst bei Deutsch nach dem Berliner Rahmenlehrplan.
-Themen: Aufsätze, Grammatik, Rechtschreibung, Lesen, Textverständnis, Erörterung, Balladenanalyse.`,
-  englisch: `Du hilfst bei Englisch nach dem Berliner Rahmenlehrplan.
-Themen: Vokabeln, Grammatik, Present Perfect, Sprechen, Schreiben.`,
-  spanisch: `Du hilfst beim Spanisch-Einstieg. Alle starten bei null — keine Vorkenntnisse nötig.
-Themen: Begrüßung, Zahlen, Aussprache, regelmäßige Verben auf -ar/-er/-ir, ser/estar.`,
-  sachunterricht: `Du hilfst bei Sachunterricht (Berlin, Klasse 1-4): Erde, Kind, Markt, Rad, Tier, Wasser, Wohnen, Zeit.`,
-  gewi: `Du hilfst bei GEWI (Gesellschaftswissenschaften): Mensch, Zeit, Raum, Zusammenleben.`,
-  nawi: `Du hilfst bei NAWI (Naturwissenschaften): Experimente, Beobachten, erste naturwissenschaftliche Konzepte.`,
-  physik: `Du hilfst bei Physik: Optik, Mechanik, Kraft, wissenschaftliches Protokoll schreiben.`,
-  chemie: `Du hilfst bei Chemie: Stoffe, Stoffgemische, Trennverfahren, Sicherheit im Labor.`,
-  geschichte: `Du hilfst bei Geschichte: Quellenarbeit, Zeitleisten, historische Zusammenhänge.`,
-  sport: `Du hilfst bei Sport - Fußball, Taekwondo, Karate. Erkläre Übungen für zuhause. Betone Respekt und Disziplin.`,
+  mathe: `Mathematik nach Berliner Rahmenlehrplan: Zahlenraum, Grundrechenarten, Brüche, Geometrie, Terme, Gleichungen.`,
+  deutsch: `Deutsch nach Berliner Rahmenlehrplan: Aufsätze, Grammatik, Rechtschreibung, Lesen, Erörterung.`,
+  englisch: `Englisch nach Berliner Rahmenlehrplan: Vokabeln, Grammatik, Present Perfect, Sprechen, Schreiben.`,
+  spanisch: `Spanisch-Einstieg. Alle starten bei null. Begrüßung, Zahlen, ser/estar.`,
+  sachunterricht: `Sachunterricht Klasse 1-4: Erde, Kind, Markt, Rad, Tier, Wasser, Wohnen, Zeit.`,
+  gewi: `GEWI: Mensch, Zeit, Raum, Zusammenleben.`,
+  nawi: `NAWI: Experimente, Beobachten, naturwissenschaftliche Konzepte.`,
+  physik: `Physik: Optik, Mechanik, Kraft, Protokoll schreiben.`,
+  chemie: `Chemie: Stoffe, Stoffgemische, Trennverfahren, Laborsicherheit.`,
+  geschichte: `Geschichte: Quellenarbeit, Zeitleisten, historische Zusammenhänge.`,
+  sport: `Sport - Fußball, Taekwondo, Karate. Übungen für zuhause. Respekt und Disziplin.`,
+}
+
+function buildSystemPrompt(avatar: string, subject: string, klasse: number) {
+  const isNica = avatar === 'nica'
+  const klasseNum = klasse || 4
+  let ton = ''
+  if (klasseNum <= 4) ton = 'Sprich verspielt, warmherzig, mit Emojis, kurze Sätze.'
+  else if (klasseNum <= 7) ton = 'Sprich freundlich, aber nicht kindisch. Wenig Emojis.'
+  else ton = 'Sprich klar, direkt, respektvoll wie zu einem Jugendlichen. Kaum Emojis.'
+
+  const persona = isNica ? 'Du bist Nica, warmherzig, kreativ, einfühlsam.' : 'Du bist Phil, neugierig, logisch, direkt.'
+  const context = SUBJECT_PROMPTS[subject] || `Hilf bei ${subject}.`
+
+  return `${persona}\n\n${context}\n\nDu begleitest ein Kind in Klasse ${klasseNum}.\nTONFALL: ${ton}\n\nREGELN:\n1. Gib NIEMALS die fertige Antwort direkt\n2. Stelle Schritt-für-Schritt Fragen\n3. Lobe den Denkweg\n4. Kurze Antworten (2-4 Sätze)\n5. Deutsch, außer bei Sprachübungen`
+}
+
+async function callOpenAI(apiKey: string, system: string, messages: any[]) {
+  const openai = new OpenAI({ apiKey })
+  const res = await openai.chat.completions.create({
+    model: 'gpt-4o-mini', max_tokens: 350, temperature: 0.55,
+    messages: [{ role: 'system', content: system }, ...messages.slice(-12)],
+  })
+  return res.choices[0]?.message?.content || 'Kannst du das nochmal sagen?'
+}
+
+async function callAnthropic(apiKey: string, system: string, messages: any[]) {
+  const res = await fetch('https://api.anthropic.com/v1/messages', {
+    method: 'POST',
+    headers: { 'x-api-key': apiKey, 'anthropic-version': '2023-06-01', 'content-type': 'application/json' },
+    body: JSON.stringify({
+      model: 'claude-3-5-haiku-20241022', max_tokens: 350, system,
+      messages: messages.slice(-12).map((m: any) => ({ role: m.role, content: m.content })),
+    }),
+  })
+  const data = await res.json()
+  if (data.error) throw new Error(data.error.message)
+  return data.content?.[0]?.text || 'Kannst du das nochmal sagen?'
+}
+
+async function callGemini(apiKey: string, system: string, messages: any[]) {
+  const history = messages.slice(-12).map((m: any) => ({ role: m.role === 'assistant' ? 'model' : 'user', parts: [{ text: m.content }] }))
+  const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`, {
+    method: 'POST', headers: { 'content-type': 'application/json' },
+    body: JSON.stringify({ systemInstruction: { parts: [{ text: system }] }, contents: history }),
+  })
+  const data = await res.json()
+  if (data.error) throw new Error(data.error.message)
+  return data.candidates?.[0]?.content?.parts?.[0]?.text || 'Kannst du das nochmal sagen?'
 }
 
 export async function POST(req: NextRequest) {
-  const { messages, avatar, subject, klasse, apiKey } = await req.json()
-
+  const { messages, avatar, subject, klasse, apiKey, provider } = await req.json()
   if (!apiKey) return NextResponse.json({ error: 'Kein API-Key angegeben' }, { status: 400 })
 
-  const isNica = avatar === 'nica'
-  const klasseNum = parseInt(klasse) || 4
-
-  // Reifestufe bestimmt den Ton
-  let toneInstruction = ''
-  if (klasseNum <= 4) {
-    toneInstruction = `Sprich verspielt und warmherzig, mit Emojis. Das Kind ist jung — nutze einfache, kurze Sätze und viel Ermutigung.`
-  } else if (klasseNum <= 7) {
-    toneInstruction = `Sprich freundlich, aber nicht kindisch. Wenig Emojis. Das Kind ist im Übergang zur Selbstständigkeit — behandle es respektvoll wie einen jungen Erwachsenen, nicht wie ein Grundschulkind.`
-  } else {
-    toneInstruction = `Sprich klar, direkt und respektvoll — wie zu einem Jugendlichen, der ernst genommen werden möchte. Keine übertriebene Verspieltheit, fast keine Emojis. Kurz und auf den Punkt.`
-  }
-
-  const persona = isNica
-    ? `Du bist Nica, eine warmherzige, kreative und einfühlsame Lernbegleiterin.`
-    : `Du bist Phil, ein neugieriger, logischer und direkter Lernbegleiter.`
-
-  const subjectContext = SUBJECT_PROMPTS[subject] || `Du hilfst bei ${subject}.`
-
-  const systemPrompt = `${persona}
-
-${subjectContext}
-
-Du begleitest ein Kind in Klasse ${klasseNum}.
-
-TONFALL: ${toneInstruction}
-
-WICHTIGSTE REGELN:
-1. Gib NIEMALS die fertige Antwort direkt
-2. Stelle Schritt-für-Schritt Fragen
-3. Lobe den Denkweg, nicht die Person
-4. Halte Antworten kurz (2-4 Sätze)
-5. Sprich immer auf Deutsch (außer bei Sprachlern-Übungen)
-6. Wenn das Kind frustriert ist: tröste zuerst, dann erkläre neu`
+  const system = buildSystemPrompt(avatar, subject, parseInt(klasse) || 4)
 
   try {
-    const openai = new OpenAI({ apiKey })
-    const completion = await openai.chat.completions.create({
-      model: 'gpt-4o-mini',
-      max_tokens: 350,
-      temperature: 0.55,
-      messages: [
-        { role: 'system', content: systemPrompt },
-        ...messages.slice(-12).map((m: { role: string; content: string }) => ({
-          role: m.role as 'user' | 'assistant',
-          content: m.content
-        }))
-      ]
-    })
-
-    const message = completion.choices[0]?.message?.content || 'Kannst du das nochmal sagen?'
+    let message: string
+    if (provider === 'anthropic') message = await callAnthropic(apiKey, system, messages)
+    else if (provider === 'gemini') message = await callGemini(apiKey, system, messages)
+    else message = await callOpenAI(apiKey, system, messages)
     return NextResponse.json({ message })
   } catch (error: unknown) {
     const msg = error instanceof Error ? error.message : 'Fehler'
