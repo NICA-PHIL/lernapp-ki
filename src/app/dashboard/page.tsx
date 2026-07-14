@@ -56,7 +56,6 @@ export default function Dashboard() {
   return (
     <div style={{ minHeight: '100vh', background: bgStyle, fontFamily: 'system-ui, sans-serif', paddingBottom: '100px' }}>
 
-      {/* Header */}
       <div style={{ background: theme.card, padding: '16px 24px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', boxShadow: `0 1px 0 ${theme.line}`, position: 'sticky', top: 0, zIndex: 10 }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
           <img src="/avatars/duo-circle.png" alt="Nica & Phil" style={{ width: '38px', height: '38px', borderRadius: '50%', objectFit: 'cover' }} />
@@ -74,7 +73,6 @@ export default function Dashboard() {
 
       <div style={{ maxWidth: '720px', margin: '0 auto', padding: '24px 20px' }}>
 
-        {/* Begrüßung */}
         <div style={{ marginBottom: '20px', display: 'flex', alignItems: 'center', gap: '14px' }}>
           {childAvatar && (
             <img src={childAvatar} alt={childName} style={{ width: reife === 'jung' ? '52px' : '46px', height: reife === 'jung' ? '52px' : '46px', borderRadius: '50%', objectFit: 'cover', border: `3px solid ${theme.soft.blue}` }} />
@@ -87,7 +85,6 @@ export default function Dashboard() {
           </div>
         </div>
 
-        {/* Vorbereitungs-Banner */}
         {vorbereitungLink && (
           <button onClick={() => router.push(vorbereitungLink)}
             style={{ width: '100%', background: theme.gradients.sommer, border: 'none', borderRadius: theme.radius.lg, padding: rs.buttonPadding, marginBottom: '12px', display: 'flex', alignItems: 'center', gap: '14px', cursor: 'pointer', textAlign: 'left' }}>
@@ -102,7 +99,6 @@ export default function Dashboard() {
           </button>
         )}
 
-        {/* Fit für die neue Klasse — volle Breite */}
         <button onClick={() => router.push('/fit-fuer-die-schule')}
           style={{ width: '100%', background: theme.gradients.philipp, border: 'none', borderRadius: theme.radius.lg, padding: '14px 16px', marginBottom: '12px', cursor: 'pointer', textAlign: 'left', display: 'flex', alignItems: 'center', gap: '10px' }}>
           <span style={{ fontSize: '20px' }}>🎯</span>
@@ -112,7 +108,6 @@ export default function Dashboard() {
           </div>
         </button>
 
-        {/* Kalender — volle Breite */}
         <button onClick={() => router.push('/kalender')}
           style={{ width: '100%', background: 'linear-gradient(135deg, #1A1F36, #4F7CFF)', border: 'none', borderRadius: theme.radius.lg, padding: '14px 16px', marginBottom: '12px', cursor: 'pointer', textAlign: 'left', display: 'flex', alignItems: 'center', gap: '10px' }}>
           <span style={{ fontSize: '20px' }}>📅</span>
@@ -122,7 +117,6 @@ export default function Dashboard() {
           </div>
         </button>
 
-        {/* Eltern-Einblicke — volle Breite */}
         <button onClick={() => router.push('/eltern-einblicke')}
           style={{ width: '100%', background: theme.gradients.eltern, border: 'none', borderRadius: theme.radius.md, padding: '14px 16px', marginBottom: '16px', cursor: 'pointer', textAlign: 'left', display: 'flex', alignItems: 'center', gap: '10px' }}>
           <span style={{ fontSize: '18px' }}>👁️</span>
@@ -132,7 +126,6 @@ export default function Dashboard() {
           </div>
         </button>
 
-        {/* Quick-Access Kacheln */}
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px', marginBottom: '20px' }}>
           <button onClick={() => router.push('/meine-wuensche')}
             style={{ background: theme.gradients.wuensche, border: 'none', borderRadius: theme.radius.md, padding: '14px 16px', cursor: 'pointer', textAlign: 'left', display: 'flex', alignItems: 'center', gap: '10px' }}>
@@ -154,14 +147,18 @@ export default function Dashboard() {
             <span style={{ fontSize: '18px' }}>🎡</span>
             <span style={{ fontSize: '12px', fontWeight: '800', color: 'white' }}>Freizeit-Ideen</span>
           </button>
+          <button onClick={() => router.push('/meine-schule')}
+            style={{ background: 'linear-gradient(135deg, #4F7CFF, #37C978)', border: 'none', borderRadius: theme.radius.md, padding: '14px 16px', cursor: 'pointer', textAlign: 'left', display: 'flex', alignItems: 'center', gap: '10px' }}>
+            <span style={{ fontSize: '18px' }}>🏫</span>
+            <span style={{ fontSize: '12px', fontWeight: '800', color: 'white' }}>Meine Schule</span>
+          </button>
           <button onClick={() => router.push('/eltern-wuensche')}
-            style={{ background: theme.gradients.eltern, border: 'none', borderRadius: theme.radius.md, padding: '14px 16px', cursor: 'pointer', textAlign: 'left', display: 'flex', alignItems: 'center', gap: '10px', gridColumn: 'span 2' }}>
+            style={{ background: theme.gradients.eltern, border: 'none', borderRadius: theme.radius.md, padding: '14px 16px', cursor: 'pointer', textAlign: 'left', display: 'flex', alignItems: 'center', gap: '10px' }}>
             <span style={{ fontSize: '18px' }}>👪</span>
-            <span style={{ fontSize: '12px', fontWeight: '800', color: 'white' }}>Eltern: Wünsche für {childName} eintragen</span>
+            <span style={{ fontSize: '12px', fontWeight: '800', color: 'white' }}>Eltern: Wünsche</span>
           </button>
         </div>
 
-        {/* Stimmung */}
         <div style={{ background: theme.card, borderRadius: theme.radius.xl, padding: '18px 20px', marginBottom: '16px', border: `1px solid ${theme.line}` }}>
           <p style={{ fontSize: '13px', fontWeight: '700', color: '#374151', marginBottom: '12px' }}>
             {reife === 'jung' ? 'Wie fühlst du dich heute?' : reife === 'mittel' ? 'Wie geht\u2019s dir heute?' : 'Stimmung heute'}
@@ -177,7 +174,6 @@ export default function Dashboard() {
           </div>
         </div>
 
-        {/* Nica & Phil Nachrichten */}
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px', marginBottom: '24px' }}>
           <div style={{ background: `linear-gradient(135deg, ${theme.soft.pink}, #fff)`, borderRadius: theme.radius.md, padding: '16px', border: '1px solid #FFD0E8', display: 'flex', gap: '12px', alignItems: 'center' }}>
             <img src="/avatars/nica-solo.png" alt="Nica" style={{ width: '48px', height: '48px', borderRadius: '50%', objectFit: 'cover', flexShrink: 0 }} />
@@ -203,7 +199,6 @@ export default function Dashboard() {
           </div>
         </div>
 
-        {/* Tabs */}
         <div style={{ display: 'flex', gap: '8px', marginBottom: '16px', background: theme.card, padding: '6px', borderRadius: theme.radius.md, border: `1px solid ${theme.line}` }}>
           <button onClick={() => setActiveTab('schule')}
             style={{ flex: 1, padding: '10px', borderRadius: theme.radius.sm, border: 'none', fontWeight: '700', fontSize: '14px', cursor: 'pointer', background: activeTab === 'schule' ? theme.ink : 'transparent', color: activeTab === 'schule' ? 'white' : theme.mid, transition: 'all 0.2s' }}>
@@ -261,7 +256,6 @@ export default function Dashboard() {
         )}
       </div>
 
-      {/* Bottom Navigation */}
       <div style={{ position: 'fixed', bottom: 0, left: 0, right: 0, background: theme.card, borderTop: `1px solid ${theme.line}`, display: 'flex', justifyContent: 'space-around', padding: '10px 0 20px' }}>
         {[
           { icon: '🏠', label: 'Start', active: true, path: '/dashboard' },
