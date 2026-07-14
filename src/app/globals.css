@@ -123,9 +123,13 @@
   }
   body {
     @apply bg-background text-foreground;
+    font-family: var(--font-body), system-ui, sans-serif;
   }
   html {
     @apply font-sans;
+  }
+  h1, h2, h3 {
+    font-family: var(--font-display), system-ui, sans-serif;
   }
 }
 /* ═══ Responsive Verbesserungen für Nica & Phil ═══ */

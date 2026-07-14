@@ -55,7 +55,7 @@ export default function ElternWuensche() {
   }
 
   return (
-    <div style={{ minHeight: '100vh', background: theme.bg, fontFamily: 'system-ui, sans-serif', paddingBottom: '60px' }}>
+    <div style={{ minHeight: '100vh', background: theme.bg, fontFamily: 'var(--font-body), system-ui, sans-serif', paddingBottom: '60px' }}>
 
       <div style={{ background: 'linear-gradient(135deg, #1A1F36, #2A2F5A)', padding: '32px 24px 60px', position: 'relative', overflow: 'hidden' }}>
         <div style={{ position: 'absolute', top: '16px', right: '24px', fontSize: '54px', opacity: 0.15 }}>👪</div>
@@ -108,7 +108,7 @@ export default function ElternWuensche() {
             onChange={e => setFreitext(e.target.value)}
             placeholder="z.B. besondere Lernbedürfnisse, Diagnosen, was bisher gut oder schlecht funktioniert hat..."
             rows={4}
-            style={{ width: '100%', padding: '14px', border: `2px solid ${theme.line}`, borderRadius: theme.radius.md, fontSize: '14px', outline: 'none', boxSizing: 'border-box', fontFamily: 'system-ui', resize: 'none' }}
+            style={{ width: '100%', padding: '14px', border: `2px solid ${theme.line}`, borderRadius: theme.radius.md, fontSize: '14px', outline: 'none', boxSizing: 'border-box', fontFamily: 'var(--font-body), system-ui', resize: 'none' }}
           />
         </div>
 

@@ -33,7 +33,7 @@ export default function LoginPage() {
       minHeight: '100vh',
       background: `linear-gradient(135deg, ${theme.soft.blue} 0%, ${theme.soft.purple} 100%)`,
       display: 'flex', alignItems: 'center', justifyContent: 'center',
-      fontFamily: 'system-ui, sans-serif', padding: '24px'
+      fontFamily: 'var(--font-body), system-ui, sans-serif', padding: '24px'
     }}>
       <div style={{
         background: 'white', borderRadius: theme.radius.xl, padding: '48px',

@@ -53,7 +53,7 @@ export default function Entspannung() {
     <div style={{
       minHeight: '100vh',
       background: 'linear-gradient(180deg, #F0F4FA 0%, #E8EEF7 100%)',
-      fontFamily: 'system-ui, sans-serif',
+      fontFamily: 'var(--font-body), system-ui, sans-serif',
       paddingBottom: '60px',
       transition: 'background 1.2s ease'
     }}>

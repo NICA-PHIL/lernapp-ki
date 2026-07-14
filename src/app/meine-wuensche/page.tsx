@@ -60,7 +60,7 @@ export default function MeineWuensche() {
   }
 
   return (
-    <div style={{ minHeight: '100vh', background: theme.bg, fontFamily: 'system-ui, sans-serif', paddingBottom: '60px' }}>
+    <div style={{ minHeight: '100vh', background: theme.bg, fontFamily: 'var(--font-body), system-ui, sans-serif', paddingBottom: '60px' }}>
 
       <div style={{ background: 'linear-gradient(135deg, #FF7CB0, #8A5CFF)', padding: '32px 24px 60px', position: 'relative', overflow: 'hidden' }}>
         <div style={{ position: 'absolute', top: '16px', right: '24px', fontSize: '54px', opacity: 0.2 }}>💭</div>
@@ -118,7 +118,7 @@ export default function MeineWuensche() {
             onChange={e => setFreitext(e.target.value)}
             placeholder="z.B. Ich mag es nicht, wenn es zu schnell geht... oder: Ich liebe Rätsel!"
             rows={4}
-            style={{ width: '100%', padding: '14px', border: `2px solid ${theme.line}`, borderRadius: theme.radius.md, fontSize: '14px', outline: 'none', boxSizing: 'border-box', fontFamily: 'system-ui', resize: 'none' }}
+            style={{ width: '100%', padding: '14px', border: `2px solid ${theme.line}`, borderRadius: theme.radius.md, fontSize: '14px', outline: 'none', boxSizing: 'border-box', fontFamily: 'var(--font-body), system-ui', resize: 'none' }}
           />
         </div>
 

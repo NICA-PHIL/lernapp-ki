@@ -56,7 +56,7 @@ export default function Dashboard() {
   }
 
   return (
-    <div style={{ minHeight: '100vh', background: 'radial-gradient(ellipse 80% 50% at 50% -10%, #F0F4FF 0%, #FAFBFF 60%)', fontFamily: "'Inter', -apple-system, sans-serif", paddingBottom: '110px' }}>
+    <div style={{ minHeight: '100vh', background: 'radial-gradient(ellipse 80% 50% at 50% -10%, #F0F4FF 0%, #FAFBFF 60%)', fontFamily: 'var(--font-body), -apple-system, sans-serif', paddingBottom: '110px' }}>
 
       {/* ── STICKY HEADER ── */}
       <div style={{ background: 'rgba(255,255,255,0.85)', backdropFilter: 'blur(20px)', padding: '16px 24px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', borderBottom: '1px solid rgba(232,236,244,0.6)', position: 'sticky', top: 0, zIndex: 20 }}>

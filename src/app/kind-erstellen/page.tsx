@@ -39,7 +39,7 @@ export default function KindErstellen() {
   }
 
   return (
-    <div style={{ minHeight: '100vh', background: theme.bg, fontFamily: 'system-ui', padding: '32px 20px' }}>
+    <div style={{ minHeight: '100vh', background: theme.bg, fontFamily: 'var(--font-body), system-ui', padding: '32px 20px' }}>
       <div style={{ maxWidth: '440px', margin: '0 auto', background: 'white', borderRadius: theme.radius.xl, padding: '32px', boxShadow: '0 8px 32px rgba(79,124,255,0.1)' }}>
 
         {!code ? (

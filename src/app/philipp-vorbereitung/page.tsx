@@ -2,6 +2,7 @@
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { theme } from '@/lib/theme'
+import { LivingAvatar } from '@/components/LivingAvatar'
 
 interface Fach {
   id: string
@@ -96,14 +97,14 @@ export default function PhilippVorbereitung() {
   ]
 
   return (
-    <div style={{ minHeight: '100vh', background: '#F0FAFF', fontFamily: 'system-ui, sans-serif', paddingBottom: '60px' }}>
+    <div style={{ minHeight: '100vh', background: '#F0FAFF', fontFamily: 'var(--font-body), system-ui, sans-serif', paddingBottom: '60px' }}>
 
       {/* Hero */}
       <div style={{ background: theme.gradients.philipp, padding: '32px 24px 70px', position: 'relative', overflow: 'hidden' }}>
         <div style={{ position: 'absolute', top: '16px', right: '24px', fontSize: '54px', opacity: 0.2 }}>🎒</div>
         <button onClick={() => router.push('/dashboard')} style={{ background: 'rgba(255,255,255,0.25)', border: 'none', borderRadius: theme.radius.sm, padding: '8px 12px', color: 'white', fontSize: '14px', cursor: 'pointer', marginBottom: '20px' }}>← Zurück</button>
         <div style={{ display: 'flex', alignItems: 'center', gap: '16px', marginBottom: '4px' }}>
-          <img src="/avatars/phil-solo.png" style={{ width: '56px', height: '56px', borderRadius: '50%', objectFit: 'cover', border: '3px solid rgba(255,255,255,0.5)' }} />
+          <LivingAvatar src="/avatars/phil-solo.png" alt="Philipp" character="phil" size={56} />
           <div>
             <h1 style={{ fontSize: '24px', fontWeight: '800', color: 'white', margin: 0 }}>Philipp wird startklar 🎒</h1>
             <p style={{ color: 'rgba(255,255,255,0.9)', fontSize: '13px', margin: '2px 0 0' }}>Fit für die 3. Klasse — fachlich und mit Selbstvertrauen</p>

@@ -27,7 +27,7 @@ export default function CodeEinloesen() {
   }
 
   return (
-    <div style={{ minHeight: '100vh', background: `linear-gradient(135deg,${theme.soft.blue},${theme.soft.purple})`, display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: 'system-ui', padding: '24px' }}>
+    <div style={{ minHeight: '100vh', background: `linear-gradient(135deg,${theme.soft.blue},${theme.soft.purple})`, display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: 'var(--font-body), system-ui', padding: '24px' }}>
       <div style={{ background: 'white', borderRadius: theme.radius.xl, padding: '40px', maxWidth: '400px', width: '100%', textAlign: 'center', boxShadow: theme.shadow.lg }}>
         <div style={{ fontSize: '48px', marginBottom: '16px' }}>🔑</div>
         <h1 style={{ fontSize: '20px', fontWeight: '800', marginBottom: '8px' }}>Hast du einen Code?</h1>

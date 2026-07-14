@@ -22,7 +22,7 @@ export default function FeedbackUebersicht() {
   const gefiltert = filter === 'alle' ? feedbacks : feedbacks.filter(f => f.wer === filter)
 
   return (
-    <div style={{ minHeight: '100vh', background: theme.bg, fontFamily: 'system-ui', paddingBottom: '60px' }}>
+    <div style={{ minHeight: '100vh', background: theme.bg, fontFamily: 'var(--font-body), system-ui', paddingBottom: '60px' }}>
       <div style={{ background: theme.gradients.eltern, padding: '28px 24px 32px' }}>
         <button onClick={() => router.push('/dashboard')} style={{ background: 'rgba(255,255,255,0.15)', border: 'none', borderRadius: theme.radius.sm, padding: '8px 12px', color: 'white', fontSize: '13px', cursor: 'pointer', marginBottom: '16px' }}>← Zurück</button>
         <h1 style={{ fontSize: '20px', fontWeight: '800', color: 'white', margin: 0 }}>💬 Alles Feedback</h1>

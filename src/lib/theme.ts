@@ -2,6 +2,7 @@ export const theme = {
   brand: { blue: '#4F7CFF', purple: '#8A5CFF', pink: '#FF7CB0', green: '#37C978', teal: '#00C9A7', orange: '#FF8C42', warn: '#FFB648', error: '#FF6B6B' },
   soft: { blue: '#EAF0FF', purple: '#F2EBFF', pink: '#FFE8F1', green: '#E3FAEE', teal: '#E0FAF5', orange: '#FFF0E6', warn: '#FFF4E0', error: '#FFEFEF' },
   ink: '#1A1F36', mid: '#6B7280', muted: '#9CA3AF', line: '#E8ECF4', bg: '#F3F6FC', card: '#FFFFFF',
+  font: { display: 'var(--font-display)', body: 'var(--font-body)' },
   gradients: {
     sommer: 'linear-gradient(135deg, #FF8C42, #FF6B9D, #8A5CFF)',
     nicole: 'linear-gradient(135deg, #8A5CFF, #6C8FFF, #FF7CB0)',

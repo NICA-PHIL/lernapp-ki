@@ -2,6 +2,7 @@
 import { useState, useRef, useEffect, Suspense } from 'react'
 import { useSearchParams, useRouter } from 'next/navigation'
 import { theme } from '@/lib/theme'
+import { LivingAvatar } from '@/components/LivingAvatar'
 
 interface Message {
   role: 'user' | 'assistant'
@@ -93,7 +94,7 @@ function ChatContent() {
   const avatarImg = isNica ? '/avatars/nica-solo.png' : '/avatars/phil-solo.png'
 
   return (
-    <div style={{ height: '100vh', display: 'flex', flexDirection: 'column', background: theme.bg, fontFamily: 'system-ui, sans-serif' }}>
+    <div style={{ height: '100vh', display: 'flex', flexDirection: 'column', background: theme.bg, fontFamily: 'var(--font-body), system-ui, sans-serif' }}>
 
       {/* Header */}
       <div style={{ background: 'white', padding: '14px 20px', display: 'flex', alignItems: 'center', gap: '12px', boxShadow: `0 1px 0 ${theme.line}`, flexShrink: 0 }}>
@@ -101,8 +102,7 @@ function ChatContent() {
           style={{ background: 'none', border: 'none', fontSize: '20px', cursor: 'pointer', padding: '4px' }}>
           ←
         </button>
-        <img src={avatarImg} alt={avatar}
-          style={{ width: '40px', height: '40px', borderRadius: '50%', objectFit: 'cover' }} />
+        <LivingAvatar src={avatarImg} alt={avatar} character={isNica ? 'nica' : 'phil'} size={40} />
         <div>
           <div style={{ fontWeight: '700', fontSize: '15px', color: theme.ink }}>
             {isNica ? 'Nica' : 'Phil'}
@@ -185,7 +185,7 @@ function ChatContent() {
           style={{
             flex: 1, border: `1.5px solid ${theme.line}`, borderRadius: theme.radius.md,
             padding: '12px 16px', fontSize: '14px', resize: 'none',
-            outline: 'none', fontFamily: 'system-ui', lineHeight: '1.4',
+            outline: 'none', fontFamily: 'var(--font-body), system-ui', lineHeight: '1.4',
             maxHeight: '120px', overflow: 'auto'
           }}
         />

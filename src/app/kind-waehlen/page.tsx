@@ -35,7 +35,7 @@ export default function KindWaehlen() {
   }
 
   return (
-    <div style={{ minHeight: '100vh', background: theme.bg, fontFamily: 'system-ui, sans-serif', padding: '40px 20px' }}>
+    <div style={{ minHeight: '100vh', background: theme.bg, fontFamily: 'var(--font-body), system-ui, sans-serif', padding: '40px 20px' }}>
       <div style={{ maxWidth: '480px', margin: '0 auto' }}>
         <div style={{ textAlign: 'center', marginBottom: '32px' }}>
           <img src="/avatars/duo-circle.png" style={{ width: '64px', height: '64px', borderRadius: '50%', marginBottom: '14px' }} />

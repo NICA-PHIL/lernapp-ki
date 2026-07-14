@@ -55,7 +55,7 @@ export default function FeedbackPage() {
 
   if (!wer) {
     return (
-      <div style={{ minHeight: '100vh', background: theme.gradients.primary, display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: 'system-ui', padding: '24px' }}>
+      <div style={{ minHeight: '100vh', background: theme.gradients.primary, display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: 'var(--font-body), system-ui', padding: '24px' }}>
         <div style={{ background: 'white', borderRadius: theme.radius.xl, padding: '36px', maxWidth: '420px', width: '100%', textAlign: 'center', boxShadow: '0 20px 60px rgba(0,0,0,0.2)' }}>
           <div style={{ fontSize: '48px', marginBottom: '14px' }}>💬</div>
           <h1 style={{ fontSize: '20px', fontWeight: '800', marginBottom: '8px', color: theme.ink }}>Sag uns deine Meinung!</h1>
@@ -74,7 +74,7 @@ export default function FeedbackPage() {
 
   if (gesendet) {
     return (
-      <div style={{ minHeight: '100vh', background: theme.bg, display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: 'system-ui' }}>
+      <div style={{ minHeight: '100vh', background: theme.bg, display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: 'var(--font-body), system-ui' }}>
         <div style={{ textAlign: 'center' }}>
           <div style={{ fontSize: '64px', marginBottom: '16px' }}>🎉</div>
           <h1 style={{ fontSize: '22px', fontWeight: '800', color: theme.ink }}>Danke für dein Feedback!</h1>
@@ -85,7 +85,7 @@ export default function FeedbackPage() {
   }
 
   return (
-    <div style={{ minHeight: '100vh', background: theme.bg, fontFamily: 'system-ui', paddingBottom: '60px' }}>
+    <div style={{ minHeight: '100vh', background: theme.bg, fontFamily: 'var(--font-body), system-ui', paddingBottom: '60px' }}>
       <div style={{ background: wer === 'kind' ? theme.gradients.wuensche : theme.gradients.eltern, padding: '28px 24px 40px' }}>
         <button onClick={() => setWer(null)} style={{ background: 'rgba(255,255,255,0.2)', border: 'none', borderRadius: theme.radius.sm, padding: '8px 12px', color: 'white', fontSize: '13px', cursor: 'pointer', marginBottom: '16px' }}>← Zurück</button>
         <h1 style={{ fontSize: '20px', fontWeight: '800', color: 'white', margin: 0 }}>{wer === 'kind' ? '🧒 Deine Meinung zählt!' : '👪 Ihr Feedback'}</h1>

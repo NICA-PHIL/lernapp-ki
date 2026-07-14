@@ -61,7 +61,7 @@ export default function ElternEinblicke() {
   }, [])
 
   return (
-    <div style={{ minHeight: '100vh', background: 'radial-gradient(ellipse 80% 50% at 50% -10%, #F0F4FF 0%, #FAFBFF 60%)', fontFamily: "'Inter', -apple-system, sans-serif", paddingBottom: '60px' }}>
+    <div style={{ minHeight: '100vh', background: 'radial-gradient(ellipse 80% 50% at 50% -10%, #F0F4FF 0%, #FAFBFF 60%)', fontFamily: 'var(--font-body), -apple-system, sans-serif', paddingBottom: '60px' }}>
 
       {/* ── Kompakter Header ── */}
       <div style={{ background: 'rgba(255,255,255,0.85)', backdropFilter: 'blur(20px)', padding: '16px clamp(20px,4vw,40px)', display: 'flex', alignItems: 'center', gap: '16px', borderBottom: `1px solid ${theme.line}`, position: 'sticky', top: 0, zIndex: 20 }}>

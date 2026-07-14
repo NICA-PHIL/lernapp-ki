@@ -60,7 +60,7 @@ export default function LernreisePage() {
   const done = pfad.stationen.filter(s => s.status === 'done').length
 
   return (
-    <div style={{ minHeight: '100vh', background: theme.bg, fontFamily: 'system-ui, sans-serif', paddingBottom: '100px' }}>
+    <div style={{ minHeight: '100vh', background: theme.bg, fontFamily: 'var(--font-body), system-ui, sans-serif', paddingBottom: '100px' }}>
       <div style={{ background: 'rgba(255,255,255,0.9)', backdropFilter: 'blur(20px)', padding: '16px 24px', display: 'flex', alignItems: 'center', gap: '14px', borderBottom: `1px solid ${theme.line}`, position: 'sticky', top: 0, zIndex: 10 }}>
         <button onClick={() => router.push('/dashboard')} style={{ background: theme.bg, border: 'none', borderRadius: theme.radius.sm, padding: '8px 12px', fontSize: '14px', cursor: 'pointer' }}>← Zurück</button>
         <div>

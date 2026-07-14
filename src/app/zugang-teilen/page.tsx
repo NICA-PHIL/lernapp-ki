@@ -15,7 +15,7 @@ export default function ZugangTeilen() {
   }, [])
 
   return (
-    <div style={{ minHeight: '100vh', background: theme.bg, fontFamily: 'system-ui, sans-serif', padding: '32px 20px' }}>
+    <div style={{ minHeight: '100vh', background: theme.bg, fontFamily: 'var(--font-body), system-ui, sans-serif', padding: '32px 20px' }}>
       <div style={{ maxWidth: '480px', margin: '0 auto' }}>
         <button onClick={() => router.push('/dashboard')} style={{ background: 'white', border: `1px solid ${theme.line}`, borderRadius: '10px', padding: '8px 14px', fontSize: '13px', cursor: 'pointer', marginBottom: '20px' }}>← Zurück</button>
 

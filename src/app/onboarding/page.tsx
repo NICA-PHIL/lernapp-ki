@@ -80,7 +80,7 @@ export default function OnboardingPage() {
   }
 
   return (
-    <div style={{ minHeight: '100vh', background: 'linear-gradient(135deg, #EAF0FF, #F2EBFF)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: 'system-ui, sans-serif', padding: '24px' }}>
+    <div style={{ minHeight: '100vh', background: 'linear-gradient(135deg, #EAF0FF, #F2EBFF)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: 'var(--font-body), system-ui, sans-serif', padding: '24px' }}>
       <div style={{ background: 'white', borderRadius: '28px', padding: '40px', width: '100%', maxWidth: '480px', boxShadow: '0 16px 48px rgba(79,124,255,0.15)' }}>
 
         <div style={{ display: 'flex', gap: '8px', marginBottom: '32px' }}>
