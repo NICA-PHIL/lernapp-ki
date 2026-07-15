@@ -5,7 +5,7 @@ import { createClient } from '@/lib/supabase/client'
 import { theme } from '@/lib/theme'
 import { BaukastenAvatar } from '@/components/BaukastenAvatar'
 
-interface Kind { id: string; name: string; klasse: number; avatar_prefs: any; selbst_registriert: boolean }
+interface Kind { id: string; name: string; klasse: number; avatar_prefs: any; selbst_registriert: boolean; rolle?: string | null }
 
 export default function ElternUebersicht() {
   const router = useRouter()
@@ -21,8 +21,12 @@ export default function ElternUebersicht() {
   async function laden() {
     const { data: { user } } = await supabase.auth.getUser()
     if (!user) { router.push('/login'); return }
-    const { data } = await supabase.from('children').select('*').eq('parent_id', user.id)
-    setKinder(data || [])
+    const { data } = await supabase.from('parent_child_links')
+      .select('rolle, children(*)').eq('parent_id', user.id)
+    const liste = (data || [])
+      .map((row: any) => row.children ? { ...row.children, rolle: row.rolle } : null)
+      .filter(Boolean) as Kind[]
+    setKinder(liste)
     setLoading(false)
   }
 
@@ -43,12 +47,16 @@ export default function ElternUebersicht() {
     if (!user) { setCodeLoading(false); return }
 
     const { data: gefunden } = await supabase.from('family_codes')
-      .select('*').eq('code', code).eq('typ', 'kind_laedt_eltern_ein').eq('eingeloest', false).single()
+      .select('*').eq('code', code).in('typ', ['kind_laedt_eltern_ein', 'eltern_laedt_eltern_ein']).eq('eingeloest', false).single()
 
     if (!gefunden) { setCodeFehler('Code nicht gefunden oder schon verwendet'); setCodeLoading(false); return }
 
+    const { error: linkError } = await supabase.from('parent_child_links')
+      .insert({ parent_id: user.id, child_id: gefunden.child_id })
+
+    if (linkError) { setCodeFehler('Verknüpfung fehlgeschlagen: ' + linkError.message); setCodeLoading(false); return }
+
     await supabase.from('family_codes').update({ eingeloest: true, parent_id: user.id }).eq('id', gefunden.id)
-    await supabase.from('children').update({ parent_id: user.id }).eq('id', gefunden.child_id)
 
     setCode('')
     setCodeLoading(false)
@@ -83,7 +91,7 @@ export default function ElternUebersicht() {
                   <BaukastenAvatar gesicht={kind.avatar_prefs?.gesicht} hautton={kind.avatar_prefs?.hautton || theme.soft.blue} haarfarbe={kind.avatar_prefs?.haarfarbe || theme.brand.blue} accessoire={kind.avatar_prefs?.accessoire} size={42} />
                   <div style={{ flex: 1 }}>
                     <div style={{ fontWeight: '800', fontSize: '14px', color: theme.ink }}>{kind.name}</div>
-                    <div style={{ fontSize: '11.5px', color: theme.muted }}>Klasse {kind.klasse}{kind.selbst_registriert ? ' · hat eigenes Konto' : ''}</div>
+                    <div style={{ fontSize: '11.5px', color: theme.muted }}>Klasse {kind.klasse}{kind.rolle ? ` · du bist ${kind.rolle}` : ''}{kind.selbst_registriert ? ' · hat eigenes Konto' : ''}</div>
                   </div>
                   <span style={{ fontSize: '13px', fontWeight: '700', color: theme.brand.blue }}>Anzeigen →</span>
                 </button>
@@ -99,8 +107,8 @@ export default function ElternUebersicht() {
 
         {/* ── Code eines selbst-registrierten Kindes einlösen ── */}
         <div style={{ background: 'white', borderRadius: theme.radius.xl, padding: '22px', marginBottom: '16px', border: `1px solid ${theme.line}` }}>
-          <div style={{ fontSize: '14px', fontWeight: '700', color: theme.ink, marginBottom: '4px' }}>Hat sich dein Kind schon selbst registriert?</div>
-          <p style={{ fontSize: '12px', color: theme.mid, marginBottom: '12px' }}>Gib den 6-stelligen Code ein, den es dir gezeigt hat.</p>
+          <div style={{ fontSize: '14px', fontWeight: '700', color: theme.ink, marginBottom: '4px' }}>Hast du einen Code?</div>
+          <p style={{ fontSize: '12px', color: theme.mid, marginBottom: '12px' }}>Von deinem Kind (Selbst-Registrierung) oder von einem anderen Elternteil ("Zugang teilen").</p>
           <div style={{ display: 'flex', gap: '8px' }}>
             <input value={code} onChange={e => setCode(e.target.value.replace(/\D/g, '').slice(0, 6))} placeholder="000000"
               style={{ flex: 1, padding: '12px 14px', fontSize: '18px', textAlign: 'center', letterSpacing: '4px', border: `2px solid ${theme.line}`, borderRadius: theme.radius.sm, fontFamily: 'monospace', boxSizing: 'border-box' }} />

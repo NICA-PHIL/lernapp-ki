@@ -17,8 +17,9 @@ export default function KindWaehlen() {
     async function laden() {
       const { data: { user } } = await supabase.auth.getUser()
       if (!user) { router.push('/login'); return }
-      const { data } = await supabase.from('children').select('*').eq('parent_id', user.id)
-      setKinder(data || [])
+      const { data } = await supabase.from('parent_child_links').select('children(*)').eq('parent_id', user.id)
+      const liste = (data || []).map((row: any) => row.children).filter(Boolean) as Kind[]
+      setKinder(liste)
       setLoading(false)
     }
     laden()

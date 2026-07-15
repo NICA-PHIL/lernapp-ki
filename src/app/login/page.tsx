@@ -39,7 +39,7 @@ export default function LoginPage() {
         setLoading(false)
         return
       }
-      const { data: alsEltern } = await supabase.from('children').select('id').eq('parent_id', user.id).limit(1).maybeSingle()
+      const { data: alsEltern } = await supabase.from('parent_child_links').select('id').eq('parent_id', user.id).limit(1).maybeSingle()
       if (alsEltern) {
         router.push('/eltern-uebersicht')
         setLoading(false)

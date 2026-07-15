@@ -25,6 +25,8 @@ export default function KindErstellen() {
       .insert({ parent_id: user.id, name, klasse, selbst_registriert: false })
       .select().single()
 
+    if (kind) await supabase.from('parent_child_links').insert({ parent_id: user.id, child_id: kind.id })
+
     const neuerCode = generiereCode()
     await supabase.from('family_codes').insert({
       code: neuerCode, parent_id: user.id, child_id: kind?.id, typ: 'eltern_erstellt_kind'
