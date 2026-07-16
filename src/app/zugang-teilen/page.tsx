@@ -42,7 +42,7 @@ export default function ZugangTeilen() {
   return (
     <div style={{ minHeight: '100vh', background: theme.bg, fontFamily: 'var(--font-body), system-ui, sans-serif', padding: '32px 20px' }}>
       <div style={{ maxWidth: '480px', margin: '0 auto' }}>
-        <button onClick={() => router.push('/eltern-uebersicht')} style={{ background: 'white', border: `1px solid ${theme.line}`, borderRadius: '10px', padding: '8px 14px', fontSize: '13px', cursor: 'pointer', marginBottom: '20px' }}>← Zurück</button>
+        <button onClick={() => router.push('/eltern-uebersicht')} style={{ background: 'white', border: `1px solid ${theme.line}`, borderRadius: theme.radius.sm, padding: '8px 14px', fontSize: '13px', cursor: 'pointer', marginBottom: '20px' }}>← Zurück</button>
 
         <h1 style={{ fontSize: '20px', fontWeight: '800', color: theme.ink, marginBottom: '6px' }}>👪 Zugang teilen</h1>
         <p style={{ fontSize: '13px', color: theme.mid, marginBottom: '24px' }}>Gebt Großeltern, dem zweiten Elternteil oder der Nanny echten Zugriff auf dasselbe Kinderprofil.</p>
@@ -80,7 +80,7 @@ export default function ZugangTeilen() {
               <li>Sieht danach dasselbe Kinderprofil, dieselben Fortschritte und Einblicke</li>
             </ol>
             <button onClick={() => { setCode(null) }}
-              style={{ width: '100%', padding: '12px', background: '#F3F4F6', color: '#374151', border: 'none', borderRadius: theme.radius.md, fontWeight: '700', cursor: 'pointer' }}>
+              style={{ width: '100%', padding: '12px', background: theme.bg, color: theme.ink, border: 'none', borderRadius: theme.radius.md, fontWeight: '700', cursor: 'pointer' }}>
               Weiteren Code erstellen
             </button>
           </div>

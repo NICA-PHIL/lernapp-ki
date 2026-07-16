@@ -55,9 +55,9 @@ export default function FeedbackUebersicht() {
                 <span style={{ fontSize: '10.5px', color: theme.muted }}>{new Date(f.erstellt_am).toLocaleDateString('de-DE')}</span>
               </div>
               {f.bereich && <div style={{ fontSize: '11px', fontWeight: '700', color: theme.brand.blue, marginBottom: '8px' }}>📍 {f.bereich}</div>}
-              {f.gefaellt && <div style={{ fontSize: '12.5px', color: '#374151', marginBottom: '6px' }}>👍 {f.gefaellt}</div>}
-              {f.gefaellt_nicht && <div style={{ fontSize: '12.5px', color: '#374151', marginBottom: '6px' }}>👎 {f.gefaellt_nicht}</div>}
-              {f.wunsch && <div style={{ fontSize: '12.5px', color: '#374151' }}>💡 {f.wunsch}</div>}
+              {f.gefaellt && <div style={{ fontSize: '12.5px', color: theme.ink, marginBottom: '6px' }}>👍 {f.gefaellt}</div>}
+              {f.gefaellt_nicht && <div style={{ fontSize: '12.5px', color: theme.ink, marginBottom: '6px' }}>👎 {f.gefaellt_nicht}</div>}
+              {f.wunsch && <div style={{ fontSize: '12.5px', color: theme.ink }}>💡 {f.wunsch}</div>}
             </div>
           ))}
         </div>

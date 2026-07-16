@@ -117,7 +117,7 @@ function ChatContent() {
       {/* API Key Banner */}
       {showKeyInput && (
         <div style={{ background: theme.soft.warn, borderBottom: `1px solid ${theme.brand.warn}`, padding: '12px 20px', display: 'flex', gap: '10px', alignItems: 'center', flexShrink: 0 }}>
-          <span style={{ fontSize: '13px', color: '#9A5700', fontWeight: '600' }}>🔑 OpenAI API-Key eingeben:</span>
+          <span style={{ fontSize: '13px', color: theme.warnText, fontWeight: '600' }}>🔑 OpenAI API-Key eingeben:</span>
           <input
             type="password"
             placeholder="sk-..."

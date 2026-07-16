@@ -2,6 +2,7 @@ export const theme = {
   brand: { blue: '#4F7CFF', purple: '#8A5CFF', pink: '#FF7CB0', green: '#37C978', teal: '#00C9A7', orange: '#FF8C42', warn: '#FFB648', error: '#FF6B6B' },
   soft: { blue: '#EAF0FF', purple: '#F2EBFF', pink: '#FFE8F1', green: '#E3FAEE', teal: '#E0FAF5', orange: '#FFF0E6', warn: '#FFF4E0', error: '#FFEFEF' },
   ink: '#1A1F36', mid: '#6B7280', muted: '#9CA3AF', line: '#E8ECF4', bg: '#F3F6FC', card: '#FFFFFF',
+  errorText: '#DC2626', errorBorder: '#FECACA', warnText: '#9A5700',
   font: { display: 'var(--font-display)', body: 'var(--font-body)' },
   gradients: {
     sommer: 'linear-gradient(135deg, #FF8C42, #FF6B9D, #8A5CFF)',
@@ -10,6 +11,7 @@ export const theme = {
     primary: 'linear-gradient(135deg, #4F7CFF, #8A5CFF)',
     wuensche: 'linear-gradient(135deg, #FF7CB0, #8A5CFF)',
     eltern: 'linear-gradient(135deg, #1A1F36, #2A2F5A)',
+    dunkel: 'linear-gradient(135deg, #1A1F36, #4F7CFF)',
   },
   radius: { sm: '10px', md: '14px', lg: '18px', xl: '22px', full: '100px' },
   shadow: { sm: '0 2px 8px rgba(0,0,0,0.04)', md: '0 8px 24px rgba(79,124,255,0.1)', lg: '0 16px 48px rgba(79,124,255,0.15)' },

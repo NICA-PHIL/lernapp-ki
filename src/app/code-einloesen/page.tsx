@@ -34,7 +34,7 @@ export default function CodeEinloesen() {
         <p style={{ fontSize: '13px', color: theme.mid, marginBottom: '24px' }}>Frag Mama oder Papa nach deinem 6-stelligen Code!</p>
         <input value={code} onChange={e => setCode(e.target.value.replace(/\D/g,'').slice(0,6))} placeholder="000000"
           style={{ width: '100%', padding: '16px', fontSize: '28px', textAlign: 'center', letterSpacing: '8px', border: `2px solid ${theme.line}`, borderRadius: theme.radius.md, marginBottom: '16px', boxSizing: 'border-box', fontFamily: 'monospace' }} />
-        {error && <p style={{ color: '#DC2626', fontSize: '13px', marginBottom: '12px' }}>{error}</p>}
+        {error && <p style={{ color: theme.errorText, fontSize: '13px', marginBottom: '12px' }}>{error}</p>}
         <button onClick={einloesen} disabled={code.length !== 6 || loading}
           style={{ width: '100%', padding: '14px', background: code.length === 6 ? theme.gradients.primary : theme.line, color: 'white', border: 'none', borderRadius: theme.radius.md, fontWeight: '800', cursor: code.length === 6 ? 'pointer' : 'default' }}>
           {loading ? 'Prüfe...' : 'Los geht\u2019s! 🚀'}

@@ -132,7 +132,7 @@ export default function PhilippVorbereitung() {
             ].map((item, i) => (
               <div key={i} style={{ display: 'flex', gap: '12px', alignItems: 'flex-start', background: '#F5FCFF', borderRadius: theme.radius.md, padding: '12px 14px' }}>
                 <span style={{ fontSize: '18px', flexShrink: 0 }}>{item.icon}</span>
-                <span style={{ fontSize: '12.5px', color: '#374151', lineHeight: '1.5' }}>{item.text}</span>
+                <span style={{ fontSize: '12.5px', color: theme.ink, lineHeight: '1.5' }}>{item.text}</span>
               </div>
             ))}
           </div>
@@ -176,7 +176,7 @@ export default function PhilippVorbereitung() {
           <div style={{ fontSize: '12px', fontWeight: '800', color: theme.brand.pink, marginBottom: '10px' }}>🇩🇪 Deutsch lesen</div>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
             {BUECHER_DEUTSCH.map((buch, i) => (
-              <div key={i} style={{ display: 'flex', gap: '10px', alignItems: 'flex-start', paddingBottom: i < BUECHER_DEUTSCH.length - 1 ? '10px' : 0, borderBottom: i < BUECHER_DEUTSCH.length - 1 ? '1px solid #F3F4F6' : 'none' }}>
+              <div key={i} style={{ display: 'flex', gap: '10px', alignItems: 'flex-start', paddingBottom: i < BUECHER_DEUTSCH.length - 1 ? '10px' : 0, borderBottom: i < BUECHER_DEUTSCH.length - 1 ? `1px solid ${theme.bg}` : 'none' }}>
                 <span style={{ fontSize: '18px' }}>📖</span>
                 <div style={{ flex: 1 }}>
                   <div style={{ fontSize: '13px', fontWeight: '700', color: theme.ink }}>{buch.titel} <span style={{ fontWeight: '400', color: theme.muted }}>— {buch.autor}</span></div>
@@ -192,7 +192,7 @@ export default function PhilippVorbereitung() {
           <div style={{ fontSize: '12px', fontWeight: '800', color: theme.brand.green, marginBottom: '10px' }}>🇬🇧 Englisch lesen</div>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
             {BUECHER_ENGLISCH.map((buch, i) => (
-              <div key={i} style={{ display: 'flex', gap: '10px', alignItems: 'flex-start', paddingBottom: i < BUECHER_ENGLISCH.length - 1 ? '10px' : 0, borderBottom: i < BUECHER_ENGLISCH.length - 1 ? '1px solid #F3F4F6' : 'none' }}>
+              <div key={i} style={{ display: 'flex', gap: '10px', alignItems: 'flex-start', paddingBottom: i < BUECHER_ENGLISCH.length - 1 ? '10px' : 0, borderBottom: i < BUECHER_ENGLISCH.length - 1 ? `1px solid ${theme.bg}` : 'none' }}>
                 <span style={{ fontSize: '18px' }}>📖</span>
                 <div style={{ flex: 1 }}>
                   <div style={{ fontSize: '13px', fontWeight: '700', color: theme.ink }}>{buch.titel} <span style={{ fontWeight: '400', color: theme.muted }}>— {buch.autor}</span></div>
@@ -218,7 +218,7 @@ export default function PhilippVorbereitung() {
                 <button key={p.id} onClick={() => toggleCheck(p.id)}
                   style={{ display: 'flex', alignItems: 'center', gap: '12px', background: done ? '#F0FFF8' : '#FAFAFA', border: `1.5px solid ${done ? theme.brand.green : theme.line}`, borderRadius: theme.radius.md, padding: '12px 14px', cursor: 'pointer', textAlign: 'left', width: '100%' }}>
                   <span style={{ width: '22px', height: '22px', borderRadius: '50%', background: done ? theme.brand.green : 'white', border: `2px solid ${done ? theme.brand.green : '#D1D5DB'}`, color: 'white', fontSize: '12px', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>{done ? '✓' : ''}</span>
-                  <span style={{ fontSize: '13px', color: '#374151', textDecoration: done ? 'line-through' : 'none' }}>{p.text}</span>
+                  <span style={{ fontSize: '13px', color: theme.ink, textDecoration: done ? 'line-through' : 'none' }}>{p.text}</span>
                 </button>
               )
             })}
@@ -244,13 +244,13 @@ function FachKarte({ fach, expanded, onToggle, onStart }: { fach: Fach; expanded
         <div style={{ padding: '0 18px 18px' }}>
           <div style={{ background: `${fach.farbe}0D`, borderRadius: theme.radius.md, padding: '12px 14px', marginBottom: '12px' }}>
             <div style={{ fontSize: '11px', fontWeight: '800', color: fach.farbe, textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '4px' }}>Was ist neu?</div>
-            <p style={{ fontSize: '12.5px', color: '#374151', margin: 0, lineHeight: '1.55' }}>{fach.wasNeu}</p>
+            <p style={{ fontSize: '12.5px', color: theme.ink, margin: 0, lineHeight: '1.55' }}>{fach.wasNeu}</p>
           </div>
           <div style={{ marginBottom: '12px' }}>
             <div style={{ fontSize: '11px', fontWeight: '800', color: theme.muted, textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '8px' }}>Vorbereitung</div>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
               {fach.auffrischen.map((punkt, i) => (
-                <div key={i} style={{ display: 'flex', gap: '8px', alignItems: 'flex-start', fontSize: '12.5px', color: '#374151' }}>
+                <div key={i} style={{ display: 'flex', gap: '8px', alignItems: 'flex-start', fontSize: '12.5px', color: theme.ink }}>
                   <span style={{ color: fach.farbe, flexShrink: 0 }}>•</span>{punkt}
                 </div>
               ))}
@@ -258,7 +258,7 @@ function FachKarte({ fach, expanded, onToggle, onStart }: { fach: Fach; expanded
           </div>
           <div style={{ background: '#FFF9E8', borderRadius: theme.radius.md, padding: '10px 14px', marginBottom: '14px', display: 'flex', gap: '8px' }}>
             <span style={{ fontSize: '14px' }}>💡</span>
-            <p style={{ fontSize: '11.5px', color: '#7A5C00', margin: 0, lineHeight: '1.5' }}>{fach.tipp}</p>
+            <p style={{ fontSize: '11.5px', color: theme.warnText, margin: 0, lineHeight: '1.5' }}>{fach.tipp}</p>
           </div>
           <button onClick={onStart} style={{ width: '100%', padding: '12px', background: fach.farbe, color: 'white', border: 'none', borderRadius: theme.radius.md, fontSize: '13px', fontWeight: '800', cursor: 'pointer' }}>
             Jetzt mit {fach.avatar === 'nica' ? 'Nica' : 'Phil'} üben →

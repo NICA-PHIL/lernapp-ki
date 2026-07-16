@@ -62,9 +62,9 @@ export default function MeineWuensche() {
   return (
     <div style={{ minHeight: '100vh', background: theme.bg, fontFamily: 'var(--font-body), system-ui, sans-serif', paddingBottom: '60px' }}>
 
-      <div style={{ background: 'linear-gradient(135deg, #FF7CB0, #8A5CFF)', padding: '32px 24px 60px', position: 'relative', overflow: 'hidden' }}>
+      <div style={{ background: theme.gradients.wuensche, padding: '32px 24px 60px', position: 'relative', overflow: 'hidden' }}>
         <div style={{ position: 'absolute', top: '16px', right: '24px', fontSize: '54px', opacity: 0.2 }}>💭</div>
-        <button onClick={() => router.push('/dashboard')} style={{ background: 'rgba(255,255,255,0.25)', border: 'none', borderRadius: '10px', padding: '8px 12px', color: 'white', fontSize: '14px', cursor: 'pointer', marginBottom: '20px' }}>← Zurück</button>
+        <button onClick={() => router.push('/dashboard')} style={{ background: 'rgba(255,255,255,0.25)', border: 'none', borderRadius: theme.radius.sm, padding: '8px 12px', color: 'white', fontSize: '14px', cursor: 'pointer', marginBottom: '20px' }}>← Zurück</button>
         <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
           {avatar && <img src={avatar} style={{ width: '52px', height: '52px', borderRadius: '50%', objectFit: 'cover', border: '3px solid rgba(255,255,255,0.5)' }} />}
           <div>
@@ -77,7 +77,7 @@ export default function MeineWuensche() {
       <div style={{ maxWidth: '640px', margin: '-32px auto 0', padding: '0 20px' }}>
 
         {/* Interessen */}
-        <div style={{ background: 'white', borderRadius: '20px', padding: '20px', marginBottom: '16px', boxShadow: theme.shadow.md }}>
+        <div style={{ background: 'white', borderRadius: theme.radius.xl, padding: '20px', marginBottom: '16px', boxShadow: theme.shadow.md }}>
           <div style={{ fontSize: '14px', fontWeight: '800', color: theme.ink, marginBottom: '4px' }}>🌟 Das mag ich!</div>
           <p style={{ fontSize: '12px', color: theme.mid, margin: '0 0 14px' }}>Wähl so viele aus, wie du magst</p>
           <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
@@ -94,7 +94,7 @@ export default function MeineWuensche() {
         </div>
 
         {/* Lernwünsche */}
-        <div style={{ background: 'white', borderRadius: '20px', padding: '20px', marginBottom: '16px', boxShadow: theme.shadow.md }}>
+        <div style={{ background: 'white', borderRadius: theme.radius.xl, padding: '20px', marginBottom: '16px', boxShadow: theme.shadow.md }}>
           <div style={{ fontSize: '14px', fontWeight: '800', color: theme.ink, marginBottom: '4px' }}>🎯 Das wünsche ich mir beim Lernen</div>
           <p style={{ fontSize: '12px', color: theme.mid, margin: '0 0 14px' }}>Was ist dir wichtig?</p>
           <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
@@ -111,7 +111,7 @@ export default function MeineWuensche() {
         </div>
 
         {/* Freitext */}
-        <div style={{ background: 'white', borderRadius: '20px', padding: '20px', marginBottom: '20px', boxShadow: theme.shadow.md }}>
+        <div style={{ background: 'white', borderRadius: theme.radius.xl, padding: '20px', marginBottom: '20px', boxShadow: theme.shadow.md }}>
           <div style={{ fontSize: '14px', fontWeight: '800', color: theme.ink, marginBottom: '10px' }}>✏️ Willst du Nica & Phil noch etwas sagen?</div>
           <textarea
             value={freitext}

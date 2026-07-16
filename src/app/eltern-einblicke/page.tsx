@@ -65,7 +65,7 @@ export default function ElternEinblicke() {
 
       {/* ── Kompakter Header ── */}
       <div style={{ background: 'rgba(255,255,255,0.85)', backdropFilter: 'blur(20px)', padding: '16px clamp(20px,4vw,40px)', display: 'flex', alignItems: 'center', gap: '16px', borderBottom: `1px solid ${theme.line}`, position: 'sticky', top: 0, zIndex: 20 }}>
-        <button onClick={() => router.push('/dashboard')} style={{ background: theme.bg, border: 'none', borderRadius: theme.radius.md, padding: '10px 16px', fontSize: 'clamp(13px,1.1vw,15px)', fontWeight: '700', cursor: 'pointer', color: '#374151' }}>← Zurück</button>
+        <button onClick={() => router.push('/dashboard')} style={{ background: theme.bg, border: 'none', borderRadius: theme.radius.md, padding: '10px 16px', fontSize: 'clamp(13px,1.1vw,15px)', fontWeight: '700', cursor: 'pointer', color: theme.ink }}>← Zurück</button>
         <div>
           <div style={{ fontFamily: theme.font.display, fontWeight: '600', fontSize: 'clamp(16px,1.6vw,19px)', color: theme.ink, letterSpacing: '-0.01em' }}>👁️ Einblicke in {childName}s Welt</div>
           <div style={{ fontSize: 'clamp(11.5px,1vw,13px)', color: theme.muted }}>Was Ihr Kind uns über sich selbst erzählt hat</div>
@@ -117,9 +117,9 @@ export default function ElternEinblicke() {
         </div>
 
         {kindText && (
-          <div style={{ background: 'linear-gradient(135deg,#FFF9E8,#FFFCF3)', borderRadius: '22px', padding: 'clamp(18px,2vw,24px)', marginBottom: '16px', border: '1px solid #FFE9AE' }}>
+          <div style={{ background: 'linear-gradient(135deg,#FFF9E8,#FFFCF3)', borderRadius: theme.radius.xl, padding: 'clamp(18px,2vw,24px)', marginBottom: '16px', border: '1px solid #FFE9AE' }}>
             <div style={{ fontSize: 'clamp(14px,1.3vw,16px)', fontWeight: '800', color: '#9A7B00', marginBottom: '10px' }}>💬 In {childName}s eigenen Worten</div>
-            <p style={{ fontSize: 'clamp(13px,1.15vw,15px)', color: '#7A5C00', margin: 0, lineHeight: '1.6', fontStyle: 'italic' }}>"{kindText}"</p>
+            <p style={{ fontSize: 'clamp(13px,1.15vw,15px)', color: theme.warnText, margin: 0, lineHeight: '1.6', fontStyle: 'italic' }}>"{kindText}"</p>
           </div>
         )}
 
@@ -144,7 +144,7 @@ export default function ElternEinblicke() {
             {checkPhilipp > 0 && (
               <div>
                 <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '6px' }}>
-                  <span style={{ fontSize: 'clamp(12.5px,1.1vw,14px)', color: '#374151', fontWeight: '600' }}>Philipp</span>
+                  <span style={{ fontSize: 'clamp(12.5px,1.1vw,14px)', color: theme.ink, fontWeight: '600' }}>Philipp</span>
                   <span style={{ fontSize: 'clamp(12.5px,1.1vw,14px)', color: theme.brand.blue, fontWeight: '800' }}>{checkPhilipp}/6</span>
                 </div>
                 <div style={{ height: '8px', background: theme.line, borderRadius: theme.radius.full, overflow: 'hidden' }}><div style={{ height: '100%', width: `${checkPhilipp/6*100}%`, background: theme.brand.blue, borderRadius: theme.radius.full }} /></div>
@@ -153,7 +153,7 @@ export default function ElternEinblicke() {
             {checkNicole > 0 && (
               <div>
                 <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '6px' }}>
-                  <span style={{ fontSize: 'clamp(12.5px,1.1vw,14px)', color: '#374151', fontWeight: '600' }}>Nicole</span>
+                  <span style={{ fontSize: 'clamp(12.5px,1.1vw,14px)', color: theme.ink, fontWeight: '600' }}>Nicole</span>
                   <span style={{ fontSize: 'clamp(12.5px,1.1vw,14px)', color: theme.brand.pink, fontWeight: '800' }}>{checkNicole}/6</span>
                 </div>
                 <div style={{ height: '8px', background: theme.line, borderRadius: theme.radius.full, overflow: 'hidden' }}><div style={{ height: '100%', width: `${checkNicole/6*100}%`, background: theme.brand.pink, borderRadius: theme.radius.full }} /></div>

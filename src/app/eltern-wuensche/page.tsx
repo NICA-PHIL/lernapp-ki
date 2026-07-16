@@ -57,9 +57,9 @@ export default function ElternWuensche() {
   return (
     <div style={{ minHeight: '100vh', background: theme.bg, fontFamily: 'var(--font-body), system-ui, sans-serif', paddingBottom: '60px' }}>
 
-      <div style={{ background: 'linear-gradient(135deg, #1A1F36, #2A2F5A)', padding: '32px 24px 60px', position: 'relative', overflow: 'hidden' }}>
+      <div style={{ background: theme.gradients.eltern, padding: '32px 24px 60px', position: 'relative', overflow: 'hidden' }}>
         <div style={{ position: 'absolute', top: '16px', right: '24px', fontSize: '54px', opacity: 0.15 }}>👪</div>
-        <button onClick={() => router.push('/dashboard')} style={{ background: 'rgba(255,255,255,0.15)', border: 'none', borderRadius: '10px', padding: '8px 12px', color: 'white', fontSize: '14px', cursor: 'pointer', marginBottom: '20px' }}>← Zurück</button>
+        <button onClick={() => router.push('/dashboard')} style={{ background: 'rgba(255,255,255,0.15)', border: 'none', borderRadius: theme.radius.sm, padding: '8px 12px', color: 'white', fontSize: '14px', cursor: 'pointer', marginBottom: '20px' }}>← Zurück</button>
         <h1 style={{ fontSize: '22px', fontWeight: '800', color: 'white', margin: 0 }}>Ihre Wünsche für {childName}</h1>
         <p style={{ color: 'rgba(255,255,255,0.7)', fontSize: '13px', margin: '4px 0 0' }}>Das hilft uns, Nica & Phil noch besser auf Ihr Kind einzustellen</p>
       </div>
@@ -67,7 +67,7 @@ export default function ElternWuensche() {
       <div style={{ maxWidth: '640px', margin: '-32px auto 0', padding: '0 20px' }}>
 
         {/* Schwerpunkte */}
-        <div style={{ background: 'white', borderRadius: '20px', padding: '20px', marginBottom: '16px', boxShadow: theme.shadow.md }}>
+        <div style={{ background: 'white', borderRadius: theme.radius.xl, padding: '20px', marginBottom: '16px', boxShadow: theme.shadow.md }}>
           <div style={{ fontSize: '14px', fontWeight: '800', color: theme.ink, marginBottom: '4px' }}>🎯 Worauf soll der Fokus liegen?</div>
           <p style={{ fontSize: '12px', color: theme.mid, margin: '0 0 14px' }}>Mehrfachauswahl möglich</p>
           <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
@@ -84,7 +84,7 @@ export default function ElternWuensche() {
         </div>
 
         {/* Sorgen */}
-        <div style={{ background: 'white', borderRadius: '20px', padding: '20px', marginBottom: '16px', boxShadow: theme.shadow.md }}>
+        <div style={{ background: 'white', borderRadius: theme.radius.xl, padding: '20px', marginBottom: '16px', boxShadow: theme.shadow.md }}>
           <div style={{ fontSize: '14px', fontWeight: '800', color: theme.ink, marginBottom: '4px' }}>💬 Gibt es aktuell Sorgen?</div>
           <p style={{ fontSize: '12px', color: theme.mid, margin: '0 0 14px' }}>Ganz offen — das bleibt vertraulich</p>
           <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
@@ -101,7 +101,7 @@ export default function ElternWuensche() {
         </div>
 
         {/* Freitext */}
-        <div style={{ background: 'white', borderRadius: '20px', padding: '20px', marginBottom: '20px', boxShadow: theme.shadow.md }}>
+        <div style={{ background: 'white', borderRadius: theme.radius.xl, padding: '20px', marginBottom: '20px', boxShadow: theme.shadow.md }}>
           <div style={{ fontSize: '14px', fontWeight: '800', color: theme.ink, marginBottom: '10px' }}>✏️ Möchten Sie uns noch etwas mitteilen?</div>
           <textarea
             value={freitext}

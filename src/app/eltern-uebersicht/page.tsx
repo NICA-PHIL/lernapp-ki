@@ -117,7 +117,7 @@ export default function ElternUebersicht() {
               {codeLoading ? '…' : 'OK'}
             </button>
           </div>
-          {codeFehler && <p style={{ color: '#DC2626', fontSize: '12px', marginTop: '8px' }}>{codeFehler}</p>}
+          {codeFehler && <p style={{ color: theme.errorText, fontSize: '12px', marginTop: '8px' }}>{codeFehler}</p>}
         </div>
 
         {/* ── Weitere Eltern-Funktionen ── */}

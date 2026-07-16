@@ -60,7 +60,7 @@ export default function MeineSchule() {
 
       <div style={{ background: 'linear-gradient(135deg, #4F7CFF, #37C978)', padding: '32px 24px 60px', position: 'relative', overflow: 'hidden' }}>
         <div style={{ position: 'absolute', top: '16px', right: '24px', fontSize: '54px', opacity: 0.2 }}>🏫</div>
-        <button onClick={() => router.push('/dashboard')} style={{ background: 'rgba(255,255,255,0.25)', border: 'none', borderRadius: '10px', padding: '8px 12px', color: 'white', fontSize: '14px', cursor: 'pointer', marginBottom: '20px' }}>← Zurück</button>
+        <button onClick={() => router.push('/dashboard')} style={{ background: 'rgba(255,255,255,0.25)', border: 'none', borderRadius: theme.radius.sm, padding: '8px 12px', color: 'white', fontSize: '14px', cursor: 'pointer', marginBottom: '20px' }}>← Zurück</button>
         <h1 style={{ fontSize: '22px', fontWeight: '800', color: 'white', margin: 0 }}>{childName}s Schule 🏫</h1>
         <p style={{ color: 'rgba(255,255,255,0.9)', fontSize: '13px', margin: '4px 0 0' }}>Schule, Stadt und Lehrer eintragen</p>
       </div>
@@ -80,30 +80,30 @@ export default function MeineSchule() {
           <div style={{ marginBottom: '12px' }}>
             <label style={{ fontSize: '12px', fontWeight: '700', color: theme.mid, display: 'block', marginBottom: '6px' }}>Name der Schule</label>
             <input type="text" value={schulname} onChange={e => setSchulname(e.target.value)} placeholder="z.B. Gymnasium Steglitz"
-              style={{ width: '100%', padding: '11px 14px', border: `1.5px solid ${theme.line}`, borderRadius: '10px', fontSize: '14px', boxSizing: 'border-box' }} />
+              style={{ width: '100%', padding: '11px 14px', border: `1.5px solid ${theme.line}`, borderRadius: theme.radius.sm, fontSize: '14px', boxSizing: 'border-box' }} />
           </div>
 
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px', marginBottom: '12px' }}>
             <div>
               <label style={{ fontSize: '12px', fontWeight: '700', color: theme.mid, display: 'block', marginBottom: '6px' }}>Stadt</label>
               <input type="text" value={stadt} onChange={e => setStadt(e.target.value)} placeholder="z.B. Berlin"
-                style={{ width: '100%', padding: '11px 14px', border: `1.5px solid ${theme.line}`, borderRadius: '10px', fontSize: '14px', boxSizing: 'border-box' }} />
+                style={{ width: '100%', padding: '11px 14px', border: `1.5px solid ${theme.line}`, borderRadius: theme.radius.sm, fontSize: '14px', boxSizing: 'border-box' }} />
             </div>
             <div>
               <label style={{ fontSize: '12px', fontWeight: '700', color: theme.mid, display: 'block', marginBottom: '6px' }}>Bezirk</label>
               <input type="text" value={bezirk} onChange={e => setBezirk(e.target.value)} placeholder="z.B. Steglitz-Zehlendorf"
-                style={{ width: '100%', padding: '11px 14px', border: `1.5px solid ${theme.line}`, borderRadius: '10px', fontSize: '14px', boxSizing: 'border-box' }} />
+                style={{ width: '100%', padding: '11px 14px', border: `1.5px solid ${theme.line}`, borderRadius: theme.radius.sm, fontSize: '14px', boxSizing: 'border-box' }} />
             </div>
           </div>
 
           <div style={{ marginBottom: '16px' }}>
             <label style={{ fontSize: '12px', fontWeight: '700', color: theme.mid, display: 'block', marginBottom: '6px' }}>Klassenlehrer*in</label>
             <input type="text" value={klassenlehrer} onChange={e => setKlassenlehrer(e.target.value)} placeholder="z.B. Frau Schmidt"
-              style={{ width: '100%', padding: '11px 14px', border: `1.5px solid ${theme.line}`, borderRadius: '10px', fontSize: '14px', boxSizing: 'border-box' }} />
+              style={{ width: '100%', padding: '11px 14px', border: `1.5px solid ${theme.line}`, borderRadius: theme.radius.sm, fontSize: '14px', boxSizing: 'border-box' }} />
           </div>
 
           <button onClick={speichern}
-            style={{ width: '100%', padding: '12px', background: theme.gradients.primary, color: 'white', border: 'none', borderRadius: '10px', fontSize: '14px', fontWeight: '800', cursor: 'pointer' }}>
+            style={{ width: '100%', padding: '12px', background: theme.gradients.primary, color: 'white', border: 'none', borderRadius: theme.radius.sm, fontSize: '14px', fontWeight: '800', cursor: 'pointer' }}>
             Speichern
           </button>
         </div>
@@ -116,7 +116,7 @@ export default function MeineSchule() {
           {lehrer.length > 0 && (
             <div style={{ display: 'flex', flexDirection: 'column', gap: '6px', marginBottom: '14px' }}>
               {lehrer.map(l => (
-                <div key={l.id} style={{ display: 'flex', alignItems: 'center', gap: '10px', background: theme.soft.blue, borderRadius: '10px', padding: '10px 14px' }}>
+                <div key={l.id} style={{ display: 'flex', alignItems: 'center', gap: '10px', background: theme.soft.blue, borderRadius: theme.radius.sm, padding: '10px 14px' }}>
                   <span style={{ fontSize: '12px', fontWeight: '800', color: theme.brand.blue, minWidth: '80px' }}>{l.fach}</span>
                   <span style={{ fontSize: '13px', color: theme.ink, flex: 1 }}>{l.name}</span>
                   <button onClick={() => lehrerLoeschen(l.id)} style={{ background: 'none', border: 'none', color: theme.muted, cursor: 'pointer', fontSize: '15px' }}>✕</button>
@@ -127,11 +127,11 @@ export default function MeineSchule() {
 
           <div style={{ display: 'flex', gap: '8px' }}>
             <input type="text" value={neuFach} onChange={e => setNeuFach(e.target.value)} placeholder="Fach"
-              style={{ width: '35%', padding: '10px 12px', border: `1.5px solid ${theme.line}`, borderRadius: '10px', fontSize: '13px', boxSizing: 'border-box' }} />
+              style={{ width: '35%', padding: '10px 12px', border: `1.5px solid ${theme.line}`, borderRadius: theme.radius.sm, fontSize: '13px', boxSizing: 'border-box' }} />
             <input type="text" value={neuName} onChange={e => setNeuName(e.target.value)} placeholder="Name des Lehrers"
-              style={{ flex: 1, padding: '10px 12px', border: `1.5px solid ${theme.line}`, borderRadius: '10px', fontSize: '13px', boxSizing: 'border-box' }} />
+              style={{ flex: 1, padding: '10px 12px', border: `1.5px solid ${theme.line}`, borderRadius: theme.radius.sm, fontSize: '13px', boxSizing: 'border-box' }} />
             <button onClick={lehrerHinzufuegen}
-              style={{ padding: '10px 16px', background: theme.brand.green, color: 'white', border: 'none', borderRadius: '10px', fontSize: '13px', fontWeight: '800', cursor: 'pointer' }}>
+              style={{ padding: '10px 16px', background: theme.brand.green, color: 'white', border: 'none', borderRadius: theme.radius.sm, fontSize: '13px', fontWeight: '800', cursor: 'pointer' }}>
               +
             </button>
           </div>

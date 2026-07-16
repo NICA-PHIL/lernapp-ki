@@ -82,7 +82,7 @@ export default function KindErstellen() {
                 <input value={kindEmail} onChange={e => setKindEmail(e.target.value)} placeholder="E-Mail des Kindes (optional)"
                   style={{ width: '100%', padding: '12px 14px', border: `2px solid ${theme.line}`, borderRadius: theme.radius.md, marginBottom: '10px', boxSizing: 'border-box' }} />
                 <button onClick={perMailSenden} disabled={!kindEmail}
-                  style={{ width: '100%', padding: '12px', background: '#F3F4F6', color: '#374151', border: 'none', borderRadius: theme.radius.md, fontWeight: '700', cursor: 'pointer', marginBottom: '20px' }}>
+                  style={{ width: '100%', padding: '12px', background: theme.bg, color: theme.ink, border: 'none', borderRadius: theme.radius.md, fontWeight: '700', cursor: 'pointer', marginBottom: '20px' }}>
                   📧 Zugangslink per Mail senden
                 </button>
               </>

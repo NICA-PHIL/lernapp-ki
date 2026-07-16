@@ -73,7 +73,7 @@ export default function LoginPage() {
         </div>
         <form onSubmit={handleSubmit}>
           <div style={{ marginBottom: '16px' }}>
-            <label style={{ display: 'block', fontSize: '13px', fontWeight: '600', color: '#374151', marginBottom: '6px' }}>
+            <label style={{ display: 'block', fontSize: '13px', fontWeight: '600', color: theme.ink, marginBottom: '6px' }}>
               E-Mail
             </label>
             <input type="email" value={email} onChange={e => setEmail(e.target.value)} required
@@ -82,7 +82,7 @@ export default function LoginPage() {
             />
           </div>
           <div style={{ marginBottom: '24px' }}>
-            <label style={{ display: 'block', fontSize: '13px', fontWeight: '600', color: '#374151', marginBottom: '6px' }}>
+            <label style={{ display: 'block', fontSize: '13px', fontWeight: '600', color: theme.ink, marginBottom: '6px' }}>
               Passwort
             </label>
             <input type="password" value={password} onChange={e => setPassword(e.target.value)} required
@@ -91,7 +91,7 @@ export default function LoginPage() {
             />
           </div>
           {error && (
-            <div style={{ background: theme.soft.error, border: '1px solid #FECACA', borderRadius: theme.radius.sm, padding: '10px 14px', fontSize: '13px', color: '#DC2626', marginBottom: '16px' }}>
+            <div style={{ background: theme.soft.error, border: `1px solid ${theme.errorBorder}`, borderRadius: theme.radius.sm, padding: '10px 14px', fontSize: '13px', color: theme.errorText, marginBottom: '16px' }}>
               {error}
             </div>
           )}

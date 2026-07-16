@@ -79,7 +79,7 @@ export default function FitFuerDieSchule() {
 
       <div style={{ background: 'linear-gradient(135deg, #4F7CFF, #8A5CFF, #FF7CB0)', padding: '32px 24px 60px', position: 'relative', overflow: 'hidden' }}>
         <div style={{ position: 'absolute', top: '16px', right: '24px', fontSize: '54px', opacity: 0.2 }}>🎯</div>
-        <button onClick={() => router.push('/dashboard')} style={{ background: 'rgba(255,255,255,0.25)', border: 'none', borderRadius: '10px', padding: '8px 12px', color: 'white', fontSize: '14px', cursor: 'pointer', marginBottom: '20px' }}>← Zurück</button>
+        <button onClick={() => router.push('/dashboard')} style={{ background: 'rgba(255,255,255,0.25)', border: 'none', borderRadius: theme.radius.sm, padding: '8px 12px', color: 'white', fontSize: '14px', cursor: 'pointer', marginBottom: '20px' }}>← Zurück</button>
         <h1 style={{ fontSize: '22px', fontWeight: '800', color: 'white', margin: 0 }}>Fit für die neue Klasse 🎯</h1>
         <p style={{ color: 'rgba(255,255,255,0.9)', fontSize: '13px', margin: '4px 0 0' }}>Stoff wiederholen, vorarbeiten und dich sicher fühlen</p>
       </div>

@@ -13,7 +13,7 @@ interface Termin {
 }
 
 const TYP_INFO: Record<Termin['typ'], { icon: string; label: string; farbe: string; bg: string }> = {
-  klassenarbeit: { icon: '📝', label: 'Klassenarbeit', farbe: '#DC2626', bg: '#FFEFEF' },
+  klassenarbeit: { icon: '📝', label: 'Klassenarbeit', farbe: theme.errorText, bg: '#FFEFEF' },
   pruefung: { icon: '🎓', label: 'Prüfung', farbe: '#8A5CFF', bg: '#F2EBFF' },
   test: { icon: '✏️', label: 'Test', farbe: '#4F7CFF', bg: '#EAF0FF' },
   geburtstag: { icon: '🎂', label: 'Geburtstag', farbe: '#FF7CB0', bg: '#FFE8F1' },
@@ -78,8 +78,8 @@ export default function Kalender() {
   return (
     <div style={{ minHeight: '100vh', background: theme.bg, fontFamily: 'var(--font-body), system-ui, sans-serif', paddingBottom: '60px' }}>
 
-      <div style={{ background: 'linear-gradient(135deg, #1A1F36, #4F7CFF)', padding: '32px 24px 40px' }}>
-        <button onClick={() => router.push('/dashboard')} style={{ background: 'rgba(255,255,255,0.15)', border: 'none', borderRadius: '10px', padding: '8px 12px', color: 'white', fontSize: '14px', cursor: 'pointer', marginBottom: '20px' }}>← Zurück</button>
+      <div style={{ background: theme.gradients.dunkel, padding: '32px 24px 40px' }}>
+        <button onClick={() => router.push('/dashboard')} style={{ background: 'rgba(255,255,255,0.15)', border: 'none', borderRadius: theme.radius.sm, padding: '8px 12px', color: 'white', fontSize: '14px', cursor: 'pointer', marginBottom: '20px' }}>← Zurück</button>
         <h1 style={{ fontSize: '22px', fontWeight: '800', color: 'white', margin: 0 }}>📅 Kalender</h1>
         <p style={{ color: 'rgba(255,255,255,0.7)', fontSize: '13px', margin: '4px 0 0' }}>Klassenarbeiten, Prüfungen, Geburtstage & Termine</p>
       </div>
@@ -96,12 +96,12 @@ export default function Kalender() {
             <div style={{ marginBottom: '12px' }}>
               <label style={{ fontSize: '12px', fontWeight: '700', color: theme.mid, display: 'block', marginBottom: '6px' }}>Datum</label>
               <input type="date" value={neuDatum} onChange={e => setNeuDatum(e.target.value)}
-                style={{ width: '100%', padding: '10px 12px', border: `1.5px solid ${theme.line}`, borderRadius: '10px', fontSize: '14px', boxSizing: 'border-box' }} />
+                style={{ width: '100%', padding: '10px 12px', border: `1.5px solid ${theme.line}`, borderRadius: theme.radius.sm, fontSize: '14px', boxSizing: 'border-box' }} />
             </div>
             <div style={{ marginBottom: '12px' }}>
               <label style={{ fontSize: '12px', fontWeight: '700', color: theme.mid, display: 'block', marginBottom: '6px' }}>Was steht an?</label>
               <input type="text" value={neuTitel} onChange={e => setNeuTitel(e.target.value)} placeholder="z.B. Matheklassenarbeit Brüche"
-                style={{ width: '100%', padding: '10px 12px', border: `1.5px solid ${theme.line}`, borderRadius: '10px', fontSize: '14px', boxSizing: 'border-box' }} />
+                style={{ width: '100%', padding: '10px 12px', border: `1.5px solid ${theme.line}`, borderRadius: theme.radius.sm, fontSize: '14px', boxSizing: 'border-box' }} />
             </div>
             <div style={{ marginBottom: '12px' }}>
               <label style={{ fontSize: '12px', fontWeight: '700', color: theme.mid, display: 'block', marginBottom: '6px' }}>Art</label>
@@ -116,12 +116,12 @@ export default function Kalender() {
             </div>
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px', marginBottom: '16px' }}>
               <input type="text" value={neuKind} onChange={e => setNeuKind(e.target.value)} placeholder="Kind (optional)"
-                style={{ padding: '10px 12px', border: `1.5px solid ${theme.line}`, borderRadius: '10px', fontSize: '13px', boxSizing: 'border-box' }} />
+                style={{ padding: '10px 12px', border: `1.5px solid ${theme.line}`, borderRadius: theme.radius.sm, fontSize: '13px', boxSizing: 'border-box' }} />
               <input type="text" value={neuFach} onChange={e => setNeuFach(e.target.value)} placeholder="Fach (optional)"
-                style={{ padding: '10px 12px', border: `1.5px solid ${theme.line}`, borderRadius: '10px', fontSize: '13px', boxSizing: 'border-box' }} />
+                style={{ padding: '10px 12px', border: `1.5px solid ${theme.line}`, borderRadius: theme.radius.sm, fontSize: '13px', boxSizing: 'border-box' }} />
             </div>
             <button onClick={hinzufuegen}
-              style={{ width: '100%', padding: '12px', background: theme.brand.green, color: 'white', border: 'none', borderRadius: '10px', fontSize: '14px', fontWeight: '800', cursor: 'pointer' }}>
+              style={{ width: '100%', padding: '12px', background: theme.brand.green, color: 'white', border: 'none', borderRadius: theme.radius.sm, fontSize: '14px', fontWeight: '800', cursor: 'pointer' }}>
               Termin speichern
             </button>
           </div>

@@ -96,13 +96,13 @@ export default function FeedbackPage() {
 
           {wer === 'kind' && !localStorage.getItem('np_child_name') && (
             <div style={{ marginBottom: '18px' }}>
-              <label style={{ fontSize: '12px', fontWeight: '700', color: '#374151', display: 'block', marginBottom: '6px' }}>Wie heißt du?</label>
+              <label style={{ fontSize: '12px', fontWeight: '700', color: theme.ink, display: 'block', marginBottom: '6px' }}>Wie heißt du?</label>
               <input value={name} onChange={e => setName(e.target.value)} placeholder="Dein Name"
                 style={{ width: '100%', padding: '10px 14px', border: `2px solid ${theme.line}`, borderRadius: theme.radius.sm, boxSizing: 'border-box' }} />
             </div>
           )}
 
-          <label style={{ fontSize: '13px', fontWeight: '700', color: '#374151', display: 'block', marginBottom: '10px' }}>
+          <label style={{ fontSize: '13px', fontWeight: '700', color: theme.ink, display: 'block', marginBottom: '10px' }}>
             {wer === 'kind' ? 'Wie findest du Nica & Phil?' : 'Wie ist Ihr Gesamteindruck?'}
           </label>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', gap: '8px', marginBottom: '20px' }}>
@@ -115,7 +115,7 @@ export default function FeedbackPage() {
             ))}
           </div>
 
-          <label style={{ fontSize: '13px', fontWeight: '700', color: '#374151', display: 'block', marginBottom: '10px' }}>Worum geht's? (optional)</label>
+          <label style={{ fontSize: '13px', fontWeight: '700', color: theme.ink, display: 'block', marginBottom: '10px' }}>Worum geht's? (optional)</label>
           <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px', marginBottom: '20px' }}>
             {BEREICHE.map(b => (
               <button key={b} onClick={() => setBereich(bereich === b ? null : b)}
