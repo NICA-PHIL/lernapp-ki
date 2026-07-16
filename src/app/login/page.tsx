@@ -103,7 +103,7 @@ export default function LoginPage() {
               Nica &amp; Phil
             </h1>
             <p style={{ color: theme.mid, fontSize: '14px', margin: 0 }}>
-              {mode === 'login' ? 'Willkommen zurück!' : rolle === 'kind' ? 'Los geht’s, dein eigenes Konto!' : 'Elternkonto erstellen'}
+              {mode === 'login' ? 'Schön, dass du da bist!' : rolle === 'kind' ? 'Los geht’s, dein eigenes Konto!' : 'Elternkonto erstellen'}
             </p>
           </div>
           <form onSubmit={handleSubmit}>
