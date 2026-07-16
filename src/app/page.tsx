@@ -126,8 +126,8 @@ export default function Home() {
               <span style={{ position: 'absolute', top: '30%', left: '2%', fontSize: '1.7rem', filter: 'drop-shadow(0 6px 10px rgba(0,0,0,0.35))' }}>♟️</span>
               <span style={{ position: 'absolute', bottom: '2%', right: '26%', fontSize: '1.7rem', filter: 'drop-shadow(0 6px 10px rgba(0,0,0,0.35))' }}>📖</span>
               <span style={{ position: 'absolute', top: '52%', right: '0%', fontSize: '1.7rem', filter: 'drop-shadow(0 6px 10px rgba(0,0,0,0.35))' }}>☀️</span>
-              <LivingAvatar src="/avatars/phil-solo.png" alt="Phil" character="phil" size={190} />
-              <LivingAvatar src="/avatars/nica-solo.png" alt="Nica" character="nica" size={172} />
+              <LivingAvatar src="/avatars/phil-solo.png" alt="Phil" character="phil" size={190} tilt />
+              <LivingAvatar src="/avatars/nica-solo.png" alt="Nica" character="nica" size={172} tilt />
             </div>
           </div>
         </div>
