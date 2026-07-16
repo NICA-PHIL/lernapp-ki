@@ -1,7 +1,22 @@
 import { createServerClient } from '@supabase/ssr'
 import { NextResponse, type NextRequest } from 'next/server'
 
+function unauthorized() {
+  return new NextResponse('Zugang erforderlich', {
+    status: 401,
+    headers: { 'WWW-Authenticate': 'Basic realm="Produktmanager-Handoff"' },
+  })
+}
+
 export async function middleware(request: NextRequest) {
+  if (request.nextUrl.pathname.startsWith('/produktmanager-handoff')) {
+    const auth = request.headers.get('authorization')
+    if (!auth?.startsWith('Basic ')) return unauthorized()
+    const [user, pass] = Buffer.from(auth.slice(6), 'base64').toString('utf-8').split(':')
+    if (user !== process.env.HANDOFF_USER || pass !== process.env.HANDOFF_PASS) return unauthorized()
+    return NextResponse.next({ request })
+  }
+
   let response = NextResponse.next({ request })
 
   const supabase = createServerClient(
@@ -33,5 +48,5 @@ export async function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ['/dashboard/:path*', '/chat/:path*', '/lernreise/:path*', '/sommermission/:path*', '/philipp-vorbereitung/:path*', '/nicole-vorbereitung/:path*', '/onboarding/:path*', '/feedback-uebersicht/:path*', '/rolle-waehlen/:path*', '/eltern-uebersicht/:path*', '/eltern-einladen/:path*'],
+  matcher: ['/dashboard/:path*', '/chat/:path*', '/lernreise/:path*', '/sommermission/:path*', '/philipp-vorbereitung/:path*', '/nicole-vorbereitung/:path*', '/onboarding/:path*', '/feedback-uebersicht/:path*', '/rolle-waehlen/:path*', '/eltern-uebersicht/:path*', '/eltern-einladen/:path*', '/produktmanager-handoff/:path*'],
 }
