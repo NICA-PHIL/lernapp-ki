@@ -12,6 +12,7 @@ const TABS = [
   { id: 'scan', label: 'Scan-System' },
   { id: 'regeln', label: 'Produktregeln' },
   { id: 'dev', label: 'Dev-Handoff' },
+  { id: 'design', label: 'Design & Mockups' },
 ] as const
 
 type TabId = typeof TABS[number]['id']
@@ -53,6 +54,45 @@ function RuleRow({ rule, meaning }: { rule: string; meaning: string }) {
       <td style={{ padding: '12px', borderBottom: `1px solid ${theme.line}`, color: theme.ink, fontWeight: 700, whiteSpace: 'nowrap', verticalAlign: 'top' }}>{rule}</td>
       <td style={{ padding: '12px', borderBottom: `1px solid ${theme.line}`, color: theme.mid, verticalAlign: 'top' }}>{meaning}</td>
     </tr>
+  )
+}
+
+function Phone({ children }: { children: React.ReactNode }) {
+  return (
+    <div style={{ width: '250px', flexShrink: 0, borderRadius: '28px', background: '#0c0e18', padding: '9px', boxShadow: '0 16px 40px rgba(0,0,0,0.18)' }}>
+      <div style={{ width: '100%', height: '460px', borderRadius: '20px', overflow: 'hidden', position: 'relative', background: theme.bg, fontFamily: 'var(--font-body), system-ui, sans-serif' }}>
+        <div style={{ overflowY: 'auto', height: '100%' }}>{children}</div>
+      </div>
+    </div>
+  )
+}
+
+function MockRow({ phone, caption }: { phone: React.ReactNode; caption: React.ReactNode }) {
+  return (
+    <div style={{ display: 'flex', gap: '24px', flexWrap: 'wrap', alignItems: 'flex-start', marginBottom: '28px' }}>
+      <Phone>{phone}</Phone>
+      <div style={{ maxWidth: '320px', paddingTop: '6px' }}>{caption}</div>
+    </div>
+  )
+}
+
+function MockHeader({ title }: { title: string }) {
+  return (
+    <div style={{ background: 'rgba(255,255,255,0.85)', padding: '12px 14px', display: 'flex', alignItems: 'center', gap: '8px', borderBottom: `1px solid ${theme.line}`, position: 'sticky', top: 0 }}>
+      <img src="/avatars/nica-solo.png" alt="" style={{ width: '22px', height: '22px', borderRadius: '50%', objectFit: 'cover' }} />
+      <span style={{ fontWeight: 800, fontSize: '12px', color: theme.ink }}>{title}</span>
+    </div>
+  )
+}
+
+function Caption({ title, items }: { title: string; items: string[] }) {
+  return (
+    <>
+      <h3 style={{ fontFamily: theme.font.display, fontSize: '14.5px', margin: '0 0 8px', color: theme.ink, fontWeight: 600 }}>{title}</h3>
+      <ul style={{ margin: 0, paddingLeft: '18px', fontSize: '12px', lineHeight: 1.7, color: theme.mid }}>
+        {items.map((it, i) => <li key={i}>{it}</li>)}
+      </ul>
+    </>
   )
 }
 
@@ -306,6 +346,172 @@ export default function ProduktmanagerHandoff() {
                 'Bei Umsetzung: eigene Auth-Rolle + schools/classes-Tabellen, RLS analog zum bestehenden Muster',
               ]} />
             </div>
+          </div>
+        )}
+
+        {tab === 'design' && (
+          <div>
+            <h2 style={{ fontFamily: theme.font.display, fontSize: '18px', fontWeight: 600, margin: '0 0 6px', color: theme.ink }}>Design &amp; Mockups</h2>
+            <p style={{ fontSize: '13.5px', color: theme.mid, margin: '0 0 20px', maxWidth: '70ch', lineHeight: 1.6 }}>Visuelle Konzepte aus der KinderGPT-Analyse und der Konkurrenz-Recherche zum Eltern-Dashboard — freigegeben, als Referenz für Design und Umsetzung.</p>
+
+            <h3 style={{ fontFamily: theme.font.display, fontSize: '15px', margin: '0 0 12px', color: theme.ink }}>Prinzipien aus der KinderGPT-Analyse</h3>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(230px, 1fr))', gap: '12px', marginBottom: '30px' }}>
+              <Card><RoleTag bg={theme.soft.blue} fg={theme.brand.blue}>VERTRAUEN ZEIGEN</RoleTag><p style={{ fontSize: '12.5px', color: theme.mid, margin: 0, lineHeight: 1.6 }}>Ein „Was Nica &amp; Phil NICHT sind"-Block mit echten Beispiel-Dialogen macht Sicherheit konkret statt zu behaupten.</p></Card>
+              <Card><RoleTag bg={theme.soft.green} fg="#1a7a45">FORTSCHRITT OHNE DRUCK</RoleTag><p style={{ fontSize: '12.5px', color: theme.mid, margin: 0, lineHeight: 1.6 }}>Lese-Tracker ohne Streak-Zwang — bewusst gegen die Duolingo-Falle (Aktivität ≠ echtes Können).</p></Card>
+              <Card><RoleTag bg={theme.soft.purple} fg={theme.brand.purple}>EIGENE BILDSPRACHE</RoleTag><p style={{ fontSize: '12.5px', color: theme.mid, margin: 0, lineHeight: 1.6 }}>Dunkler „Nacht"-Hero mit Gold-Sternen und lebendige Tilt-Avatare bleiben markanter als ein rein weißer Auftritt.</p></Card>
+              <Card><RoleTag bg={theme.soft.warn} fg="#8A5D00">KLARHEIT VOR DEKORATION</RoleTag><p style={{ fontSize: '12.5px', color: theme.mid, margin: 0, lineHeight: 1.6 }}>Pill-Buttons, ruhige Kartenraster, ein Akzent-Blau als Führung — konsequent auf neue Screens angewendet.</p></Card>
+            </div>
+
+            <h3 style={{ fontFamily: theme.font.display, fontSize: '15px', margin: '0 0 12px', color: theme.ink }}>Dashboard mit neuem Modul „Lesen &amp; Schreiben"</h3>
+            <MockRow
+              phone={<>
+                <MockHeader title="Nica & Phil" />
+                <div style={{ padding: '14px' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '14px' }}>
+                    <img src="/avatars/nica-solo.png" style={{ width: '38px', height: '38px', borderRadius: '50%', objectFit: 'cover', border: '2px solid white', boxShadow: '0 4px 14px rgba(79,124,255,0.25)' }} />
+                    <div><div style={{ fontFamily: theme.font.display, fontSize: '15px', fontWeight: 600, color: theme.ink }}>Hallo Nicole 👋</div><div style={{ fontSize: '10.5px', color: theme.muted, fontWeight: 600 }}>Klasse 7 · Was lernst du heute?</div></div>
+                  </div>
+                  <div style={{ fontFamily: theme.font.display, fontSize: '12px', fontWeight: 600, color: theme.ink, marginBottom: '8px' }}>⚡ Schnellzugriff</div>
+                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: '6px' }}>
+                    {['💭 Wünsche', '🚀 Skills', '📔 Lesen'].map((l, i) => (
+                      <div key={l} style={{ background: 'white', border: i === 2 ? `1.5px dashed ${theme.brand.pink}` : `1px solid ${theme.line}`, borderRadius: theme.radius.md, padding: '10px 6px', textAlign: 'center', fontSize: '9px', fontWeight: 700, color: theme.mid }}>{l}</div>
+                    ))}
+                  </div>
+                </div>
+              </>}
+              caption={<Caption title="Ein Kästchen mehr" items={[
+                'Reiht sich zwischen bestehende Felder ein, gleiche Kartenoptik',
+                'NEU-Markierung nur bei Einführung, verschwindet danach',
+              ]} />}
+            />
+
+            <h3 style={{ fontFamily: theme.font.display, fontSize: '15px', margin: '0 0 12px', color: theme.ink }}>Lesen &amp; Schreiben — Tagebuch &amp; Bücher</h3>
+            <MockRow
+              phone={<>
+                <MockHeader title="Lesen & Schreiben" />
+                <div style={{ padding: '14px' }}>
+                  <div style={{ display: 'flex', gap: '6px', background: theme.bg, padding: '4px', borderRadius: theme.radius.md, marginBottom: '12px' }}>
+                    <div style={{ flex: 1, textAlign: 'center', padding: '7px', borderRadius: '9px', background: theme.ink, color: 'white', fontSize: '11px', fontWeight: 700 }}>📔 Tagebuch</div>
+                    <div style={{ flex: 1, textAlign: 'center', padding: '7px', borderRadius: '9px', color: theme.mid, fontSize: '11px', fontWeight: 700 }}>📚 Bücher</div>
+                  </div>
+                  <div style={{ background: `linear-gradient(160deg,${theme.soft.pink},white)`, border: '1px solid #FFE0EE', borderRadius: theme.radius.lg, padding: '12px', display: 'flex', gap: '8px', marginBottom: '10px' }}>
+                    <img src="/avatars/nica-solo.png" style={{ width: '30px', height: '30px', borderRadius: '50%', objectFit: 'cover', flexShrink: 0 }} />
+                    <div><div style={{ fontSize: '9px', fontWeight: 800, color: theme.brand.pink }}>NICA FRAGT HEUTE</div><div style={{ fontSize: '11.5px', color: theme.ink, fontWeight: 600 }}>Was hat dich heute zum Lachen gebracht?</div></div>
+                  </div>
+                  <div style={{ border: `1.5px solid ${theme.line}`, borderRadius: theme.radius.md, padding: '10px', fontSize: '11px', color: theme.muted, minHeight: '40px' }}>Schreib, was du magst …</div>
+                </div>
+              </>}
+              caption={<Caption title="Freies + geführtes Schreiben" items={[
+                'Tagesfrage von Nica, jederzeit überspringbar',
+                '🔒 privat (Standard) · 👁️ vom Kind für Eltern freigegeben',
+                'Design-Themen sind reine Optik, kein Content-Fork nach Geschlecht',
+              ]} />}
+            />
+            <MockRow
+              phone={<>
+                <MockHeader title="Lesen & Schreiben" />
+                <div style={{ padding: '14px' }}>
+                  <div style={{ display: 'flex', gap: '6px', overflowX: 'auto', marginBottom: '12px' }}>
+                    {['Klasse 7', 'Abenteuer', 'Freundschaft'].map((c, i) => (
+                      <div key={c} style={{ flexShrink: 0, padding: '6px 11px', borderRadius: theme.radius.full, fontSize: '10px', fontWeight: 700, border: `1.5px solid ${i === 0 ? theme.brand.blue : theme.line}`, background: i === 0 ? theme.soft.blue : 'white', color: i === 0 ? theme.brand.blue : theme.mid }}>{c}</div>
+                    ))}
+                  </div>
+                  <div style={{ display: 'flex', gap: '10px', background: 'white', border: `1px solid ${theme.line}`, borderRadius: theme.radius.md, padding: '10px' }}>
+                    <div style={{ width: '36px', height: '48px', borderRadius: '5px', background: `linear-gradient(160deg,${theme.brand.purple},${theme.brand.blue})`, flexShrink: 0 }} />
+                    <div><div style={{ fontSize: '11.5px', fontWeight: 800, color: theme.ink }}>Rico, Oskar und die Tieferschatten</div><div style={{ fontSize: '9.5px', color: theme.muted, marginBottom: '4px' }}>Andreas Steinhöfel</div><span style={{ fontSize: '8.5px', fontWeight: 700, padding: '3px 6px', borderRadius: theme.radius.full, background: theme.soft.green, color: '#1a7a45' }}>Lese ich gerade</span></div>
+                  </div>
+                </div>
+              </>}
+              caption={<Caption title="Empfehlung statt Feed" items={[
+                'Filter nach Klasse (vorbelegt) + Interesse, kein endloser Scroll',
+                'Status-Wechsel löst kurze Nica/Phil-Reaktion im Chat aus',
+                'Buchdaten aus gepflegter Liste, nicht von der KI erfunden',
+              ]} />}
+            />
+
+            <h3 style={{ fontFamily: theme.font.display, fontSize: '15px', margin: '0 0 12px', color: theme.ink }}>Design wächst mit dem Alter</h3>
+            <MockRow
+              phone={<>
+                <MockHeader title="Nica & Phil" />
+                <div style={{ padding: '16px' }}>
+                  <div style={{ fontFamily: theme.font.display, fontSize: '19px', fontWeight: 600, color: theme.ink }}>Hallo Mia 👋🎉</div>
+                  <div style={{ fontSize: '11px', color: theme.muted, marginBottom: '14px' }}>Klasse 2 · Super, dass du da bist!</div>
+                  <div style={{ background: 'white', borderRadius: '20px', padding: '16px', boxShadow: theme.shadow.sm }}>
+                    <div style={{ fontWeight: 800, fontSize: '13.5px', color: theme.ink }}>🎉 Mathe: 68% geschafft!</div>
+                    <div style={{ fontSize: '11px', color: theme.mid, marginTop: '4px' }}>Weiter so, du machst das super! 🌟</div>
+                  </div>
+                </div>
+              </>}
+              caption={<Caption title="Grundschule (jung · Klasse 2)" items={[
+                'Radius 20px, größere Touch-Flächen und Typo',
+                'Kräftige Farben, hohe Emoji-Dichte',
+                'Überschwängliche Ansprache: „Super gemacht! 🎉"',
+              ]} />}
+            />
+            <MockRow
+              phone={<>
+                <MockHeader title="Nica & Phil" />
+                <div style={{ padding: '16px' }}>
+                  <div style={{ fontFamily: theme.font.display, fontSize: '15px', fontWeight: 600, color: theme.ink }}>Hallo Mia</div>
+                  <div style={{ fontSize: '10px', color: theme.muted, marginBottom: '14px' }}>Klasse 12 · Alles im Blick.</div>
+                  <div style={{ background: 'white', borderRadius: '12px', padding: '12px', filter: 'saturate(0.55)' }}>
+                    <div style={{ fontWeight: 700, fontSize: '12px', color: theme.ink }}>Mathe — 68%</div>
+                    <div style={{ fontSize: '10px', color: theme.mid, marginTop: '3px' }}>Sehr gut. Weiter im Plan.</div>
+                  </div>
+                </div>
+              </>}
+              caption={<Caption title="Oberstufe (reif · Klasse 12)" items={[
+                'Radius 12–14px, kompakter, kleinere Typo',
+                'Gedeckte Farbsättigung, kaum Emoji',
+                'Sachliche Ansprache: „Sehr gut." — gleiches Layout-Skelett wie Grundschule',
+              ]} />}
+            />
+
+            <h3 style={{ fontFamily: theme.font.display, fontSize: '15px', margin: '0 0 12px', color: theme.ink }}>Eltern-Übersicht als Wochen-Digest, mehrsprachig</h3>
+            <p style={{ fontSize: '12.5px', color: theme.mid, margin: '0 0 16px', maxWidth: '68ch', lineHeight: 1.6 }}>Aus der Konkurrenz-Recherche: ClassDojo übersetzt automatisch in 35+ Sprachen — wichtig, da einige Eltern kein Deutsch sprechen. Kein tägliches Monitoring (wirkt wie Misstrauen), sondern ein Wochen-Digest mit echtem Verständnis-Signal statt reiner Prozentzahl.</p>
+            <MockRow
+              phone={<>
+                <div style={{ background: 'rgba(255,255,255,0.85)', padding: '10px 12px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: `1px solid ${theme.line}` }}>
+                  <span style={{ fontWeight: 800, fontSize: '11.5px', color: theme.ink }}>Eltern-Übersicht</span>
+                  <span style={{ fontSize: '10px', fontWeight: 800, color: theme.ink, background: theme.bg, padding: '5px 9px', borderRadius: theme.radius.full, border: `1px solid ${theme.line}` }}>🇩🇪 Deutsch ▾</span>
+                </div>
+                <div style={{ padding: '14px' }}>
+                  <div style={{ fontSize: '11px', fontWeight: 700, color: theme.ink, marginBottom: '8px' }}>Diese Woche · Nicole</div>
+                  <div style={{ background: `linear-gradient(160deg,${theme.soft.blue},white)`, border: '1px solid #DEE8FF', borderRadius: theme.radius.lg, padding: '12px' }}>
+                    <div style={{ fontWeight: 800, fontSize: '12.5px', color: theme.ink, marginBottom: '5px' }}>📐 Brüche sitzen jetzt sicher</div>
+                    <div style={{ fontSize: '10px', color: theme.mid, marginBottom: '10px' }}>4× Chat-Hilfe · 2 Kapitel Lernreise</div>
+                    <div style={{ background: 'white', borderRadius: '9px', padding: '8px 10px', fontSize: '10px', color: theme.brand.blue, fontWeight: 600 }}>💡 Frag sie nach ⅓ vs. ⅔ — genau das hat sie geübt.</div>
+                  </div>
+                </div>
+              </>}
+              caption={<Caption title="Deutsch — Standardansicht" items={[
+                'Wochen-Digest statt Live-Feed pro Kind',
+                'Überschrift ist Verständnis-Signal, keine Prozentzahl',
+                'Genau ein konkreter Tipp, keine Rohdaten-Tabelle',
+              ]} />}
+            />
+            <MockRow
+              phone={<>
+                <div style={{ background: 'rgba(255,255,255,0.85)', padding: '10px 12px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: `1px solid ${theme.line}` }}>
+                  <span style={{ fontWeight: 800, fontSize: '11.5px', color: theme.ink }}>Eltern-Übersicht</span>
+                  <span style={{ fontSize: '10px', fontWeight: 800, color: theme.ink, background: theme.soft.blue, padding: '5px 9px', borderRadius: theme.radius.full, border: `1px solid ${theme.brand.blue}` }}>🇹🇷 Türkçe ▾</span>
+                </div>
+                <div style={{ padding: '14px' }}>
+                  <div style={{ fontSize: '11px', fontWeight: 700, color: theme.ink, marginBottom: '8px' }}>Bu hafta · Nicole</div>
+                  <div style={{ background: `linear-gradient(160deg,${theme.soft.blue},white)`, border: '1px solid #DEE8FF', borderRadius: theme.radius.lg, padding: '12px', marginBottom: '10px' }}>
+                    <div style={{ fontWeight: 800, fontSize: '12.5px', color: theme.ink, marginBottom: '5px' }}>📐 Artık kesirlerde çok rahat</div>
+                    <div style={{ fontSize: '10px', color: theme.mid, marginBottom: '10px' }}>4× sohbet · 2 bölüm Öğrenme Yolu</div>
+                    <div style={{ background: 'white', borderRadius: '9px', padding: '8px 10px', fontSize: '10px', color: theme.brand.blue, fontWeight: 600 }}>💡 Ona ⅓ ile ⅔ farkını sor.</div>
+                  </div>
+                  <div style={{ background: theme.soft.warn, borderRadius: '9px', padding: '8px 10px', fontSize: '9.5px', color: '#8A5D00' }}>ℹ️ Otomatik çevrilmiştir. Almanca orijinali her zaman görebilirsin.</div>
+                </div>
+              </>}
+              caption={<Caption title="Gleicher Inhalt, andere Sprache" items={[
+                'Kompletter Wochenbericht übersetzt, nicht nur Menüs',
+                'Transparenter Hinweis „automatisch übersetzt", Original abrufbar',
+                'Start-Sprachen Berlin-Pilot: Türkisch, Arabisch, Englisch, Ukrainisch, Polnisch',
+              ]} />}
+            />
           </div>
         )}
       </div>
