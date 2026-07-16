@@ -16,21 +16,36 @@ export default function KindErstellen() {
   const [code, setCode] = useState<string | null>(null)
   const [kindEmail, setKindEmail] = useState('')
   const [versendet, setVersendet] = useState(false)
+  const [error, setError] = useState('')
+  const [loading, setLoading] = useState(false)
 
   async function erstellen() {
     const { data: { user } } = await supabase.auth.getUser()
     if (!user || !name.trim()) return
+    setLoading(true); setError('')
 
-    const { data: kind } = await supabase.from('children')
+    const { data: kind, error: kindError } = await supabase.from('children')
       .insert({ parent_id: user.id, name, klasse, selbst_registriert: false })
       .select().single()
 
-    if (kind) await supabase.from('parent_child_links').insert({ parent_id: user.id, child_id: kind.id })
+    if (kindError || !kind) {
+      setError('Kind-Profil konnte nicht angelegt werden: ' + (kindError?.message || 'unbekannter Fehler'))
+      setLoading(false)
+      return
+    }
+
+    const { error: linkError } = await supabase.from('parent_child_links').insert({ parent_id: user.id, child_id: kind.id })
+    if (linkError) {
+      setError('Verknüpfung fehlgeschlagen: ' + linkError.message)
+      setLoading(false)
+      return
+    }
 
     const neuerCode = generiereCode()
     await supabase.from('family_codes').insert({
-      code: neuerCode, parent_id: user.id, child_id: kind?.id, typ: 'eltern_erstellt_kind'
+      code: neuerCode, parent_id: user.id, child_id: kind.id, typ: 'eltern_erstellt_kind'
     })
+    setLoading(false)
     setCode(neuerCode)
   }
 
@@ -59,9 +74,14 @@ export default function KindErstellen() {
               ))}
             </div>
 
-            <button onClick={erstellen} disabled={!name.trim()}
-              style={{ width: '100%', padding: '14px', background: theme.gradients.primary, color: 'white', border: 'none', borderRadius: theme.radius.md, fontWeight: '800', cursor: 'pointer' }}>
-              Kind-Profil erstellen →
+            {error && (
+              <div style={{ background: theme.soft.error, border: `1px solid ${theme.errorBorder}`, borderRadius: theme.radius.sm, padding: '10px 14px', fontSize: '13px', color: theme.errorText, marginBottom: '16px' }}>
+                {error}
+              </div>
+            )}
+            <button onClick={erstellen} disabled={!name.trim() || loading}
+              style={{ width: '100%', padding: '14px', background: loading ? theme.muted : theme.gradients.primary, color: 'white', border: 'none', borderRadius: theme.radius.md, fontWeight: '800', cursor: loading ? 'not-allowed' : 'pointer' }}>
+              {loading ? 'Wird angelegt…' : 'Kind-Profil erstellen →'}
             </button>
           </>
         ) : (
