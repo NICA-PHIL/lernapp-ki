@@ -105,10 +105,10 @@ export default function ElternUebersicht() {
             </div>
           )}
 
-          <button onClick={() => router.push('/kind-erstellen')} style={{
-            width: '100%', padding: '13px', background: theme.soft.blue, color: theme.brand.blue, border: 'none',
-            borderRadius: theme.radius.md, fontWeight: '700', fontSize: '13.5px', cursor: 'pointer',
-          }}>+ Kind hinzufügen</button>
+          <button disabled title="Vorübergehend deaktiviert" style={{
+            width: '100%', padding: '13px', background: theme.bg, color: theme.muted, border: 'none',
+            borderRadius: theme.radius.md, fontWeight: '700', fontSize: '13.5px', cursor: 'not-allowed',
+          }}>+ Kind hinzufügen (bald wieder verfügbar)</button>
         </div>
 
         {/* ── Code eines selbst-registrierten Kindes einlösen ── */}
