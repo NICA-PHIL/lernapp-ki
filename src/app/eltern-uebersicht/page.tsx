@@ -4,8 +4,14 @@ import { useRouter } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
 import { theme } from '@/lib/theme'
 import { BaukastenAvatar } from '@/components/BaukastenAvatar'
+import { GalleryAvatar } from '@/components/GalleryAvatar'
 
 interface Kind { id: string; name: string; klasse: number; avatar_prefs: any; selbst_registriert: boolean; rolle?: string | null }
+
+function KindAvatar({ prefs, size }: { prefs: any; size: number }) {
+  if (prefs?.type === 'gallery') return <GalleryAvatar avatarId={prefs.avatarId} size={size} />
+  return <BaukastenAvatar gesicht={prefs?.gesicht} hautton={prefs?.hautton || theme.soft.blue} haarfarbe={prefs?.haarfarbe || theme.brand.blue} accessoire={prefs?.accessoire} size={size} />
+}
 
 export default function ElternUebersicht() {
   const router = useRouter()
@@ -88,7 +94,7 @@ export default function ElternUebersicht() {
               {kinder.map(kind => (
                 <button key={kind.id} onClick={() => kindAnzeigen(kind)}
                   style={{ background: theme.bg, border: `1.5px solid ${theme.line}`, borderRadius: theme.radius.lg, padding: '14px 16px', display: 'flex', alignItems: 'center', gap: '14px', cursor: 'pointer', textAlign: 'left' }}>
-                  <BaukastenAvatar gesicht={kind.avatar_prefs?.gesicht} hautton={kind.avatar_prefs?.hautton || theme.soft.blue} haarfarbe={kind.avatar_prefs?.haarfarbe || theme.brand.blue} accessoire={kind.avatar_prefs?.accessoire} size={42} />
+                  <KindAvatar prefs={kind.avatar_prefs} size={42} />
                   <div style={{ flex: 1 }}>
                     <div style={{ fontWeight: '800', fontSize: '14px', color: theme.ink }}>{kind.name}</div>
                     <div style={{ fontSize: '11.5px', color: theme.muted }}>Klasse {kind.klasse}{kind.rolle ? ` · du bist ${kind.rolle}` : ''}{kind.selbst_registriert ? ' · hat eigenes Konto' : ''}</div>

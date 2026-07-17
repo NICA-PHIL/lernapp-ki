@@ -4,8 +4,14 @@ import { useRouter } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
 import { theme } from '@/lib/theme'
 import { BaukastenAvatar } from '@/components/BaukastenAvatar'
+import { GalleryAvatar } from '@/components/GalleryAvatar'
 
 interface Kind { id: string; name: string; klasse: number; avatar_prefs: any }
+
+function KindAvatar({ prefs, size }: { prefs: any; size: number }) {
+  if (prefs?.type === 'gallery') return <GalleryAvatar avatarId={prefs.avatarId} size={size} />
+  return <BaukastenAvatar gesicht={prefs?.gesicht} hautton={prefs?.hautton || theme.soft.blue} haarfarbe={prefs?.haarfarbe || theme.brand.blue} accessoire={prefs?.accessoire} size={size} />
+}
 
 export default function KindWaehlen() {
   const router = useRouter()
@@ -28,8 +34,8 @@ export default function KindWaehlen() {
   function kindAktivieren(kind: Kind) {
     localStorage.setItem('np_child_name', kind.name)
     localStorage.setItem('np_child_klasse', String(kind.klasse))
-    if (kind.avatar_prefs?.type === 'baukasten') {
-      localStorage.setItem('np_child_avatar_typ', 'baukasten')
+    if (kind.avatar_prefs?.type === 'baukasten' || kind.avatar_prefs?.type === 'gallery') {
+      localStorage.setItem('np_child_avatar_typ', kind.avatar_prefs.type)
       localStorage.setItem('np_child_avatar_baukasten', JSON.stringify(kind.avatar_prefs))
       localStorage.setItem('np_child_avatar', '')
     }
@@ -52,7 +58,7 @@ export default function KindWaehlen() {
             {kinder.map(kind => (
               <button key={kind.id} onClick={() => kindAktivieren(kind)}
                 style={{ background: 'white', border: `1.5px solid ${theme.line}`, borderRadius: theme.radius.lg, padding: '18px 20px', display: 'flex', alignItems: 'center', gap: '16px', cursor: 'pointer', textAlign: 'left', boxShadow: theme.shadow.sm }}>
-                <BaukastenAvatar gesicht={kind.avatar_prefs?.gesicht} hautton={kind.avatar_prefs?.hautton || theme.soft.blue} haarfarbe={kind.avatar_prefs?.haarfarbe || theme.brand.blue} accessoire={kind.avatar_prefs?.accessoire} size={48} />
+                <KindAvatar prefs={kind.avatar_prefs} size={48} />
                 <div style={{ flex: 1 }}>
                   <div style={{ fontWeight: '800', fontSize: '16px', color: theme.ink }}>{kind.name}</div>
                   <div style={{ fontSize: '12px', color: theme.mid }}>Klasse {kind.klasse}</div>

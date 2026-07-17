@@ -4,6 +4,7 @@ import { useRouter } from 'next/navigation'
 import { theme } from '@/lib/theme'
 import { LivingAvatar } from '@/components/LivingAvatar'
 import { BaukastenAvatar } from '@/components/BaukastenAvatar'
+import { GalleryAvatar } from '@/components/GalleryAvatar'
 
 const MOODS = [
   { emoji: '😄', label: 'Super', color: theme.brand.green },
@@ -49,6 +50,7 @@ export default function Dashboard() {
 
   function AvatarBubble({ size = 56 }: { size?: number }) {
     if (childAvatar) return <img src={childAvatar} style={{ width: size, height: size, borderRadius: '50%', objectFit: 'cover', border: '3px solid white', boxShadow: '0 4px 16px rgba(79,124,255,0.25)' }} />
+    if (avatarBaukasten?.type === 'gallery') return <GalleryAvatar avatarId={avatarBaukasten.avatarId} size={size} boxShadow="0 4px 16px rgba(79,124,255,0.25)" />
     if (avatarBaukasten) return (
       <BaukastenAvatar gesicht={avatarBaukasten.gesicht} hautton={avatarBaukasten.hautton} haarfarbe={avatarBaukasten.haarfarbe || theme.brand.blue} accessoire={avatarBaukasten.accessoire} size={size} boxShadow="0 4px 16px rgba(79,124,255,0.25)" />
     )

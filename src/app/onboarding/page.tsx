@@ -3,12 +3,8 @@ import { useState, useRef } from 'react'
 import { useRouter } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
 import { theme, klassenFrage, PROVIDERS, Provider } from '@/lib/theme'
-import { BaukastenAvatar } from '@/components/BaukastenAvatar'
-
-const GESICHTER = ['😀','😊','🤓','😎','🥳','🤩','😇','🙂','😄','🧑','👧','👦','🧒','👩','👨']
-const HAUTTOENE = ['#FFDBB4','#F1C27D','#E0AC69','#C68642','#8D5524','#5C3317']
-const HAARFARBEN = ['#2C1B0E','#6B4423','#B87333','#D4A017','#4A4A4A','#8B0000','#4169E1','#800080']
-const ACCESSOIRES = ['Keins','🎩','👓','🕶️','🎀','🧢','⭐']
+import { GalleryAvatar } from '@/components/GalleryAvatar'
+import { AvatarGalleryPicker } from '@/components/AvatarGalleryPicker'
 
 const KLASSEN = [1,2,3,4,5,6,7,8,9,10]
 
@@ -16,11 +12,8 @@ export default function OnboardingPage() {
   const [step, setStep] = useState(1)
   const [childName, setChildName] = useState('')
   const [klasse, setKlasse] = useState(3)
-  const [avatarModus, setAvatarModus] = useState<'baukasten' | 'foto'>('baukasten')
-  const [gesicht, setGesicht] = useState('😀')
-  const [hautton, setHautton] = useState(HAUTTOENE[0])
-  const [haarfarbe, setHaarfarbe] = useState(HAARFARBEN[0])
-  const [accessoire, setAccessoire] = useState('Keins')
+  const [avatarModus, setAvatarModus] = useState<'galerie' | 'foto'>('galerie')
+  const [avatarId, setAvatarId] = useState('01')
   const [photoPreview, setPhotoPreview] = useState<string | null>(null)
   const [provider, setProvider] = useState<Provider>('openai')
   const [apiKey, setApiKey] = useState('')
@@ -43,7 +36,7 @@ export default function OnboardingPage() {
   }
 
   function avatarSVG() {
-    return <BaukastenAvatar gesicht={gesicht} hautton={hautton} haarfarbe={haarfarbe} accessoire={accessoire} size={100} />
+    return <GalleryAvatar avatarId={avatarId} size={100} />
   }
 
   async function handleFinish() {
@@ -56,16 +49,16 @@ export default function OnboardingPage() {
     }
 
     localStorage.setItem('np_child_name', childName)
-    localStorage.setItem('np_child_avatar_typ', photoPreview ? 'foto' : 'baukasten')
+    localStorage.setItem('np_child_avatar_typ', photoPreview ? 'foto' : 'galerie')
     localStorage.setItem('np_child_avatar', photoPreview || '')
-    localStorage.setItem('np_child_avatar_baukasten', JSON.stringify({ gesicht, hautton, haarfarbe, accessoire }))
+    localStorage.setItem('np_child_avatar_baukasten', JSON.stringify({ type: 'gallery', avatarId }))
     localStorage.setItem('np_child_klasse', String(klasse))
 
     const { data: { user } } = await supabase.auth.getUser()
     if (user) {
       const { data: kind } = await supabase.from('children').insert({
         auth_user_id: user.id, selbst_registriert: true, name: childName, klasse,
-        avatar_prefs: photoPreview ? { type: 'photo' } : { type: 'baukasten', gesicht, hautton, haarfarbe, accessoire }
+        avatar_prefs: photoPreview ? { type: 'photo' } : { type: 'gallery', avatarId }
       }).select().single()
 
       if (kind) {
@@ -132,13 +125,13 @@ export default function OnboardingPage() {
             <div style={{ textAlign: 'center', marginBottom: '20px' }}>
               <div style={{ fontSize: '40px', marginBottom: '8px' }}>🎨</div>
               <h2 style={{ fontSize: '22px', fontWeight: '800', color: theme.ink, margin: '0 0 8px' }}>Wähle deinen Avatar</h2>
-              <p style={{ color: theme.mid, fontSize: '14px', margin: 0 }}>Stell dir deinen eigenen Charakter zusammen!</p>
+              <p style={{ color: theme.mid, fontSize: '14px', margin: 0 }}>Such dir deinen Lieblings-Charakter aus!</p>
             </div>
 
             <div style={{ display: 'flex', gap: '8px', marginBottom: '20px', background: theme.bg, padding: '6px', borderRadius: theme.radius.md }}>
-              <button onClick={() => setAvatarModus('baukasten')}
-                style={{ flex: 1, padding: '9px', borderRadius: theme.radius.sm, border: 'none', fontWeight: '700', fontSize: '13px', cursor: 'pointer', background: avatarModus === 'baukasten' ? theme.ink : 'transparent', color: avatarModus === 'baukasten' ? 'white' : theme.mid }}>
-                🎨 Baukasten
+              <button onClick={() => setAvatarModus('galerie')}
+                style={{ flex: 1, padding: '9px', borderRadius: theme.radius.sm, border: 'none', fontWeight: '700', fontSize: '13px', cursor: 'pointer', background: avatarModus === 'galerie' ? theme.ink : 'transparent', color: avatarModus === 'galerie' ? 'white' : theme.mid }}>
+                🎨 Avatare
               </button>
               <button onClick={() => fileRef.current?.click()}
                 style={{ flex: 1, padding: '9px', borderRadius: theme.radius.sm, border: 'none', fontWeight: '700', fontSize: '13px', cursor: 'pointer', background: avatarModus === 'foto' ? theme.ink : 'transparent', color: avatarModus === 'foto' ? 'white' : theme.mid }}>
@@ -154,46 +147,12 @@ export default function OnboardingPage() {
             ) : (
               <>
                 <div style={{ marginBottom: '20px' }}>{avatarSVG()}</div>
-
-                <div style={{ marginBottom: '14px' }}>
-                  <div style={{ fontSize: '12px', fontWeight: '700', color: theme.ink, marginBottom: '8px' }}>Gesicht</div>
-                  <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px' }}>
-                    {GESICHTER.map(g => (
-                      <button key={g} onClick={() => setGesicht(g)}
-                        style={{ width: '38px', height: '38px', borderRadius: theme.radius.sm, border: `2px solid ${gesicht === g ? theme.brand.blue : theme.line}`, background: gesicht === g ? theme.soft.blue : 'white', fontSize: '18px', cursor: 'pointer' }}>{g}</button>
-                    ))}
-                  </div>
+                <div style={{ marginBottom: '10px' }}>
+                  <AvatarGalleryPicker value={avatarId} onChange={setAvatarId} />
                 </div>
-
-                <div style={{ marginBottom: '14px' }}>
-                  <div style={{ fontSize: '12px', fontWeight: '700', color: theme.ink, marginBottom: '8px' }}>Hautton</div>
-                  <div style={{ display: 'flex', gap: '8px' }}>
-                    {HAUTTOENE.map(h => (
-                      <button key={h} onClick={() => setHautton(h)}
-                        style={{ width: '30px', height: '30px', borderRadius: '50%', background: h, border: hautton === h ? `3px solid ${theme.brand.blue}` : `2px solid ${theme.line}`, cursor: 'pointer' }} />
-                    ))}
-                  </div>
-                </div>
-
-                <div style={{ marginBottom: '14px' }}>
-                  <div style={{ fontSize: '12px', fontWeight: '700', color: theme.ink, marginBottom: '8px' }}>Haar-/Rahmenfarbe</div>
-                  <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
-                    {HAARFARBEN.map(h => (
-                      <button key={h} onClick={() => setHaarfarbe(h)}
-                        style={{ width: '30px', height: '30px', borderRadius: '50%', background: h, border: haarfarbe === h ? `3px solid ${theme.brand.blue}` : `2px solid ${theme.line}`, cursor: 'pointer' }} />
-                    ))}
-                  </div>
-                </div>
-
-                <div style={{ marginBottom: '20px' }}>
-                  <div style={{ fontSize: '12px', fontWeight: '700', color: theme.ink, marginBottom: '8px' }}>Accessoire</div>
-                  <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap' }}>
-                    {ACCESSOIRES.map(a => (
-                      <button key={a} onClick={() => setAccessoire(a)}
-                        style={{ padding: '8px 12px', borderRadius: theme.radius.sm, border: `2px solid ${accessoire === a ? theme.brand.blue : theme.line}`, background: accessoire === a ? theme.soft.blue : 'white', fontSize: '16px', cursor: 'pointer' }}>{a}</button>
-                    ))}
-                  </div>
-                </div>
+                <p style={{ fontSize: '10px', color: theme.muted, textAlign: 'center', margin: '0 0 20px' }}>
+                  Avatare: Remix von „Adventurer" von Lisa Wischofsky, <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener noreferrer" style={{ color: theme.muted }}>CC BY 4.0</a>
+                </p>
               </>
             )}
 

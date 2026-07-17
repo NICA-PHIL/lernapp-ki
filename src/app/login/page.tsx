@@ -40,6 +40,9 @@ export default function LoginPage() {
       if (alsKind) {
         localStorage.setItem('np_child_name', alsKind.name)
         localStorage.setItem('np_child_klasse', String(alsKind.klasse))
+        if (alsKind.avatar_prefs?.type === 'gallery' || alsKind.avatar_prefs?.type === 'baukasten') {
+          localStorage.setItem('np_child_avatar_baukasten', JSON.stringify(alsKind.avatar_prefs))
+        }
         router.push('/dashboard')
         setLoading(false)
         return
